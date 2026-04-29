@@ -1,7 +1,7 @@
 services:
   # MongoDB Database
   mongodb:
-    image: mongo:7.0
+    image: mongo:7.0-bullseye
     container_name: rosary-mongodb
     restart: unless-stopped
     ports:
@@ -12,7 +12,6 @@ services:
       MONGO_INITDB_DATABASE: rosary-app
     volumes:
       - mongodb_data:/data/db
-      - ./backend/docker/mongo-init.ts:/docker-entrypoint-initdb.d/mongo-init.ts:ro
     networks:
       - rosary-network
     healthcheck:
@@ -22,50 +21,17 @@ services:
       retries: 5
       start_period: 10s
 
-  # NestJS Backend API
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: rosary-backend
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3001
-      MONGODB_URI: mongodb://rosary_user:rosary_password_2024@mongodb:27017/rosary-app?authSource=rosary-app
-      JWT_SECRET: ${JWT_SECRET:-change-this-secret-in-production}
-      JWT_EXPIRES_IN: 7d
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
-    ports:
-      - "3001:3001"
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    networks:
-      - rosary-network
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-
   # Next.js Frontend
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001/api}
+      context: ./
+      dockerfile: ./Dockerfile
     container_name: rosary-frontend
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001/api}
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
     networks:
       - rosary-network
 
