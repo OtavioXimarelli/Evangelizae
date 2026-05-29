@@ -43,12 +43,13 @@ const withPWA = require('next-pwa')({
       },
     },
     {
-      urlPattern: /^https?.*/,
+      // Catch-all for other assets, but excluding API, Auth, and dynamic paths
+      urlPattern: /^https?.*(?!\/(?:api|auth|_next\/data)\/).*/i,
       handler: 'StaleWhileRevalidate',
       options: {
-        cacheName: 'offlineCache',
+        cacheName: 'offline-assets',
         expiration: {
-          maxEntries: 200,
+          maxEntries: 100,
           maxAgeSeconds: 24 * 60 * 60, // 24 hours
         },
       },
