@@ -821,18 +821,18 @@
     }
   },
   "About": {
-    "title": "About Living Rosary",
+    "title": "About Evangelizae",
     "subtitle": "A platform to live your faith, every day",
     "mission": {
       "title": "Our Mission",
-      "p1": "Living Rosary makes the teachings of the Catholic Church accessible and practical for modern Catholics. We synthesize official documents from the Holy See, writings of saints, and Catholic theology into clear content that nourishes your prayer life.",
+      "p1": "Evangelizae makes the teachings of the Catholic Church accessible and practical for modern Catholics. We synthesize official documents from the Holy See, writings of saints, and Catholic theology into clear content that nourishes your prayer life.",
       "p2": "We don't offer formal courses—we offer a digital companion for your faith journey: track your daily prayer, explore Church teachings whenever you wish, and discover the richness of Catholic tradition at your own pace.",
       "visionTitle": "Our Vision",
       "visionDesc": "To make the teachings of the Holy See and Catholic tradition as accessible as an app on your phone—without losing depth, without distorting doctrine, just Catholic truth in clear language."
     },
     "principles": {
       "title": "Our Principles",
-      "subtitle": "Six pillars that guide every decision, every feature, every word in Living Rosary",
+      "subtitle": "Six pillars that guide every decision, every feature, every word in Evangelizae",
       "p1": {
         "title": "Authentic Faith",
         "desc": "We connect people to the living tradition of the Catholic Church, rooted in the Rosary prayer as a path of spiritual transformation."
@@ -882,7 +882,7 @@
       "j1": {
         "year": "2024",
         "title": "Birth of a Vision",
-        "desc": "Living Rosary started as a simple idea: a rosary tracker that connected people to their daily faith."
+        "desc": "Evangelizae started as a simple idea: a rosary tracker that connected people to their daily faith."
       },
       "j2": {
         "year": "2025",
@@ -892,7 +892,7 @@
       "j3": {
         "year": "2026",
         "title": "Synthesis of Tradition",
-        "desc": "Living Rosary becomes an accessible compendium of the Church: we synthesize Holy See documents, teachings of saints, and theology into practical content."
+        "desc": "Evangelizae becomes an accessible compendium of the Church: we synthesize Holy See documents, teachings of saints, and theology into practical content."
       }
     },
     "different": {
@@ -907,7 +907,7 @@
       },
       "d3": {
         "title": "Always Free and Open",
-        "desc": "Living Rosary is an open-source project driven by faith, not profit. Church teachings belong to everyone—we don't charge to access them."
+        "desc": "Evangelizae is an open-source project driven by faith, not profit. Church teachings belong to everyone—we don't charge to access them."
       },
       "d4": {
         "title": "No Ads, No Invasive Tracking",
@@ -916,7 +916,7 @@
     },
     "faq": {
       "title": "Frequently Asked Questions",
-      "subtitle": "Quick answers about Living Rosary",
+      "subtitle": "Quick answers about Evangelizae",
       "q1": {
         "q": "Why do I need to create an account if the service is free?",
         "a": "Great question! We ask for a simple account (just email and password) for two reasons: to protect the community from spam and to offer personalized features. With an account, you can track your prayer streak, save favorite content, and access exclusive member resources. It also helps us understand which teachings are most useful, improving the service for everyone. We promise never to sell your data or send spam—your account is just your gateway to a richer experience."
@@ -935,24 +935,24 @@
       },
       "q5": {
         "q": "Can I use it offline or do I need internet?",
-        "a": "Currently, Living Rosary requires an internet connection to load content and sync your progress. We are working on offline features (prayer cache, downloaded content) for future versions. For now, a stable connection ensures the best experience."
+        "a": "Currently, Evangelizae requires an internet connection to load content and sync your progress. We are working on offline features (prayer cache, downloaded content) for future versions. For now, a stable connection ensures the best experience."
       },
       "q6": {
         "q": "Why is it open source? Can I contribute?",
-        "a": "Living Rosary is open source because we believe faith tools should be transparent and collaborative. The code is available on GitHub for anyone to review, learn, or contribute. If you are a developer, designer, or Catholic theology expert, your help is welcome! We accept code contributions, content suggestions, and improvements.",
+        "a": "Evangelizae is open source because we believe faith tools should be transparent and collaborative. The code is available on GitHub for anyone to review, learn, or contribute. If you are a developer, designer, or Catholic theology expert, your help is welcome! We accept code contributions, content suggestions, and improvements.",
         "github": "View on GitHub"
       },
       "q7": {
         "q": "Is it available in other languages?",
-        "a": "Currently, Living Rosary is in Portuguese and English. We plan to expand to Spanish and other languages in the future. The infrastructure is prepared for internationalization—it's just a matter of translating the content while maintaining theological fidelity."
+        "a": "Currently, Evangelizae is in Portuguese and English. We plan to expand to Spanish and other languages in the future. The infrastructure is prepared for internationalization—it's just a matter of translating the content while maintaining theological fidelity."
       },
       "q8": {
         "q": "Is there a mobile app?",
-        "a": "For now, Living Rosary works as a web app (PWA - Progressive Web App), accessible via browser on your phone. You can add it to your device's home screen for an experience similar to a native app. Native apps for iOS and Android are on our long-term roadmap."
+        "a": "For now, Evangelizae works as a web app (PWA - Progressive Web App), accessible via browser on your phone. You can add it to your device's home screen for an experience similar to a native app. Native apps for iOS and Android are on our long-term roadmap."
       },
       "q9": {
         "q": "Will it always be free or will it become paid in the future?",
-        "a": "Living Rosary will always be free. Our commitment is to keep all essential features accessible to all at no cost. In the future, we may introduce optional premium features (like live classes, spiritual consultancies, exclusive content), but the platform's core—prayer, teachings, and community—will remain free."
+        "a": "Evangelizae will always be free. Our commitment is to keep all essential features accessible to all at no cost. In the future, we may introduce optional premium features (like live classes, spiritual consultancies, exclusive content), but the platform's core—prayer, teachings, and community—will remain free."
       }
     },
     "cta": {
@@ -1121,7 +1121,7 @@
       "access": "Access tool",
       "suggest": {
         "title": "Suggest a tool",
-        "desc": "Living Rosary is a community project. Do you have an idea for a tool that would help your prayer life?",
+        "desc": "Evangelizae is a community project. Do you have an idea for a tool that would help your prayer life?",
         "btn": "Get in touch"
       }
     },
@@ -1256,11 +1256,11 @@
     }
   },
   "Onboarding": {
-    "title": "Welcome to Living Rosary",
+    "title": "Welcome to Evangelizae",
     "description": "Discover the main features of the app.",
     "step1": {
       "title": "Your Faith Companion",
-      "desc": "Living Rosary is more than an app; it's a digital guide for your daily spiritual journey.",
+      "desc": "Evangelizae is more than an app; it's a digital guide for your daily spiritual journey.",
       "f1": "Track your consistency",
       "f2": "Request prayers",
       "f3": "Grow in faith"
@@ -1335,7 +1335,7 @@
     "mission": {
       "badge": "A prayer project, not a sales funnel",
       "title": "A simple place to pray, learn, and stay faithful",
-      "description": "Living Rosary exists to help you keep a daily prayer life. No ads, no pressure, no distractions: just a clear path to meet Christ through Mary."
+      "description": "Evangelizae exists to help you keep a daily prayer life. No ads, no pressure, no distractions: just a clear path to meet Christ through Mary."
     },
     "whatYouGet": {
       "title": "What you can do",
@@ -1406,7 +1406,7 @@
       }
     },
     "soul": {
-      "title": "The soul of Living Rosary",
+      "title": "The soul of Evangelizae",
       "subtitle": "A reverent, welcoming experience rooted in Catholic tradition.",
       "items": [
         {
@@ -1443,7 +1443,7 @@
       "action": "Open"
     },
     "why": {
-      "title": "Why Living Rosary?",
+      "title": "Why Evangelizae?",
       "subtitle": "More than an app, we are your companion on the spiritual journey",
       "items": [
         {
@@ -1466,7 +1466,7 @@
     },
     "cta": {
       "title": "Start your journey today",
-      "desc": "Join thousands of Catholics around the world living the Living Rosary. Free, open-source, and made with faith.",
+      "desc": "Join thousands of Catholics around the world living the Evangelizae. Free, open-source, and made with faith.",
       "btn": "Start now",
       "learnMore": "Learn more",
       "primaryBtn": "Begin prayer",
@@ -1488,7 +1488,7 @@
         "Prayer feed",
         "Statistics"
       ],
-      "credits": "Made with faith and love • {year} • Living Rosary",
+      "credits": "Made with faith and love • {year} • Evangelizae",
       "quote": "\"Pray the Rosary every day to obtain peace for the world\" - Our Lady of Fatima"
     }
   },

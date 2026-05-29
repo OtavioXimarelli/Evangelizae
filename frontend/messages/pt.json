@@ -1,8 +1,8 @@
 {
   "Metadata": {
-    "title": "Rosário Vivo | Viva sua fé católica plenamente",
+    "title": "Evangelizae | Viva sua fé católica plenamente",
     "description": "Acompanhe sua jornada espiritual, explore conteúdos profundos sobre o Rosário e espiritualidade católica, e conecte-se com uma comunidade global de fé.",
-    "ogTitle": "Rosário Vivo - Viva sua fé católica plenamente",
+    "ogTitle": "Evangelizae - Viva sua fé católica plenamente",
     "ogDescription": "Plataforma completa de espiritualidade católica. Acompanhe sua jornada, explore conteúdos profundos e ore em comunidade."
   },
   "Common": {
@@ -47,8 +47,8 @@
     }
   },
   "Hero": {
-    "title": "Rosário Vivo",
-    "subtitle": "Viva sua fé, cada dia",
+    "title": "Evangelizae",
+    "subtitle": "Seja Luz no Mundo Digital",
     "hasPrayed": "Parabéns! Você já rezou hoje. Sua fidelidade é uma bênção!",
     "notPrayed": "Acompanhe sua jornada espiritual, explore conteúdos profundos e conecte-se com uma comunidade global de fé.",
     "choice": "Como você deseja começar?",
@@ -121,7 +121,7 @@
       "startPath": "Iniciar Caminho",
       "suggestedForYou": "Sugerido para Você",
       "dailyVerse": "Versículo do Dia",
-      "explore": "Explore o Rosário Vivo",
+      "explore": "Explore o Evangelizae",
       "tools": "Ferramentas de Oração",
       "content": "Conteúdo & Aprendizado"
     },
@@ -821,18 +821,18 @@
     }
   },
   "About": {
-    "title": "Sobre Rosário Vivo",
+    "title": "Sobre Evangelizae",
     "subtitle": "Uma plataforma para viver a fé, cada dia",
     "mission": {
       "title": "Nossa Missão",
-      "p1": "Rosário Vivo torna os ensinamentos da Igreja Católica acessíveis e práticos para católicos modernos. Sintetizamos documentos oficiais da Santa Sé, escritos de santos e teologia católica em conteúdo claro que nutre sua vida de oração.",
+      "p1": "Evangelizae torna os ensinamentos da Igreja Católica acessíveis e práticos para católicos modernos. Sintetizamos documentos oficiais da Santa Sé, escritos de santos e teologia católica em conteúdo claro que nutre sua vida de oração.",
       "p2": "Não oferecemos cursos formais—oferecemos um companheiro digital para sua jornada de fé: acompanhe sua oração diária, explore ensinamentos da Igreja quando desejar, e descubra a riqueza da tradição católica ao seu próprio ritmo.",
       "visionTitle": "Nossa Visão",
       "visionDesc": "Tornar os ensinamentos da Santa Sé e da tradição católica tão acessíveis quanto um aplicativo no seu telefone—sem perder profundidade, sem distorcer doutrina, apenas verdade católica em linguagem clara."
     },
     "principles": {
       "title": "Nossos Princípios",
-      "subtitle": "Seis pilares que guiam cada decisão, cada funcionalidade, cada palavra em Rosário Vivo",
+      "subtitle": "Seis pilares que guiam cada decisão, cada funcionalidade, cada palavra em Evangelizae",
       "p1": {
         "title": "Fé Autêntica",
         "desc": "Conectamos as pessoas à tradição viva da Igreja Católica, radicada na oração do Rosário como caminho de transformação espiritual."
@@ -882,7 +882,7 @@
       "j1": {
         "year": "2024",
         "title": "Nascimento de uma Visão",
-        "desc": "Rosário Vivo começou como uma simples ideia: um rastreador de terços que conectasse pessoas à sua fé diária."
+        "desc": "Evangelizae começou como uma simples ideia: um rastreador de terços que conectasse pessoas à sua fé diária."
       },
       "j2": {
         "year": "2025",
@@ -892,7 +892,7 @@
       "j3": {
         "year": "2026",
         "title": "Síntese da Tradição",
-        "desc": "Rosário Vivo torna-se um compêndio acessível da Igreja: sintetizamos documentos da Santa Sé, ensinamentos de santos e teologia em conteúdo prático."
+        "desc": "Evangelizae torna-se um compêndio acessível da Igreja: sintetizamos documentos da Santa Sé, ensinamentos de santos e teologia em conteúdo prático."
       }
     },
     "different": {
@@ -907,7 +907,7 @@
       },
       "d3": {
         "title": "Sempre Gratuito e Aberto",
-        "desc": "Rosário Vivo é um projeto de código aberto impulsionado por fé, não por lucro. Os ensinamentos da Igreja pertencem a todos—não cobramos para acessá-los."
+        "desc": "Evangelizae é um projeto de código aberto impulsionado por fé, não por lucro. Os ensinamentos da Igreja pertencem a todos—não cobramos para acessá-los."
       },
       "d4": {
         "title": "Sem Anúncios, Sem Rastreamento Invasivo",
@@ -916,7 +916,7 @@
     },
     "faq": {
       "title": "Perguntas Frequentes",
-      "subtitle": "Respostas rápidas sobre Rosário Vivo",
+      "subtitle": "Respostas rápidas sobre Evangelizae",
       "q1": {
         "q": "Por que preciso criar uma conta se o serviço é gratuito?",
         "a": "Ótima pergunta! Pedimos uma conta simples (apenas email e senha) por duas razões: proteger a comunidade de spam e oferecer recursos personalizados. Com uma conta, você pode rastrear sua sequência de orações, salvar conteúdos favoritos e acessar recursos exclusivos para membros. Isso também nos ajuda a entender quais ensinamentos são mais úteis, melhorando o serviço para todos. Prometemos nunca vender seus dados ou enviar spam—sua conta é apenas sua porta de entrada para uma experiência mais rica."
@@ -935,24 +935,24 @@
       },
       "q5": {
         "q": "Posso usar offline ou preciso de internet?",
-        "a": "Atualmente, Rosário Vivo requer conexão com internet para carregar conteúdos e sincronizar seu progresso. Estamos trabalhando em funcionalidades offline (cache de orações, conteúdos baixados) para versões futuras. Por enquanto, uma conexão estável garante a melhor experiência."
+        "a": "Atualmente, Evangelizae requer conexão com internet para carregar conteúdos e sincronizar seu progresso. Estamos trabalhando em funcionalidades offline (cache de orações, conteúdos baixados) para versões futuras. Por enquanto, uma conexão estável garante a melhor experiência."
       },
       "q6": {
         "q": "Por que é open source? Posso contribuir?",
-        "a": "Rosário Vivo é open source porque acreditamos que ferramentas de fé devem ser transparentes e colaborativas. O código está disponível no GitHub para qualquer pessoa revisar, aprender ou contribuir. Se você é desenvolvedor, designer ou especialista em teologia católica, sua ajuda é bem-vinda! Aceitamos contribuições de código, sugestões de conteúdo e melhorias.",
+        "a": "Evangelizae é open source porque acreditamos que ferramentas de fé devem ser transparentes e colaborativas. O código está disponível no GitHub para qualquer pessoa revisar, aprender ou contribuir. Se você é desenvolvedor, designer ou especialista em teologia católica, sua ajuda é bem-vinda! Aceitamos contribuições de código, sugestões de conteúdo e melhorias.",
         "github": "Ver no GitHub"
       },
       "q7": {
         "q": "Está disponível em outros idiomas?",
-        "a": "Atualmente, Rosário Vivo está em Português. Planejamos expandir para Espanhol, Inglês e outros idiomas no futuro. A infraestrutura está preparada para internacionalização—é apenas uma questão de traduzir os conteúdos mantendo fidelidade teológica."
+        "a": "Atualmente, Evangelizae está em Português. Planejamos expandir para Espanhol, Inglês e outros idiomas no futuro. A infraestrutura está preparada para internacionalização—é apenas uma questão de traduzir os conteúdos mantendo fidelidade teológica."
       },
       "q8": {
         "q": "Existe aplicativo para celular?",
-        "a": "Por enquanto, Rosário Vivo funciona como um aplicativo web (PWA - Progressive Web App), acessível via navegador no celular. Você pode adicioná-lo à tela inicial do seu dispositivo para uma experiência similar a um app nativo. Apps nativos para iOS e Android estão em nosso roadmap de longo prazo."
+        "a": "Por enquanto, Evangelizae funciona como um aplicativo web (PWA - Progressive Web App), acessível via navegador no celular. Você pode adicioná-lo à tela inicial do seu dispositivo para uma experiência similar a um app nativo. Apps nativos para iOS e Android estão em nosso roadmap de longo prazo."
       },
       "q9": {
         "q": "Será sempre gratuito ou virará pago no futuro?",
-        "a": "Rosário Vivo será sempre gratuito. Nosso compromisso é manter todos os recursos essenciais acessíveis a todos, sem custo. No futuro, podemos introduzir recursos opcionais premium (como aulas ao vivo, consultorias espirituais, conteúdo exclusivo), mas o núcleo da plataforma—oração, ensinamentos e comunidade—permanecerá livre."
+        "a": "Evangelizae será sempre gratuito. Nosso compromisso é manter todos os recursos essenciais acessíveis a todos, sem custo. No futuro, podemos introduzir recursos opcionais premium (como aulas ao vivo, consultorias espirituais, conteúdo exclusivo), mas o núcleo da plataforma—oração, ensinamentos e comunidade—permanecerá livre."
       }
     },
     "cta": {
@@ -1121,7 +1121,7 @@
       "access": "Acessar ferramenta",
       "suggest": {
         "title": "Sugira uma ferramenta",
-        "desc": "O Rosário Vivo é um projeto comunitário. Tem alguma ideia de ferramenta que ajudaria sua vida de oração?",
+        "desc": "O Evangelizae é um projeto comunitário. Tem alguma ideia de ferramenta que ajudaria sua vida de oração?",
         "btn": "Entre em contato"
       }
     },
@@ -1204,7 +1204,7 @@
     "btn": "Acessar ferramenta",
     "suggest": {
       "title": "Sugira uma ferramenta",
-      "desc": "O Rosário Vivo é um projeto comunitário. Tem alguma ideia de ferramenta que ajudaria sua vida de oração?",
+      "desc": "O Evangelizae é um projeto comunitário. Tem alguma ideia de ferramenta que ajudaria sua vida de oração?",
       "btn": "Entre em contato"
     }
   },
@@ -1292,11 +1292,11 @@
     }
   },
   "Onboarding": {
-    "title": "Bem-vindo ao Rosário Vivo",
+    "title": "Bem-vindo ao Evangelizae",
     "description": "Conheça as principais funcionalidades do aplicativo.",
     "step1": {
       "title": "Seu Companheiro de Fé",
-      "desc": "O Rosário Vivo é mais que um app; é um guia digital para sua caminhada espiritual diária.",
+      "desc": "O Evangelizae é mais que um app; é um guia digital para sua caminhada espiritual diária.",
       "f1": "Acompanhe sua constância",
       "f2": "Peça orações",
       "f3": "Cresça na fé"
@@ -1371,7 +1371,7 @@
     "mission": {
       "badge": "Um projeto de oração, não de venda",
       "title": "Um lugar simples para rezar, aprender e permanecer fiel",
-      "description": "Rosário Vivo existe para ajudar você a manter a vida de oração no dia a dia. Sem anúncios, sem pressão, sem distrações: apenas um caminho claro para encontrar Cristo com Maria."
+      "description": "Evangelizae existe para ajudar você a manter a vida de oração no dia a dia. Sem anúncios, sem pressão, sem distrações: apenas um caminho claro para encontrar Cristo com Maria."
     },
     "whatYouGet": {
       "title": "O que você consegue fazer",
@@ -1442,7 +1442,7 @@
       }
     },
     "soul": {
-      "title": "A alma do Rosário Vivo",
+      "title": "A alma do Evangelizae",
       "subtitle": "Uma experiência reverente, acolhedora e fiel à tradição católica.",
       "items": [
         {
@@ -1479,7 +1479,7 @@
       "action": "Abrir"
     },
     "why": {
-      "title": "Por que Rosário Vivo?",
+      "title": "Por que Evangelizae?",
       "subtitle": "Mais que um app, somos sua companhia na jornada espiritual",
       "items": [
         {
@@ -1502,7 +1502,7 @@
     },
     "cta": {
       "title": "Comece sua jornada hoje",
-      "desc": "Junte-se a milhares de católicos ao redor do mundo vivendo o Rosário Vivo. Gratuito, open-source, e feito com fé.",
+      "desc": "Junte-se a milhares de católicos ao redor do mundo vivendo o Evangelizae. Gratuito, open-source, e feito com fé.",
       "btn": "Começar agora",
       "learnMore": "Saiba mais",
       "primaryBtn": "Começar oração",
@@ -1524,7 +1524,7 @@
         "Feed de orações",
         "Estatísticas"
       ],
-      "credits": "Feito com fé e amor • {year} • Rosário Vivo",
+      "credits": "Feito com fé e amor • {year} • Evangelizae",
       "quote": "\"Reze o Rosário todos os dias para obter a paz no mundo\" - Nossa Senhora de Fátima"
     }
   },
