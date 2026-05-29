@@ -79,57 +79,20 @@ export function HeroSection() {
         </h1>
 
         <p className="mt-6 sm:mt-8 text-lg sm:text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-manrope animate-fade-up opacity-0" style={{ animationDelay: "400ms" }}>
-          {hasPrayed ? t("hasPrayed") : t("notPrayed")}
+          {t("notPrayed")}
         </p>
 
         <div className="mt-12 sm:mt-14 animate-fade-up opacity-0" style={{ animationDelay: "500ms" }}>
-          {hasPrayed ? (
-            <div className="space-y-4 mb-12">
-              <div className="inline-flex items-center gap-3 px-8 py-4 glass rounded-full border border-green-500/30 dark:border-green-400/30">
-                <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
-                  <Check className="w-5 h-5 text-white" strokeWidth={3} />
-                </div>
-                <span className="font-cinzel font-bold text-green-700 dark:text-green-400 text-lg">
-                  {t("completed")}
-                </span>
-              </div>
-              <p className="text-slate-500 dark:text-slate-400 font-medium">{t("comeBack")}</p>
-            </div>
-          ) : (
-            <div className="mb-10">
-              <p className="text-sm font-cinzel font-semibold text-gold-500 dark:text-gold-400 uppercase tracking-widest mb-6">
-                {t("choice")}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Link
-                  href="/como-rezar"
-                  className="group relative p-6 glass rounded-lg border border-gold-500/30 hover:border-gold-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-gold-500/20 block text-left"
-                >
-                  <div className="text-3xl mb-3">📿</div>
-                  <h3 className="font-cinzel font-bold text-lg text-foreground mb-2">{t("prayNow")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("prayNowDesc")}</p>
-                </Link>
-
-                <Link
-                  href="/ensinamentos"
-                  className="group relative p-6 glass rounded-lg border border-gold-500/30 hover:border-gold-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-gold-500/20 block text-left"
-                >
-                  <div className="text-3xl mb-3">📚</div>
-                  <h3 className="font-cinzel font-bold text-lg text-foreground mb-2">{t("learn")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("learnDesc")}</p>
-                </Link>
-
-                <button
-                  onClick={() => openAuthModal("signup")}
-                  className="group relative p-6 glass rounded-lg border border-gold-500/30 hover:border-gold-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-gold-500/20 text-left w-full"
-                >
-                  <div className="text-3xl mb-3">⭐</div>
-                  <h3 className="font-cinzel font-bold text-lg text-foreground mb-2">{t("track")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("trackDesc")}</p>
-                </button>
-              </div>
-            </div>
-          )}
+          <Button
+            size="lg"
+            onClick={() => {
+              const element = document.getElementById("witness");
+              if (element) element.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="rounded-full bg-gradient-to-r from-gold-500 to-gold-600 px-10 py-7 font-cinzel text-xl font-bold tracking-wide text-sacred-blue transition-all duration-300 hover:shadow-gold-glow-lg"
+          >
+            Start Your Mission
+          </Button>
         </div>
 
         <div className="mt-16 sm:mt-20 animate-bounce">

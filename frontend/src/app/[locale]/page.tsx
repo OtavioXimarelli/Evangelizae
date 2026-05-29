@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
 import { useTranslations } from "next-intl";
 
+import { BRAND } from "@/config/brand";
+
 export default function HomePage() {
   const router = useRouter();
   const { openAuthModal } = useAuth();
@@ -26,193 +28,177 @@ export default function HomePage() {
 
   const openSignup = () => openAuthModal("signup");
 
+  const witnesses = [
+    { name: "Maria S.", text: "Gratias Deo. The recovery was a miracle through your collective prayers in the St. Jude Circle.", time: "2h ago", category: "Testimonium" },
+    { name: "John D.", text: "Found peace during a difficult week at work by meditating on the Sorrowful Mysteries.", time: "5h ago", category: "Testimonium" },
+    { name: "Lucas P.", text: "The new lesson on the Eucharist completely changed how I see the Mass.", time: "1d ago", category: "Insight" },
+  ];
+
   return (
     <PageTransition>
       <main className="min-h-screen bg-background">
         <HeroSection />
 
-        <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-5xl rounded-3xl border border-gold-500/20 bg-gradient-to-br from-gold-500/10 to-transparent p-8 sm:p-10">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-gold-600 dark:text-gold-400">
-              {t("mission.badge")}
-            </p>
-            <h2 className="mb-4 text-3xl font-cinzel font-bold text-foreground sm:text-4xl">
-              {t("mission.title")}
-            </h2>
-            <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {t("mission.description")}
-            </p>
-          </div>
-        </section>
-
-        <section className="border-y border-gold-500/10 bg-gradient-to-br from-gold-500/5 via-background to-background px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12 text-center">
-              <h2 className="mb-4 text-3xl font-cinzel font-bold text-foreground sm:text-4xl md:text-5xl">
-                {t("start.title")}
+        {/* Section 1: Witness Feed (Testimonium) */}
+        <section id="witness" className="relative px-4 py-24 sm:px-6 lg:px-8 bg-sacred-cream dark:bg-slate-950 overflow-hidden">
+          <div className="absolute inset-0 opacity-30 noise-overlay" />
+          <div className="relative mx-auto max-w-7xl">
+            <div className="mb-16 text-center">
+              <span className="text-gold-600 dark:text-gold-400 font-cinzel text-sm font-bold tracking-[0.3em] uppercase mb-4 block">
+                {BRAND.latin.witness}
+              </span>
+              <h2 className="text-4xl md:text-5xl font-cinzel font-bold text-foreground mb-6">
+                See the Impact of Prayer
               </h2>
-              <p className="text-lg text-muted-foreground">{t("start.subtitle")}</p>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Real stories of faith, hope, and intercession from our global community.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              <button
-                type="button"
-                className="group rounded-3xl border border-gold-500/20 bg-card p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-gold-glow"
-                onClick={() => router.push("/como-rezar")}
-                aria-label={t("start.path1.btn")}
-                data-testid="start-pray-now"
-              >
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg">
-                  <Calendar className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="mb-2 text-2xl font-cinzel font-bold text-foreground">{t("start.path1.title")}</h3>
-                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{t("start.path1.desc")}</p>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold-600 transition-all group-hover:gap-3 dark:text-gold-400">
-                  {t("start.path1.btn")}
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="group rounded-3xl border border-gold-500/20 bg-card p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-gold-glow"
-                onClick={() => router.push("/ensinamentos")}
-                aria-label={t("start.path2.btn")}
-                data-testid="start-learn-path"
-              >
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
-                  <BookOpen className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="mb-2 text-2xl font-cinzel font-bold text-foreground">{t("start.path2.title")}</h3>
-                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{t("start.path2.desc")}</p>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold-600 transition-all group-hover:gap-3 dark:text-gold-400">
-                  {t("start.path2.btn")}
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="group relative rounded-3xl border border-gold-500/30 bg-gradient-to-br from-gold-500/10 to-gold-600/5 p-8 text-left transition-all duration-300 hover:-translate-y-1"
-                onClick={openSignup}
-                aria-label={t("start.path3.btn")}
-                data-testid="start-track-path"
-              >
-                <div className="absolute -right-3 -top-3 inline-flex items-center gap-1 rounded-full bg-gold-500 px-3 py-1 text-xs font-cinzel font-bold text-sacred-blue">
-                  ⭐ {t("start.path3.badge")}
-                </div>
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg">
-                  <Heart className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="mb-2 text-2xl font-cinzel font-bold text-foreground">{t("start.path3.title")}</h3>
-                <p className="mb-5 text-sm leading-relaxed text-muted-foreground">{t("start.path3.desc")}</p>
-                <span className="inline-flex items-center rounded-full bg-gradient-to-r from-gold-500 to-gold-600 px-6 py-2 text-sm font-cinzel font-bold text-sacred-blue transition-all">
-                  {t("start.path3.btn")}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </span>
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12 text-center">
-              <h2 className="mb-4 text-3xl font-cinzel font-bold text-foreground sm:text-4xl md:text-5xl">
-                {t("soul.title")}
-              </h2>
-              <p className="mx-auto max-w-3xl text-lg text-muted-foreground">{t("soul.subtitle")}</p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {[
-                { icon: Shield, title: t("soul.items.0.title"), desc: t("soul.items.0.desc") },
-                { icon: Users, title: t("soul.items.1.title"), desc: t("soul.items.1.desc") },
-                { icon: Sparkles, title: t("soul.items.2.title"), desc: t("soul.items.2.desc") },
-              ].map((item, index) => (
-                <article
-                  key={index}
-                  className="rounded-2xl border border-gold-500/15 bg-card p-6 transition-colors hover:border-gold-500/30"
-                >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-gold-500/20 to-gold-600/20">
-                    <item.icon className="h-6 w-6 text-gold-600 dark:text-gold-400" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {witnesses.map((w, idx) => (
+                <div key={idx} className="glass-card p-8 flex flex-col justify-between min-h-[250px] group hover:border-gold-leaf transition-all duration-500">
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <span className="text-[10px] font-bold tracking-widest text-gold-leaf uppercase px-2 py-1 border border-gold-leaf/20 rounded">
+                        {w.category}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{w.time}</span>
+                    </div>
+                    <p className="text-lg italic font-manrope leading-relaxed text-foreground group-hover:text-gold-leaf/90 transition-colors">
+                      "{w.text}"
+                    </p>
                   </div>
-                  <h3 className="mb-2 text-xl font-cinzel font-bold text-foreground">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
-                </article>
+                  <div className="mt-8 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gold-leaf/20 flex items-center justify-center text-gold-leaf font-bold text-xs">
+                      {w.name[0]}
+                    </div>
+                    <span className="text-sm font-semibold">{w.name}</span>
+                  </div>
+                </div>
               ))}
+            </div>
+            
+            <div className="mt-16 text-center">
+              <Button variant="outline" className="rounded-full border-gold-leaf/30 hover:border-gold-leaf/60 text-gold-leaf px-8">
+                View All Testimonies
+              </Button>
             </div>
           </div>
         </section>
 
-        <section className="bg-muted/40 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-10 text-center">
-              <h2 className="mb-4 text-3xl font-cinzel font-bold text-foreground sm:text-4xl">
-                {t("rhythm.title")}
+        {/* Section 2: Mission Power-ups (Communio) */}
+        <section className="relative px-4 py-24 sm:px-6 lg:px-8 bg-slate-900 text-white overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.05)_0%,transparent_70%)]" />
+          <div className="relative mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-gold-leaf font-cinzel text-sm font-bold tracking-[0.3em] uppercase mb-4 block text-center lg:text-left">
+                {BRAND.latin.community}
+              </span>
+              <h2 className="text-4xl md:text-5xl font-cinzel font-bold mb-8 text-center lg:text-left">
+                Join a Circle. <br/><span className="text-gold-leaf">Power the Mission.</span>
               </h2>
-              <p className="text-lg text-muted-foreground">{t("rhythm.subtitle")}</p>
+              <p className="text-xl text-slate-300 mb-10 leading-relaxed text-center lg:text-left">
+                Don't pray alone. Join a private "Circle" to adopt intentions and fuel them with your daily devotions. 
+                Your progress contributes to a global missionary effort.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button size="lg" className="rounded-full bg-gold-leaf text-sacred-blue font-bold px-8">
+                  Find a Circle
+                </Button>
+                <Button size="lg" variant="outline" className="rounded-full border-white/20 hover:bg-white/5 px-8">
+                  Learn How it Works
+                </Button>
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {[
-                { icon: BookOpen, label: t("rhythm.steps.0.title"), desc: t("rhythm.steps.0.desc"), path: "/como-rezar" },
-                { icon: Compass, label: t("rhythm.steps.1.title"), desc: t("rhythm.steps.1.desc"), path: "/ferramentas/guia-interativo" },
-                { icon: History, label: t("rhythm.steps.2.title"), desc: t("rhythm.steps.2.desc"), path: "/dashboard" },
-              ].map((step, index) => (
-                <button
-                  key={index}
-                  onClick={() => router.push(step.path as any)}
-                  className="group rounded-2xl border border-border bg-background p-6 text-left transition-all hover:-translate-y-1 hover:border-gold-500/30"
-                >
-                  <step.icon className="mb-4 h-8 w-8 text-gold-600 dark:text-gold-400" />
-                  <h3 className="mb-2 text-xl font-cinzel font-bold text-foreground">{step.label}</h3>
-                  <p className="mb-4 text-sm text-muted-foreground">{step.desc}</p>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold-600 dark:text-gold-400">
-                    {t("rhythm.action")}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </button>
-              ))}
+            <div className="relative">
+              <div className="glass-card p-8 border-gold-leaf/40 relative z-10">
+                <div className="flex items-center justify-between mb-8">
+                  <h4 className="font-cinzel font-bold text-lg">Active Mission: Peace in families</h4>
+                  <span className="text-gold-leaf text-xs font-bold">LIVE</span>
+                </div>
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Group Progress</span>
+                      <span className="text-gold-leaf">84%</span>
+                    </div>
+                    <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-gold-leaf" style={{ width: '84%' }} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+                      <div className="text-2xl font-bold text-gold-leaf">1,240</div>
+                      <div className="text-[10px] uppercase tracking-tighter text-slate-400">Rosaries Prayed</div>
+                    </div>
+                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+                      <div className="text-2xl font-bold text-gold-leaf">58</div>
+                      <div className="text-[10px] uppercase tracking-tighter text-slate-400">Members Active</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-leaf/20 rounded-full blur-3xl" />
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gold-leaf/10 rounded-full blur-3xl" />
             </div>
           </div>
         </section>
 
-        <section className="bg-gradient-to-br from-sacred-blue via-slate-800 to-slate-900 px-4 py-20 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 text-5xl">📿</div>
-            <h2 className="mb-4 text-3xl font-cinzel font-bold text-white sm:text-4xl md:text-5xl">{t("cta.title")}</h2>
-            <p className="mx-auto mb-10 max-w-2xl text-lg text-white/80">{t("cta.desc")}</p>
-            <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <Button
-                size="lg"
-                onClick={() => router.push("/como-rezar")}
-                data-testid="cta-pray-now"
-                className="rounded-full border-2 border-gold-400/50 bg-gradient-to-r from-gold-500 to-gold-600 px-10 py-7 font-cinzel text-lg font-bold tracking-wide text-sacred-blue transition-all duration-300 hover:shadow-gold-glow-lg"
-              >
-                {t("cta.primaryBtn")}
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => router.push("/dashboard")}
-                data-testid="cta-dashboard"
-                className="rounded-full border-2 border-white/20 bg-white/5 px-10 py-7 text-lg font-semibold text-white transition-all hover:border-white/40 hover:bg-white/10"
-              >
-                {t("cta.secondaryBtn")}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+        {/* Section 3: Apostolic Shareables (Missio) */}
+        <section className="relative px-4 py-24 sm:px-6 lg:px-8 bg-background">
+          <div className="relative mx-auto max-w-7xl text-center">
+            <span className="text-gold-600 dark:text-gold-400 font-cinzel text-sm font-bold tracking-[0.3em] uppercase mb-4 block">
+              {BRAND.latin.mission}
+            </span>
+            <h2 className="text-4xl md:text-5xl font-cinzel font-bold text-foreground mb-8">
+              Share the Light
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-16">
+              Turn your study and prayer into witness. Create beautiful, shareable cards from our Teachings Hub to evangelize your social circles.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="relative aspect-[4/5] rounded-2xl overflow-hidden group shadow-2xl">
+                   <div className={`absolute inset-0 bg-gradient-to-br ${i === 1 ? 'from-slate-900 to-sacred-blue' : i === 2 ? 'from-gold-leaf/20 to-gold-leaf/40' : 'from-slate-800 to-slate-950'}`} />
+                   <div className="absolute inset-0 p-8 flex flex-col justify-between text-left border border-white/10">
+                      <div>
+                        <div className="text-2xl text-gold-leaf mb-4">"</div>
+                        <p className="text-xl font-cinzel font-medium text-white leading-tight">
+                          {i === 1 ? "The Rosary is the weapon for these times." : i === 2 ? "Be a Light in the Digital World." : "Do whatever he tells you."}
+                        </p>
+                      </div>
+                      <div className="flex justify-between items-end">
+                        <span className="text-[10px] font-bold tracking-widest text-white/50 uppercase">
+                          {i === 1 ? "St. Padre Pio" : i === 2 ? "Evangelizae" : "Mother Mary"}
+                        </span>
+                        <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
+                           <span className="text-xs text-gold-leaf">📿</span>
+                        </div>
+                      </div>
+                   </div>
+                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                      <Button className="rounded-full bg-white text-black font-bold">Customize & Share</Button>
+                   </div>
+                </div>
+              ))}
             </div>
+
+            <Button size="lg" onClick={openSignup} className="rounded-full bg-gradient-to-r from-gold-leaf to-gold-muted text-sacred-blue font-bold px-12 py-8 text-xl hover:shadow-gold-glow-lg transition-all">
+              Join the Mission Today
+            </Button>
           </div>
         </section>
 
         <footer className="relative overflow-hidden border-t border-gold-500/15 bg-slate-950 px-4 py-16 text-white sm:px-6 lg:px-8">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.12)_0%,transparent_55%)]" />
           <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg shadow-gold-500/20">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg shadow-gold-500/20">
               <span className="text-3xl">📿</span>
             </div>
-            <h3 className="mb-3 text-2xl font-cinzel font-bold text-white">Rosário Vivo</h3>
+            <h3 className="mb-3 text-2xl font-cinzel font-bold text-white">{BRAND.name}</h3>
             <p className="mb-8 max-w-2xl leading-relaxed text-slate-300">{t("footer.desc")}</p>
 
             <div className="w-full border-t border-slate-800/90 pt-6">
