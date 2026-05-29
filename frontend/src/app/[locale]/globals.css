@@ -111,6 +111,14 @@
   }
 
   /* Glass effects */
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-gold-leaf/30 rounded-lg;
+  }
+
+  .cathedral-night {
+    @apply bg-[#0a0a0c] text-[#e2d1b3];
+  }
+
   .glass-light {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
   }

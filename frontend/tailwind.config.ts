@@ -59,6 +59,8 @@ const config: Config = {
         // Custom Sacred Colors
         gold: {
           DEFAULT: "hsl(var(--gold))",
+          leaf: "#d4af37",
+          muted: "#b8860b",
           50: "hsl(217 100% 97%)",
           100: "hsl(217 100% 93%)",
           200: "hsl(217 100% 87%)",
@@ -75,6 +77,10 @@ const config: Config = {
             DEFAULT: "hsl(var(--sacred-blue))",
             light: "hsl(var(--sacred-blue-light))",
             dark: "hsl(var(--sacred-blue-dark))",
+          },
+          cathedral: {
+            dark: "#0a0a0c",
+            cream: "#f4f1ea",
           },
           cream: "hsl(var(--cream))",
           rose: "#E11D48",
