@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/providers/theme-provider";
 import { useAuth, AUTH_DISABLED } from "@/providers/auth-provider";
 import { useLocale, useTranslations } from "next-intl";
+import { BRAND } from "@/config/brand";
 
 export function PublicHeader() {
   const pathname = usePathname();
@@ -94,7 +95,7 @@ export function PublicHeader() {
               </div>
               <div className="hidden sm:block">
                 <h1 className="font-cinzel text-lg font-bold text-foreground transition-colors group-hover:text-gold-500 sm:text-xl">
-                  Rosário Vivo
+                  {BRAND.name}
                 </h1>
               </div>
             </button>

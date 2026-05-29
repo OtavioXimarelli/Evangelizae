@@ -1,8 +1,8 @@
 {
   "Metadata": {
-    "title": "Living Rosary | Live your Catholic faith fully",
+    "title": "Evangelizae | Be a Light in the Digital World",
     "description": "Track your spiritual journey, explore deep content about the Rosary and Catholic spirituality, and connect with a global community of faith.",
-    "ogTitle": "Living Rosary - Live your Catholic faith fully",
+    "ogTitle": "Evangelizae - Be a Light in the Digital World",
     "ogDescription": "Complete Catholic spirituality platform. Track your journey, explore deep content, and pray in community."
   },
   "Common": {
@@ -47,8 +47,8 @@
     }
   },
   "Hero": {
-    "title": "Living Rosary",
-    "subtitle": "Live your faith, every day",
+    "title": "Evangelizae",
+    "subtitle": "Be a Light in the Digital World",
     "hasPrayed": "Congratulations! You have already prayed today. Your faithfulness is a blessing!",
     "notPrayed": "Track your spiritual journey, explore deep content and connect with a global community of faith.",
     "choice": "How do you want to start?",
