@@ -1,5 +1,7 @@
 "use client";
 
+import { Shield } from "lucide-react";
+
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
@@ -36,6 +38,8 @@ export function MobileNav() {
   const moreLinks = [
     { label: t("mysteries"), path: "/misterios-do-dia", icon: Sparkles },
     { label: t("prayers"), path: "/oracoes-tradicionais", icon: BookOpen },
+    { label: "Liturgia Diária", path: "/ensinamentos/liturgia-diaria", icon: BookOpen },
+    { label: "Defesa da Fé", path: "/ensinamentos/apologetica", icon: Shield },
     { label: t("resources"), path: "/recursos", icon: Compass },
     { label: t("about"), path: "/about", icon: Home },
   ];

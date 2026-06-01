@@ -1888,5 +1888,39 @@
     "options": "Opções",
     "chooseDuration": "Escolher a Duração",
     "min": "min"
+  },
+  "Liturgy": {
+    "title": "Liturgia Diária",
+    "subtitle": "Medite na Palavra de Deus e nas reflexões dos Santos",
+    "today": "Hoje",
+    "color": "Cor Litúrgica",
+    "firstReading": "Primeira Leitura",
+    "psalm": "Salmo Responsorial",
+    "gospel": "Evangelho",
+    "wordOfSalvation": "Palavra da Salvação.",
+    "reflection": "Reflexão Católica",
+    "colors": {
+      "green": "Verde (Tempo Comum)",
+      "purple": "Roxo (Advento/Quaresma)",
+      "white": "Branco (Festas/Solenidades)",
+      "red": "Vermelho (Mártires/Pentecostes)",
+      "rose": "Rosa (Alegria)"
+    }
+  },
+  "Apologetics": {
+    "title": "Defesa da Fé",
+    "subtitle": "Respostas católicas para objeções comuns",
+    "objection": "A Objeção",
+    "catholicAnswer": "A Resposta Católica",
+    "scriptureEvidence": "Evidência Bíblica",
+    "traditionEvidence": "A Tradição (Padres da Igreja)",
+    "detailedExplanation": "Explicação Detalhada",
+    "categories": {
+      "eucharist": "Sagrada Eucaristia",
+      "papacy": "O Papado",
+      "mary": "Dogmas Marianos",
+      "scripture": "Sola Scriptura",
+      "salvation": "Salvação e Graça"
+    }
   }
 }

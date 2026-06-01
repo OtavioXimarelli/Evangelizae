@@ -13,7 +13,7 @@ Evangelizae is a high-performance, Offline-First/Local-First web application tha
 ## 2. Technical Specifications by Module
 
 ### 2.1 Brand Identity & Design System
-*   **Pillars**: *Testimonium* (Witness), *Communio* (Community), *Missio* (Mission).
+*   **Pillars**: *Veritas* (Truth/Learn), *Communio* (Community/Connect), *Missio* (Evangelization/Mission).
 *   **Typography**: Cinzel (Headings), Manrope (Body).
 *   **Glassmorphism**: "Stained Glass" effect implemented via custom `.glass` and `.glass-card` utilities.
 
@@ -21,11 +21,27 @@ Evangelizae is a high-performance, Offline-First/Local-First web application tha
 
 #### Narrative Landing Page (`/`)
 *   **Hero**: High-impact "Be a Light" mission statement.
-*   **Testimonium Section**: Social proof feed with glassmorphic cards and GSAP staggered reveal animations.
+*   **Testimonium Section**: Social proof feed focusing on **Conversion Stories** and miracles with glassmorphic cards and GSAP reveal animations.
 *   **Communio Section**: Interactive mission blocks showing collective progress and active missionary circles.
-*   **Missio Section**: Apostolic Card generator and showcase for digital evangelization.
+*   **Missio Section**: Entry point for the Apostolic Toolkit.
+
+#### Veritas (Learn) Hub (`/ensinamentos` -> `/veritas`)
+*   **Apologetics Tracts**: Highly visual, bite-sized guides for core dogmas (Eucharist, Papacy) to answer secular/Protestant objections.
+*   **Daily Gospel & Reflection**: Integration of daily Mass readings with short orthodox reflections.
+*   **MDX Articles**: Beautifully rendered Church teachings and Saints' lives.
+
+#### Communio (Connect) Features
+*   **Faith Circles (Círculos)**: Small user-created groups for localized intentions and collective Novenas.
+*   **Mentorship (Padrinhos)**: Pairing devout Catholics with seekers or catechumens for guidance.
+*   **Global Intentions Wall**: Masonry layout for global prayer requests.
+
+#### Missio (Mission) Toolkit
+*   **Apostolic Card Generator**: Customizable design tool for exporting Saint/Scripture quotes with the "Modern Cathedral" aesthetic for social sharing.
+*   **Quick Apologetics Tool**: Searchable database of Catholic answers to common faith questions, optimized for mobile defense of the faith.
+*   **Evangelization Challenges**: Monthly gamified missions (e.g., "Invite a friend to Mass").
 
 #### Dashboard Overview (`/dashboard`)
+... (rest of the file)
 *   **Sacred Space**: Stat-driven environment using glassmorphism and SVG-based progress rings (Papal Gold).
 *   **Hydration safety**: Strict usage of `useEffect` or dynamic imports for `localStorage` reads.
 

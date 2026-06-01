@@ -1852,5 +1852,39 @@
     "options": "Options",
     "chooseDuration": "Choose Duration",
     "min": "min"
+  },
+  "Liturgy": {
+    "title": "Daily Liturgy",
+    "subtitle": "Meditate on the Word of God and the reflections of the Saints",
+    "today": "Today",
+    "color": "Liturgical Color",
+    "firstReading": "First Reading",
+    "psalm": "Responsorial Psalm",
+    "gospel": "Gospel",
+    "wordOfSalvation": "The Gospel of the Lord.",
+    "reflection": "Catholic Reflection",
+    "colors": {
+      "green": "Green (Ordinary Time)",
+      "purple": "Purple (Advent/Lent)",
+      "white": "White (Feasts/Solemnities)",
+      "red": "Red (Martyrs/Pentecost)",
+      "rose": "Rose (Joy)"
+    }
+  },
+  "Apologetics": {
+    "title": "Defense of the Faith",
+    "subtitle": "Catholic answers to common objections",
+    "objection": "The Objection",
+    "catholicAnswer": "The Catholic Answer",
+    "scriptureEvidence": "Biblical Evidence",
+    "traditionEvidence": "Tradition (Church Fathers)",
+    "detailedExplanation": "Detailed Explanation",
+    "categories": {
+      "eucharist": "Holy Eucharist",
+      "papacy": "The Papacy",
+      "mary": "Marian Dogmas",
+      "scripture": "Sola Scriptura",
+      "salvation": "Salvation and Grace"
+    }
   }
 }

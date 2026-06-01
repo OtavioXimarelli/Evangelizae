@@ -64,6 +64,8 @@ export function Navbar() {
     { label: t("history"), description: t("description.history"), icon: History, path: "/historia", isPublic: true },
     { label: t("mysteries"), description: t("description.mysteries"), icon: Sparkles, path: "/misterios-do-dia", isPublic: true },
     { label: t("prayers"), description: t("description.prayers"), icon: ScrollText, path: "/oracoes-tradicionais", isPublic: true },
+    { label: "Liturgia Diária", description: "Medite na Palavra de Deus", icon: BookOpen, path: "/ensinamentos/liturgia-diaria", isPublic: true },
+    { label: "Defesa da Fé", description: "Respostas católicas para objeções", icon: BookOpen, path: "/ensinamentos/apologetica", isPublic: true },
     { label: t("teachings"), description: t("description.teachings"), icon: GraduationCap, path: "/ensinamentos", isPublic: false },
     { label: t("tools"), description: t("description.tools"), icon: Compass, path: "/ferramentas", isPublic: false },
     { label: t("about"), description: t("description.about"), icon: BookOpen, path: "/about", isPublic: true },
