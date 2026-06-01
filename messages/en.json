@@ -1338,7 +1338,18 @@
       "title": "Share the Light",
       "description": "Turn your study and prayer into witness. Create beautiful, shareable cards from our Teachings Hub to evangelize your social circles.",
       "finalCta": "Join the Mission Today",
-      "cta": "Customize & Share"
+      "cta": "Customize & Share",
+      "generator": {
+        "quoteLabel": "Choose a Quote",
+        "themeLabel": "Choose a Theme",
+        "downloadBtn": "Download Image",
+        "generatingBtn": "Generating...",
+        "themes": {
+          "marian": "Marian Mantle (Dark)",
+          "vatican": "Vatican Light (Light)"
+        },
+        "watermark": "Evangelizae"
+      }
     },
     "witness": {
       "title": "See the Impact of Prayer",

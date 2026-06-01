@@ -1374,7 +1374,18 @@
       "title": "Compartilhe a Luz",
       "description": "Transforme seu estudo e oração em testemunho. Crie belos cartões compartilháveis a partir do nosso Hub de Ensinamentos para evangelizar seus círculos sociais.",
       "finalCta": "Junte-se à Missão Hoje",
-      "cta": "Personalizar & Compartilhar"
+      "cta": "Personalizar & Compartilhar",
+      "generator": {
+        "quoteLabel": "Escolha uma Citação",
+        "themeLabel": "Escolha um Tema",
+        "downloadBtn": "Baixar Imagem",
+        "generatingBtn": "Gerando...",
+        "themes": {
+          "marian": "Manto Mariano (Escuro)",
+          "vatican": "Luz do Vaticano (Claro)"
+        },
+        "watermark": "Evangelizae"
+      }
     },
     "witness": {
       "title": "Veja o Impacto da Oração",

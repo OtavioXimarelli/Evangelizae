@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from "react";
 import { ComingSoonModal } from "@/components/coming-soon-modal";
 import { BRAND } from "@/config/brand";
 import { CommunityFeed } from "@/components/community-feed";
+import { ApostolicCardGenerator } from "@/components/apostolic-card-generator";
 import { Footer } from "@/components/footer";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -204,27 +205,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-              {[1, 2, 3].map((i) => (
-                <div key={i} data-magic-bento className="group relative aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-primary/20 shadow-lg hover:shadow-gold-glow transition-all duration-700 hover:-translate-y-2">
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent z-10" />
-                  <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors duration-700" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-10 z-20 text-left">
-                    <div className="h-1 w-16 bg-primary mb-6 rounded-full" />
-                    <h4 className="font-cinzel font-bold text-2xl text-foreground mb-3 uppercase tracking-widest">Apostolic Card #{i}</h4>
-                    <p className="text-sm text-muted-foreground mb-8 font-manrope font-medium">"Be a Light in the Digital World"</p>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-fit rounded-full border-primary/30 hover:bg-primary text-primary hover:text-primary-foreground font-cinzel font-bold text-[10px] tracking-widest uppercase px-6"
-                      onClick={() => openComingSoon(t("mission.cta"))}
-                    >
-                      {t("mission.cta")}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ApostolicCardGenerator />
 
             <Button size="lg" onClick={openSignup} className="rounded-full bg-gradient-to-r from-primary to-gold-dark text-primary-foreground font-cinzel font-bold px-12 py-8 text-base tracking-[0.2em] uppercase hover:shadow-gold-glow-lg transition-all border-none">
               {t("mission.finalCta")}
