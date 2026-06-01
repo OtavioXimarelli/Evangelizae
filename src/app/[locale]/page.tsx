@@ -1,21 +1,79 @@
 "use client";
 
-import { useRouter } from "@/i18n/routing";
 import { HeroSection } from "@/components/hero-section";
 import { PageTransition } from "@/components/page-transition";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ComingSoonModal } from "@/components/coming-soon-modal";
-
 import { BRAND } from "@/config/brand";
+import { CommunityFeed } from "@/components/community-feed";
+import { Footer } from "@/components/footer";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function HomePage() {
   const { openAuthModal } = useAuth();
   const t = useTranslations("Landing");
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
   const [comingSoonFeature, setComingSoonFeature] = useState("");
+  const sectionsRef = useRef<HTMLElement[]>([]);
+
+  useEffect(() => {
+    sectionsRef.current.forEach((section) => {
+      if (!section) return;
+      
+      const elements = section.querySelectorAll('[data-magic-bento]');
+      
+      if (elements.length > 0) {
+        gsap.fromTo(
+          elements,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 85%",
+            },
+          }
+        );
+      }
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }, []);
+
+  const addToRefs = (el: HTMLElement | null) => {
+    if (el && !sectionsRef.current.includes(el)) {
+      sectionsRef.current.push(el);
+    }
+  };
 
   const openSignup = () => openAuthModal("signup");
   const openComingSoon = (feature: string) => {
@@ -23,205 +81,160 @@ export default function HomePage() {
     setComingSoonOpen(true);
   };
 
-  const witnesses = [
-    { name: "Maria S.", text: "Gratias Deo. The recovery was a miracle through your collective prayers in the St. Jude Circle.", time: "2h ago", category: t("witness.categories.testimonium") },
-    { name: "John D.", text: "Found peace during a difficult week at work by meditating on the Sorrowful Mysteries.", time: "5h ago", category: t("witness.categories.testimonium") },
-    { name: "Lucas P.", text: "The new lesson on the Eucharist completely changed how I see the Mass.", time: "1d ago", category: t("witness.categories.insight") },
-  ];
-
   return (
     <PageTransition>
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background selection:bg-primary/30">
         <HeroSection />
 
-        {/* Section 1: Witness Feed (Testimonium) */}
-        <section id="witness" className="relative px-4 py-24 sm:px-6 lg:px-8 bg-sacred-cream dark:bg-slate-950 overflow-hidden">
-          <div className="absolute inset-0 opacity-30 noise-overlay" />
-          <div className="relative mx-auto max-w-7xl">
-            <div className="mb-16 text-center">
-              <span className="text-gold-600 dark:text-gold-400 font-cinzel text-sm font-bold tracking-[0.3em] uppercase mb-4 block">
+        {/* Testimonium Section */}
+        <section ref={addToRefs} id="witness" className="relative py-24 lg:py-40 overflow-hidden">
+          <div className="container relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-20">
+              <span className="font-cinzel text-primary font-bold tracking-[0.4em] text-[10px] sm:text-xs uppercase mb-6 block">
                 {BRAND.latin.witness}
               </span>
-              <h2 className="text-4xl md:text-5xl font-cinzel font-bold text-foreground mb-6">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-bold text-foreground mb-8 leading-tight">
                 {t("witness.title")}
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed font-manrope font-medium">
                 {t("witness.description")}
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {witnesses.map((w, idx) => (
-                <div key={idx} className="glass-card p-8 flex flex-col justify-between min-h-[250px] group hover:border-gold-leaf transition-all duration-500">
-                  <div>
-                    <div className="flex justify-between items-start mb-6">
-                      <span className="text-[10px] font-bold tracking-widest text-gold-leaf uppercase px-2 py-1 border border-gold-leaf/20 rounded">
-                        {w.category}
-                      </span>
-                      <span className="text-xs text-muted-foreground">{w.time}</span>
-                    </div>
-                    <p className="text-lg italic font-manrope leading-relaxed text-foreground group-hover:text-gold-leaf/90 transition-colors">
-                      "{w.text}"
-                    </p>
-                  </div>
-                  <div className="mt-8 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gold-leaf/20 flex items-center justify-center text-gold-leaf font-bold text-xs">
-                      {w.name[0]}
-                    </div>
-                    <span className="text-sm font-semibold">{w.name}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
             
-            <div className="mt-16 text-center">
+            <CommunityFeed limit={3} />
+            
+            <div className="text-center mt-16">
               <Button 
                 variant="outline" 
-                className="rounded-full border-gold-leaf/30 hover:border-gold-leaf/60 text-gold-leaf px-8"
+                size="lg"
+                className="rounded-full border-primary/20 hover:border-primary/40 px-10 py-6 font-cinzel font-bold text-sm tracking-widest uppercase transition-all hover:bg-primary/5 shadow-sm"
                 onClick={() => openComingSoon(t("witness.cta"))}
               >
                 {t("witness.cta")}
               </Button>
             </div>
           </div>
+          
+          {/* Subtle background glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-primary/5 rounded-[100%] blur-[120px] -z-10" />
         </section>
 
-        {/* Section 2: Mission Power-ups (Communio) */}
-        <section className="relative px-4 py-24 sm:px-6 lg:px-8 bg-slate-900 text-white overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.05)_0%,transparent_70%)]" />
-          <div className="relative mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="text-gold-leaf font-cinzel text-sm font-bold tracking-[0.3em] uppercase mb-4 block text-center lg:text-left">
-                {BRAND.latin.community}
-              </span>
-              <h2 className="text-4xl md:text-5xl font-cinzel font-bold mb-8 text-center lg:text-left">
-                {t.rich("community.title", {
-                  span: (chunks) => <span className="text-gold-leaf">{chunks}</span>,
-                  br: () => <br />
-                })}
-              </h2>
-              <p className="text-xl text-slate-300 mb-10 leading-relaxed text-center lg:text-left">
-                {t("community.description")}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button 
-                  size="lg" 
-                  className="rounded-full bg-gold-leaf text-sacred-blue font-bold px-8"
-                  onClick={() => openComingSoon(t("community.cta1"))}
-                >
-                  {t("community.cta1")}
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="rounded-full border-white/20 hover:bg-white/5 px-8"
-                  onClick={() => openComingSoon(t("community.cta2"))}
-                >
-                  {t("community.cta2")}
-                </Button>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="glass-card p-8 border-gold-leaf/40 relative z-10">
-                <div className="flex items-center justify-between mb-8">
-                  <h4 className="font-cinzel font-bold text-lg">{t("community.activeMission", { topic: "Peace in families" })}</h4>
-                  <span className="text-gold-leaf text-xs font-bold">{t("community.live")}</span>
-                </div>
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between text-sm mb-2">
-                      <span>{t("community.groupProgress")}</span>
-                      <span className="text-gold-leaf">84%</span>
-                    </div>
-                    <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-gold-leaf" style={{ width: '84%' }} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
-                      <div className="text-2xl font-bold text-gold-leaf">1,240</div>
-                      <div className="text-[10px] uppercase tracking-tighter text-slate-400">{t("community.rosariesPrayed")}</div>
-                    </div>
-                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
-                      <div className="text-2xl font-bold text-gold-leaf">58</div>
-                      <div className="text-[10px] uppercase tracking-tighter text-slate-400">{t("community.membersActive")}</div>
-                    </div>
-                  </div>
+        {/* Communio Section */}
+        <section ref={addToRefs} id="community" className="relative py-24 lg:py-40 bg-secondary/5 border-y border-primary/10 overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_hsla(var(--primary)/0.03)_0%,transparent_70%)]" />
+          <div className="container relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center">
+              <div>
+                <span className="font-cinzel text-primary font-bold tracking-[0.4em] text-[10px] sm:text-xs uppercase mb-6 block">
+                  {BRAND.latin.community}
+                </span>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-bold text-foreground mb-10 leading-tight">
+                  {t.rich("community.title", {
+                    br: () => <br />
+                  })}
+                </h2>
+                <p className="text-lg sm:text-xl text-muted-foreground mb-12 leading-relaxed font-manrope font-medium">
+                  {t("community.description")}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <Button 
+                    size="lg" 
+                    className="rounded-full bg-gradient-to-r from-primary to-gold-dark text-primary-foreground font-cinzel font-bold px-10 py-7 text-sm tracking-widest uppercase shadow-gold-glow hover:shadow-gold-glow-lg transition-all"
+                    onClick={() => openComingSoon(t("community.cta1"))}
+                  >
+                    {t("community.cta1")}
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="rounded-full border-primary/20 hover:bg-primary/5 px-10 py-7 font-cinzel font-bold text-sm tracking-widest uppercase shadow-sm"
+                    onClick={() => openComingSoon(t("community.cta2"))}
+                  >
+                    {t("community.cta2")}
+                  </Button>
                 </div>
               </div>
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-leaf/20 rounded-full blur-3xl" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gold-leaf/10 rounded-full blur-3xl" />
+              <div className="relative" data-magic-bento>
+                <div className="glass-card p-10 sm:p-12 border-primary/30 relative z-10 shadow-sacred">
+                  <div className="flex items-center justify-between mb-10">
+                    <h4 className="font-cinzel font-bold text-xl uppercase tracking-widest text-primary">{t("community.activeMission", { topic: "Peace in families" })}</h4>
+                    <span className="text-primary text-[10px] font-bold animate-pulse uppercase tracking-[0.2em]">{t("community.live")}</span>
+                  </div>
+                  <div className="space-y-10">
+                    <div>
+                      <div className="flex justify-between text-xs font-bold uppercase tracking-widest mb-3">
+                        <span className="text-muted-foreground">{t("community.groupProgress")}</span>
+                        <span className="text-primary">84%</span>
+                      </div>
+                      <div className="h-2 w-full bg-primary/10 rounded-full overflow-hidden border border-primary/5">
+                        <div className="h-full bg-gradient-to-r from-primary to-gold-dark" style={{ width: '84%' }} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="bg-primary/5 p-6 rounded-3xl border border-primary/10 shadow-sm">
+                        <div className="text-3xl font-cinzel font-bold text-primary mb-1">1,240</div>
+                        <div className="text-[9px] uppercase font-bold tracking-[0.2em] text-muted-foreground">{t("community.rosariesPrayed")}</div>
+                      </div>
+                      <div className="bg-primary/5 p-6 rounded-3xl border border-primary/10 shadow-sm">
+                        <div className="text-3xl font-cinzel font-bold text-primary mb-1">58</div>
+                        <div className="text-[9px] uppercase font-bold tracking-[0.2em] text-muted-foreground">{t("community.membersActive")}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute -top-16 -right-16 w-80 h-80 bg-primary/10 rounded-full blur-[100px] -z-10" />
+                <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-secondary/10 rounded-full blur-[80px] -z-10" />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Section 3: Apostolic Shareables (Missio) */}
-        <section className="relative px-4 py-24 sm:px-6 lg:px-8 bg-background">
-          <div className="relative mx-auto max-w-7xl text-center">
-            <span className="text-gold-600 dark:text-gold-400 font-cinzel text-sm font-bold tracking-[0.3em] uppercase mb-4 block">
+        {/* Missio Section */}
+        <section ref={addToRefs} id="mission" className="relative py-24 lg:py-40 overflow-hidden border-b border-primary/10">
+          <div className="container relative z-10 text-center">
+            <span className="font-cinzel text-primary font-bold tracking-[0.4em] text-[10px] sm:text-xs uppercase mb-6 block">
               {BRAND.latin.mission}
             </span>
-            <h2 className="text-4xl md:text-5xl font-cinzel font-bold text-foreground mb-8">
-              {t("mission.title")}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-16">
-              {t("mission.description")}
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div className="max-w-3xl mx-auto mb-20">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-bold text-foreground mb-8 leading-tight">
+                {t("mission.title")}
+              </h2>
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed font-manrope font-medium">
+                {t("mission.description")}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="relative aspect-[4/5] rounded-2xl overflow-hidden group shadow-2xl">
-                   <div className={`absolute inset-0 bg-gradient-to-br ${i === 1 ? 'from-slate-900 to-sacred-blue' : i === 2 ? 'from-gold-leaf/20 to-gold-leaf/40' : 'from-slate-800 to-slate-950'}`} />
-                   <div className="absolute inset-0 p-8 flex flex-col justify-between text-left border border-white/10">
-                      <div>
-                        <div className="text-2xl text-gold-leaf mb-4">"</div>
-                        <p className="text-xl font-cinzel font-medium text-white leading-tight">
-                          {i === 1 ? "The Rosary is the weapon for these times." : i === 2 ? "Be a Light in the Digital World." : "Do whatever he tells you."}
-                        </p>
-                      </div>
-                      <div className="flex justify-between items-end">
-                        <span className="text-[10px] font-bold tracking-widest text-white/50 uppercase">
-                          {i === 1 ? "St. Padre Pio" : i === 2 ? "Evangelizae" : "Mother Mary"}
-                        </span>
-                        <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
-                           <span className="text-xs text-gold-leaf">📿</span>
-                        </div>
-                      </div>
-                   </div>
-                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                      <Button 
-                        className="rounded-full bg-white text-black font-bold"
-                        onClick={() => openComingSoon(t("mission.cta"))}
-                      >
-                        {t("mission.cta")}
-                      </Button>
-                   </div>
+                <div key={i} data-magic-bento className="group relative aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-primary/20 shadow-lg hover:shadow-gold-glow transition-all duration-700 hover:-translate-y-2">
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors duration-700" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-10 z-20 text-left">
+                    <div className="h-1 w-16 bg-primary mb-6 rounded-full" />
+                    <h4 className="font-cinzel font-bold text-2xl text-foreground mb-3 uppercase tracking-widest">Apostolic Card #{i}</h4>
+                    <p className="text-sm text-muted-foreground mb-8 font-manrope font-medium">"Be a Light in the Digital World"</p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-fit rounded-full border-primary/30 hover:bg-primary text-primary hover:text-primary-foreground font-cinzel font-bold text-[10px] tracking-widest uppercase px-6"
+                      onClick={() => openComingSoon(t("mission.cta"))}
+                    >
+                      {t("mission.cta")}
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <Button size="lg" onClick={openSignup} className="rounded-full bg-gradient-to-r from-gold-leaf to-gold-muted text-sacred-blue font-bold px-12 py-8 text-xl hover:shadow-gold-glow-lg transition-all">
+            <Button size="lg" onClick={openSignup} className="rounded-full bg-gradient-to-r from-primary to-gold-dark text-primary-foreground font-cinzel font-bold px-12 py-8 text-base tracking-[0.2em] uppercase hover:shadow-gold-glow-lg transition-all border-none">
               {t("mission.finalCta")}
             </Button>
           </div>
+          
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </section>
 
-        <footer className="relative overflow-hidden border-t border-gold-500/15 bg-slate-950 px-4 py-16 text-white sm:px-6 lg:px-8">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.12)_0%,transparent_55%)]" />
-          <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg shadow-gold-500/20">
-              <span className="text-3xl">📿</span>
-            </div>
-            <h3 className="mb-3 text-2xl font-cinzel font-bold text-white">{BRAND.name}</h3>
-            <p className="mb-8 max-w-2xl leading-relaxed text-slate-300">{t("footer.desc")}</p>
-
-            <div className="w-full border-t border-slate-800/90 pt-6">
-              <p className="mb-2 text-sm text-slate-400">{t("footer.credits", { year: new Date().getFullYear() })}</p>
-              <p className="text-sm italic text-slate-500">{t("footer.quote")}</p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
 
         <ComingSoonModal 
           isOpen={comingSoonOpen} 

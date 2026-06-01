@@ -56,38 +56,18 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom Sacred Colors
+        // Brand Specific Semantic Aliases
         gold: {
-          DEFAULT: "hsl(var(--gold))",
-          leaf: "#d4af37",
-          muted: "#b8860b",
-          50: "hsl(217 100% 97%)",
-          100: "hsl(217 100% 93%)",
-          200: "hsl(217 100% 87%)",
-          300: "hsl(217 100% 77%)",
-          400: "hsl(217 75% 65%)",
-          500: "hsl(var(--gold))",
-          600: "hsl(var(--gold-dark))",
-          700: "hsl(217 50% 35%)",
-          800: "hsl(217 50% 28%)",
-          900: "hsl(217 50% 20%)",
+          DEFAULT: "hsl(var(--primary))",
+          leaf: "#D4AF37",
+          dark: "#B7950B",
         },
-        sacred: {
-          blue: {
-            DEFAULT: "hsl(var(--sacred-blue))",
-            light: "hsl(var(--sacred-blue-light))",
-            dark: "hsl(var(--sacred-blue-dark))",
-          },
-          cathedral: {
-            dark: "#0a0a0c",
-            cream: "#f4f1ea",
-          },
-          cream: "hsl(var(--cream))",
-          rose: "#E11D48",
+        marian: {
+          DEFAULT: "hsl(var(--secondary))",
+          midnight: "#0B1224",
         },
-        slate: {
-          850: "#1A2332",
-          950: "#020617",
+        vatican: {
+          white: "#FFFDF7",
         },
       },
       borderRadius: {
@@ -97,9 +77,9 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-gold': 'linear-gradient(135deg, #D4AF37 0%, #F59E0B 100%)',
-        'gradient-night': 'linear-gradient(to bottom, #020617, #0F172A)',
+        'gradient-night': 'linear-gradient(to bottom, #0B1224, #16233D)',
         'gradient-radial-gold': 'radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-        'gradient-sacred': 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+        'gradient-sacred': 'linear-gradient(135deg, #1B2A4A 0%, #2F5AA8 100%)',
       },
       boxShadow: {
         'gold-glow': '0 0 20px -5px rgba(212, 175, 55, 0.4)',

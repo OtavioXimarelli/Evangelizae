@@ -79,8 +79,8 @@ export function PublicHeader() {
       <header
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "border-b border-gold-500/10 bg-sacred-cream/95 shadow-lg backdrop-blur-xl dark:bg-slate-950/95"
-            : "bg-sacred-cream/80 backdrop-blur-md dark:bg-slate-950/80"
+            ? "border-b border-primary/10 bg-background/95 shadow-lg backdrop-blur-xl"
+            : "bg-background/80 backdrop-blur-md"
         }`}
       >
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -90,11 +90,11 @@ export function PublicHeader() {
               className="group flex items-center gap-2 sm:gap-3"
               data-testid="header-logo"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg transition-all group-hover:shadow-gold-glow sm:h-12 sm:w-12">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-gold-dark shadow-lg transition-all group-hover:shadow-gold-glow sm:h-12 sm:w-12">
                 <span className="text-xl sm:text-2xl">📿</span>
               </div>
               <div className="hidden sm:block">
-                <h1 className="font-cinzel text-lg font-bold text-foreground transition-colors group-hover:text-gold-500 sm:text-xl">
+                <h1 className="font-cinzel text-lg font-bold text-foreground transition-colors group-hover:text-primary sm:text-xl">
                   {BRAND.name}
                 </h1>
               </div>
@@ -110,15 +110,15 @@ export function PublicHeader() {
                     onClick={() => navigateTo(link.path)}
                     className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-all duration-200 ${
                       isActive
-                        ? "bg-gold-500/10 font-medium text-gold-600 dark:text-gold-400"
+                        ? "bg-primary/10 font-bold text-primary"
                         : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                     }`}
                     data-testid={`nav-${link.path.replace("/", "") || "home"}`}
                   >
                     <Icon className="h-4 w-4" />
-                    <span>{link.label}</span>
+                    <span className={isActive ? "font-bold" : "font-medium"}>{link.label}</span>
                     {link.badge && (
-                      <span className="rounded-full border border-gold-500/30 bg-gold-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-600 dark:text-gold-300">
+                      <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
                         {link.badge}
                       </span>
                     )}
@@ -133,7 +133,7 @@ export function PublicHeader() {
                   onClick={() => setLangOpen(!langOpen)}
                   className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-all duration-300 ${
                     langOpen
-                      ? "border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400"
+                      ? "border-primary/30 bg-primary/10 text-primary"
                       : "border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                   }`}
                   aria-label="Change language"
@@ -143,16 +143,16 @@ export function PublicHeader() {
                 </button>
 
                 {langOpen && (
-                  <div className="animate-in fade-in slide-in-from-top-2 absolute right-0 top-full z-[60] mt-2 w-40 overflow-hidden rounded-xl border border-gold-500/10 bg-sacred-cream p-1 shadow-xl dark:bg-slate-900">
+                  <div className="animate-in fade-in slide-in-from-top-2 absolute right-0 top-full z-[60] mt-2 w-40 overflow-hidden rounded-xl border border-primary/10 bg-card p-1 shadow-xl">
                     <button
                       onClick={() => changeLanguage("pt")}
-                      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors ${locale === "pt" ? "bg-gold-500/10 text-gold-600 dark:text-gold-400" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"}`}
+                      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors ${locale === "pt" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"}`}
                     >
                       <span className="text-base">🇧🇷</span> Português
                     </button>
                     <button
                       onClick={() => changeLanguage("en")}
-                      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors ${locale === "en" ? "bg-gold-500/10 text-gold-600 dark:text-gold-400" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"}`}
+                      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors ${locale === "en" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"}`}
                     >
                       <span className="text-base">🇺🇸</span> English
                     </button>
@@ -162,19 +162,19 @@ export function PublicHeader() {
 
               <button
                 onClick={toggleTheme}
-                className="glass sacred-border relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 hover:shadow-gold-glow"
+                className="glass relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 hover:shadow-gold-glow"
                 aria-label={t("theme")}
                 data-testid="theme-toggle"
               >
-                <Sun className="h-4 w-4 scale-100 rotate-0 text-gold-600 transition-transform duration-300 dark:scale-0 dark:-rotate-90" />
-                <Moon className="absolute h-4 w-4 scale-0 rotate-90 text-gold-400 transition-transform duration-300 dark:scale-100 dark:rotate-0" />
+                <Sun className="h-4 w-4 scale-100 rotate-0 text-primary transition-transform duration-300 dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute h-4 w-4 scale-0 rotate-90 text-primary transition-transform duration-300 dark:scale-100 dark:rotate-0" />
               </button>
 
               {AUTH_DISABLED ? (
                 <Button
                   size="sm"
                   onClick={() => navigateTo("/dashboard")}
-                  className="rounded-full bg-gradient-to-r from-gold-500 to-gold-600 font-cinzel font-semibold text-sacred-blue hover:shadow-gold-glow"
+                  className="rounded-full bg-gradient-to-r from-primary to-gold-dark font-cinzel font-bold text-primary-foreground hover:shadow-gold-glow"
                   data-testid="header-dashboard"
                 >
                   {t("openDashboard")}
@@ -185,7 +185,7 @@ export function PublicHeader() {
                     variant="outline"
                     size="sm"
                     onClick={() => openAuthModal("login")}
-                    className="rounded-full border-gold-500/20 hover:border-gold-500/40 hover:bg-gold-500/5"
+                    className="rounded-full border-primary/20 hover:border-primary/40 hover:bg-primary/5 font-bold"
                     data-testid="header-login"
                   >
                     {t("login")}
@@ -193,7 +193,7 @@ export function PublicHeader() {
                   <Button
                     size="sm"
                     onClick={() => openAuthModal("signup")}
-                    className="rounded-full bg-gradient-to-r from-gold-500 to-gold-600 font-cinzel font-semibold text-sacred-blue hover:shadow-gold-glow"
+                    className="rounded-full bg-gradient-to-r from-primary to-gold-dark font-cinzel font-bold text-primary-foreground hover:shadow-gold-glow"
                     data-testid="header-signup"
                   >
                     {t("start")}
@@ -205,15 +205,15 @@ export function PublicHeader() {
             <div className="flex items-center gap-2 lg:hidden">
               <button
                 onClick={toggleTheme}
-                className="glass sacred-border relative flex h-9 w-9 items-center justify-center rounded-full"
+                className="glass relative flex h-9 w-9 items-center justify-center rounded-full"
                 aria-label={t("theme")}
               >
-                <Sun className="h-4 w-4 scale-100 rotate-0 text-gold-600 transition-transform duration-300 dark:scale-0 dark:-rotate-90" />
-                <Moon className="absolute h-4 w-4 scale-0 rotate-90 text-gold-400 transition-transform duration-300 dark:scale-100 dark:rotate-0" />
+                <Sun className="h-4 w-4 scale-100 rotate-0 text-primary transition-transform duration-300 dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute h-4 w-4 scale-0 rotate-90 text-primary transition-transform duration-300 dark:scale-100 dark:rotate-0" />
               </button>
               <button
                 onClick={() => setMobileMenuOpen((v) => !v)}
-                className="glass sacred-border flex h-9 w-9 items-center justify-center rounded-full"
+                className="glass flex h-9 w-9 items-center justify-center rounded-full"
                 aria-label={t("menu")}
               >
                 {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -232,7 +232,7 @@ export function PublicHeader() {
             onClick={() => setMobileMenuOpen(false)}
             aria-label="Close menu overlay"
           />
-          <div className="absolute left-4 right-4 top-20 rounded-2xl border border-gold-500/20 bg-background p-4 shadow-2xl">
+          <div className="absolute left-4 right-4 top-24 rounded-2xl border border-primary/20 bg-background p-4 shadow-2xl">
             <div className="space-y-2">
               {navLinks.map((link) => {
                 const Icon = link.icon;

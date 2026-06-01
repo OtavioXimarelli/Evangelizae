@@ -4,64 +4,60 @@
 
 @layer base {
   :root {
-    /* Light Theme - Cream Parchment */
-    --background: 45 50% 98%;
-    --foreground: 222 47% 11%;
+    /* Light Theme - Vatican White / Modern Cathedral */
+    --background: 45 100% 98%;      /* #FFFDF7 */
+    --foreground: 224 46% 20%;      /* Marian Navy */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 224 46% 20%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 43 74% 49%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 222 47% 11%;
-    --secondary-foreground: 45 50% 98%;
-    --muted: 40 30% 94%;
-    --muted-foreground: 222 20% 40%;
-    --accent: 347 77% 50%;
-    --accent-foreground: 0 0% 100%;
+    --popover-foreground: 224 46% 20%;
+    --primary: 46 65% 52%;          /* Papal Gold #D4AF37 */
+    --primary-foreground: 45 100% 98%;
+    --secondary: 224 64% 33%;        /* Marian Blue #1E3A8A */
+    --secondary-foreground: 45 100% 98%;
+    --muted: 45 31% 93%;
+    --muted-foreground: 224 22% 38%;
+    --accent: 219 56% 42%;          /* Azure #2F5AA8 */
+    --accent-foreground: 45 100% 98%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 40 20% 88%;
-    --input: 40 20% 88%;
-    --ring: 43 74% 49%;
+    --border: 45 31% 86%;
+    --input: 45 31% 86%;
+    --ring: 46 65% 52%;
     --radius: 0.75rem;
     
-    /* Custom Colors */
-    --gold: 43 74% 53%;
-    --gold-dark: 43 74% 42%;
-    --gold-glow: 43 74% 53%;
-    --sacred-blue: 222 47% 11%;
-    --cream: 45 50% 98%;
+    /* Semantic Component Variables */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 46 65% 52% / 0.2;
+    --glass-shadow: 0 8px 32px 0 rgb(0 0 0 / 0.1);
   }
 
   .dark {
-    /* Dark Theme - Cathedral Night */
-    --background: 222 47% 2%;
-    --foreground: 210 40% 98%;
-    --card: 217 33% 12%;
-    --card-foreground: 210 40% 98%;
-    --popover: 217 33% 12%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 43 74% 53%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 347 77% 50%;
-    --accent-foreground: 0 0% 100%;
+    /* Dark Theme - Marian Midnight */
+    --background: 223 53% 9%;       /* #0B1224 */
+    --foreground: 45 40% 94%;
+    --card: 224 48% 14%;            /* #121B33 */
+    --card-foreground: 45 40% 94%;
+    --popover: 224 48% 14%;
+    --popover-foreground: 45 40% 94%;
+    --primary: 46 68% 62%;          /* Lighter Papal Gold #E0C15A */
+    --primary-foreground: 223 53% 9%;
+    --secondary: 224 38% 20%;        /* #1A2A4A */
+    --secondary-foreground: 45 40% 94%;
+    --muted: 224 47% 16%;
+    --muted-foreground: 224 26% 72%;
+    --accent: 224 54% 45%;          /* #3559B3 */
+    --accent-foreground: 45 40% 94%;
     --destructive: 0 62% 30%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 43 74% 53%;
-    
-    /* Custom Colors Dark */
-    --gold: 43 74% 53%;
-    --gold-dark: 43 74% 42%;
-    --gold-glow: 43 74% 53%;
-    --sacred-blue: 222 47% 11%;
-    --cream: 45 50% 98%;
+    --destructive-foreground: 45 40% 94%;
+    --border: 224 43% 21%;
+    --input: 224 43% 21%;
+    --ring: 46 68% 62%;
+
+    /* Semantic Component Variables - Dark */
+    --glass-bg: 224 48% 14% / 0.6;
+    --glass-border: 46 65% 52% / 0.1;
+    --glass-shadow: 0 8px 32px 0 rgb(0 0 0 / 0.3);
   }
 }
 
@@ -74,185 +70,88 @@
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-manrope), system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overscroll-behavior-y: none; /* Prevent iOS bounce on body */
   }
 
   html {
     scroll-behavior: smooth;
   }
   
-  /* Smooth page transitions */
+  /* Smooth theme transitions */
   html, body {
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-cinzel), Georgia, serif;
+    @apply font-cinzel;
   }
-
 
   /* Selection styles */
   ::selection {
-    background: hsl(var(--gold) / 0.3);
+    background: hsl(var(--primary) / 0.3);
     color: hsl(var(--foreground));
   }
 }
 
 @layer utilities {
   .font-cinzel {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-cinzel), Georgia, serif;
   }
 
   .font-manrope {
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--font-manrope), system-ui, sans-serif;
   }
 
   .text-balance {
     text-wrap: balance;
   }
 
-  /* Glass effects */
-  .glass-card {
-    @apply bg-white/5 backdrop-blur-md border border-gold-leaf/30 rounded-lg;
-  }
-
-  .cathedral-night {
-    @apply bg-[#0a0a0c] text-[#e2d1b3];
-  }
-
-  .glass-light {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
-  }
-
-  .glass-dark {
-    @apply bg-slate-900/60 backdrop-blur-xl border border-yellow-500/10 shadow-xl;
-  }
-
+  /* Theme-aware Glass effects */
   .glass {
-    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-md dark:backdrop-blur-xl border border-white/20 dark:border-yellow-500/10 shadow-lg dark:shadow-xl;
+    background-color: hsla(var(--glass-bg));
+    backdrop-filter: blur(12px);
+    border: 1px solid hsla(var(--glass-border));
+    box-shadow: var(--glass-shadow);
   }
 
-  /* Gold glow effect */
+  .glass-card {
+    @apply glass rounded-2xl;
+  }
+
+  /* Gold glow effects */
   .gold-glow {
-    box-shadow: 0 0 20px -5px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 20px -5px hsla(var(--primary) / 0.4);
+  }
+
+  .gold-glow-lg {
+    box-shadow: 0 0 40px -5px hsla(var(--primary) / 0.5);
   }
 
   .gold-glow-hover:hover {
-    box-shadow: 0 0 30px -5px rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 30px -5px hsla(var(--primary) / 0.5);
+  }
+
+  .shadow-sacred {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
   /* Animations */
-  .animate-in {
-    animation: animateIn 0.5s ease-out;
-  }
-
-  @keyframes animateIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
-  .animate-shimmer {
-    animation: shimmer 3s ease-in-out infinite;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-    background-size: 200% 100%;
-  }
-
-  @keyframes pulse-gold {
-    0%, 100% {
-      box-shadow: 0 0 20px -5px rgba(212, 175, 55, 0.3);
-    }
-    50% {
-      box-shadow: 0 0 40px -5px rgba(212, 175, 55, 0.5);
-    }
-  }
-
-  .animate-pulse-gold {
-    animation: pulse-gold 2s ease-in-out infinite;
-  }
-
   @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .animate-fade-up {
-    animation: fadeUp 0.6s ease-out both;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
-  .animate-fade-in {
-    animation: fadeIn 0.6s ease-out both;
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.5s ease-out both;
-  }
-
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.5s ease-out both;
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
   }
 
   .animate-delay-100 { animation-delay: 100ms; }
@@ -281,6 +180,19 @@
   /* Safe area for bottom tab bar on notched devices */
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
+    overscroll-behavior-y: contain;
+  }
+
+  /* GSAP / ScrollTrigger helper classes */
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -308,11 +220,11 @@
 }
 
 .dark::-webkit-scrollbar-thumb {
-  @apply bg-yellow-500/30;
+  @apply bg-primary/30;
 }
 
 .dark::-webkit-scrollbar-thumb:hover {
-  @apply bg-yellow-500/50;
+  @apply bg-primary/50;
 }
 
 /* Focus styles */
@@ -333,10 +245,10 @@
 
 /* Sacred border accent */
 .sacred-border {
-  @apply border border-yellow-500/20;
+  @apply border border-primary/20;
 }
 
 /* Gradient text */
 .gradient-gold {
-  @apply bg-gradient-to-r from-yellow-500 to-yellow-600 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-primary to-gold-dark bg-clip-text text-transparent;
 }
