@@ -1,64 +1,88 @@
-# Evangelizae ✝ — Plataforma Missionária Digital
+# Evangelizae ✝ — Plataforma Missionária Digital Católica
 
 > **"A Tecnologia a Serviço da Fé e da Vida Cristã"**  
-> *Veritas • Communio • Missio*
-
-Evangelizae é uma plataforma 100% católica, construída sob estrita fidelidade ao Magistério da Igreja Católica, às Sagradas Escrituras e à Tradição Apostólica. Seu propósito não é reter o fiel diante das telas ou estimular vaidades digitais, mas ser uma **ponte espiritual** que conduz à oração diária, à sólida formação doutrinal, à comunhão fraterna e à vida sacramental concreta na paróquia física.
+> *Veritas • Communio • Missio* — Verdade, Comunhão e Missão
 
 ---
 
-## 🏛️ Os 4 Pilares do Evangelizae
+## 🕊️ A Missão Sagrada: Por Que o Evangelizae Existe?
 
-1. **Pilar I: Oração (Santo Rosário & Vida Devocional)**
-   - Guia passo a passo interativo com vibração háptica em cada conta (`BeadMap`).
-   - Meditação bíblica e frutos teológicos para cada Mistério (Gozozos, Dolorosos, Gloriosos, Luminosos).
-   - Suporte ao Latim tradicional (`Pater Noster`, `Ave Maria`, `Gloria Patri`).
-   - Registro de check-ins offline no santuário pessoal.
+Vivemos em um tempo de dispersão digital, onde algoritmos foram projetados para capturar a atenção através do vício, da ansiedade e da comparação constante. Mesmo as ferramentas e aplicativos de espiritualidade muitas vezes caem na armadilha da "gamificação secular": placares de líderes, medalhas de ego e rankings públicos que transformam o diálogo íntimo com Deus em uma competição de produtividade espiritual.
 
-2. **Pilar II: Formação (Liturgia Diária & Assistente Magisterial)**
-   - Leituras litúrgicas diárias fundamentadas com reflexões catequéticas de santos e padres da Igreja.
-   - **Assistente Magisterial (RAG):** Inteligência artificial estritamente configurada (índice de similaridade de alta fidelidade) que responde a dúvidas teológicas com citações exatas do Catecismo da Igreja Católica (CIC), Sagradas Escrituras e Documentos do Vaticano. *Possui guardrail ativo contra especulações ou opiniões particulares.*
+O **Evangelizae** nasce como uma resposta radicalmente católica e purificada a essa crise moderna. 
 
-3. **Pilar III: Comunhão (Muro Orante & Intercessão Fraterna)**
-   - Muro de intenções onde os irmãos intercedem uns pelos outros em silêncio orante (`"Em oração por você"`).
-   - Sem debates, sem polêmicas ou julgamentos: apenas oração caridosa e união fraterna.
+Nossa missão não é reter você diante das telas, nem alimentar vaidades digitais. **Para nós, a tecnologia é apenas um meio transitório, nunca um fim em si mesmo.** O maior êxito e o objetivo central desta plataforma acontecem no exato momento em que você **desliga a tela**, ajoelha-se diante de Deus em silêncio e vive a fé concreta: nos Sacramentos da sua Paróquia, no amor à sua família e na caridade para com os irmãos.
 
-4. **Pilar IV: A Igreja Física (Fidelidade Sem Vaidade & Paróquia)**
-   - **Sem Rankings ou Gamificação Tóxica:** Abolimos leaderboards ou comparações públicas. A fidelidade é entre a alma, Deus e Sua Santa Igreja.
-   - **Conexão Paroquial:** A plataforma impulsiona o usuário a frequentar os Sacramentos e a adoração eucarística em sua comunidade física.
+> *"Não vos conformeis com este mundo, mas transformai-vos pela renovação da vossa mente, para que possais discernir qual é a vontade de Deus, o que é bom, o que lhe agrada e o que é perfeito."* — **Romanos 12, 2**
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🛡️ O Propósito da Aplicação & Os 3 Compromissos Inegociáveis
 
-- **Core & Framework:** Next.js 16 (App Router), React 19, TypeScript
-- **Estilização & UI:** Tailwind CSS v4 (`@import "tailwindcss"; @custom-variant dark (&:where(.dark, .dark *));`) com design system de alta precisão cromática (`Vatican White` / `Marian Midnight`).
-- **Internacionalização (i18n):** `next-intl` (suporte nativo e instantâneo a Português e Inglês).
-- **Gerenciamento de Estado & Persistência Offline:** Zustand + `persist` middleware para check-ins no Santuário e fila de oração offline.
-- **Ambiente de Execução:** Bun / Node.js
+Todo o desenho, a engenharia e as decisões arquitetônicas do Evangelizae foram forjados sob três pilares de fidelidade espiritual:
+
+### 1. Fidelidade Integral e Incondicional ao Magistério (`Veritas`)
+Em uma época de relativismo e especulações doutrinais absurdas, o Evangelizae é **100% ancorado na pureza do Depósito da Fé (Depositum Fidei)**.
+- **Doutrina Sem Especulação:** Nenhuma ferramenta de nossa plataforma emite opiniões particulares, visões seculares ou profecias sem aprovação eclesial.
+- **Inteligência Artificial Magisterial (RAG):** Nosso Assistente Teológico foi desenhado sob rígidas diretrizes (Guardrails de alta precisão) para responder exclusivamente com citações literais e exatas das **Sagradas Escrituras**, do **Catecismo da Igreja Católica (CIC)** e dos **Documentos Oficiais do Magistério Pontifício e Conciliar**.
+
+### 2. Fidelidade Sem Vaidade (`Zero Competição`)
+A vida espiritual é um caminho interior de conversão diária diante da Santíssima Trindade, não uma corrida contra o próximo.
+- **Abolição de Rankings Públicos:** No Evangelizae não existem tabelas de classificação, comparações de quem reza mais, nem exposições públicas. 
+- **O Santuário Interior:** O registro diário de constância (o "Oferecimento da Manhã" e os Terços rezados) serve unicamente como um espelho particular de perseverança e amor devocional diante de Deus.
+
+### 3. Silêncio Sagrado e Comunhão das Almas (`Communio`)
+No **Muro Sagrado de Intenções**, irmãos de diferentes paróquias e nações intercedem pelas necessidades físicas, morais e espirituais uns dos outros.
+- **Sem Debates ou Polêmicas:** Para proteger a paz fraterna, o Muro Orante não permite comentários, discussões ou julgamentos. A única resposta possível diante da dor do outro é o ato de amor silencioso: clicar em **"Em oração por você"**.
 
 ---
 
-## 🚀 Como Executar Localmente
+## 🏛️ Como os 4 Pilares Práticos Servem a Esta Missão?
+
+| Pilar | Área da Aplicação | Propósito Prático na Vida Cristã |
+| :--- | :--- | :--- |
+| **I. Oração** | **Santuário Diário & Terço Guiado** | Conduzir à meditação profunda dos Mistérios de Cristo (Gozozos, Dolorosos, Gloriosos e Luminosos). Inclui mapa sensorial interativo (`BeadMap`), vibração háptica em cada Ave Maria, meditação das Sagradas Escrituras em cada dezena e suporte nativo ao Latim tradicional (`Pater Noster`, `Ave Maria`, `Gloria Patri`). |
+| **II. Formação** | **Liturgia da Palavra & IA Magisterial** | Iluminar a inteligência cristã com as leituras da Santa Missa diária acompanhadas de reflexões teológicas de Santos e Padres da Igreja (Catecismo §1825, São João Crisóstomo, Santo Tomás de Aquino), além do consultor teológico instantâneo para catequese doutrinal. |
+| **III. Comunhão** | **Muro Orante de Intercessão** | Exercitar a caridade fraterna intercedendo por famílias em crise, enfermos, conversões de pecadores, vocações sacerdotais e pelo descanso eterno das Almas do Purgatório em um ecossistema de silêncio contemplativo. |
+| **IV. Igreja Física**| **Conexão Paroquial & Sacramentos** | Lembrar constantemente que a verdadeira vida sobrenatural brota da graça sacramental na Igreja de pedra. A plataforma incentiva e direciona o usuário ao Sacramento da Confissão e à Adoração ao Santíssimo Sacramento em sua comunidade local. |
+
+---
+
+## 🛠️ Arquitetura Técnica a Serviço da Beleza e Dignidade
+
+A Igreja Católica sempre ensinou que o **Belo (`Pulchrum`)** é um caminho que eleva a alma a Deus. Por isso, a excelência técnica do Evangelizae reflete a solenidade e a dignidade do sagrado:
+
+- **Core & Roteamento:** Next.js 16 (App Router com renderização ultrarrápida SSR/CSR) & React 19 em TypeScript estrito.
+- **Estética & Design System Sagrado:** Tailwind CSS v4 (`@custom-variant dark (&:where(.dark, .dark *));`) com paleta cromática de alta precisão (`Vatican White` para luminosidade diurna e `Marian Midnight / Sombra Mariana` para recolhimento noturno na oração).
+- **Universalidade da Igreja (i18n):** Suporte bilíngue instantâneo (`next-intl`) em Português e Inglês, refletindo a catolicidade (universalidade) da missão cristã.
+- **Persistência & Acessibilidade Offline:** Gerenciamento de estado via Zustand + `persist` middleware, garantindo que o fiel possa rezar e registrar sua devoção mesmo em capelas ou locais sem conexão à internet.
+
+---
+
+## 🚀 Guia Rápido para Início Local
 
 ```bash
-# Instalar dependências (com Bun ou NPM)
+# 1. Instalar as dependências do projeto (compatível com Bun ou NPM)
 bun install
 # ou
 npm install
 
-# Iniciar servidor de desenvolvimento
+# 2. Iniciar o servidor local de desenvolvimento
 bun run dev
 # ou
 npm run dev
 ```
 
-Acesse [http://localhost:3000](http://localhost:3000) (redirecionamento automático para `/pt/sanctuary` ou `/en/sanctuary`).
+Acesse [http://localhost:3000](http://localhost:3000) no seu navegador. O portal o guiará automaticamente para o **Santuário Diário** (`/pt/sanctuary` ou `/en/sanctuary`).
 
 ---
 
-## 📜 Manifesto de Fidelidade
+## 📜 Manifesto Final de Consagração
 
-> *"A sagrada Tradição e a sagrada Escritura constituem um só depósito sagrado da palavra de Deus, confiado à Igreja."* — **Dei Verbum, 10**
+> *"A santidade não consiste em fazer coisas extraordinárias, mas em fazer as coisas comuns com um amor extraordinário."* — **Santa Teresa de Calcutá**
 
-Evangelizae opera sob o compromisso de nunca introduzir ensinamentos divergentes do Sagrado Magistério da Igreja Católica Apostólica Romana. Ad Maiorem Dei Gloriam (AMDG).
+> *"O Rosário é a arma para estes tempos."* — **São Padre Pio de Pietrelcina**
+
+Consagramos todo o desenvolvimento, código e fruto espiritual desta plataforma à proteção maternal da **Santíssima Virgem Maria, Mãe da Igreja e Estrela da Evangelização**, sob o patrocínio glorioso de **São José**. 
+
+**Ad Maiorem Dei Gloriam (AMDG)** — *Para a Maior Glória de Deus.*
