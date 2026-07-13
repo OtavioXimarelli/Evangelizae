@@ -13,7 +13,15 @@
     "save": "Salvar",
     "back": "Voltar",
     "continue": "Continuar",
-    "freeForeverNotice": "100% Gratuito & Código Aberto Para Sempre • Sem Anúncios ou Paywalls • Sustentado por Providência & Doações Voluntárias"
+    "freeForeverNotice": "100% Gratuito & Código Aberto Para Sempre • Sem Anúncios ou Paywalls • Sustentado por Providência & Doações Voluntárias",
+    "mvpModalTitle": "Aviso de Protótipo & Desenvolvimento (MVP)",
+    "mvpModalBadge": "Versão Demonstrativa 0.1.0-alpha",
+    "mvpModalIntro": "Bem-vindo(a) ao Evangelizae — plataforma digital católica 100% gratuita, de código aberto e sem anúncios.",
+    "mvpModalPoint1Title": "🎯 Estado Atual (Protótipo Interativo)",
+    "mvpModalPoint1Desc": "Toda a interface (Santuário, Terço sensorial com vibração, Liturgia e Muro Orante) está operando em modo de demonstração local de alta fidelidade para validação visual e espiritual.",
+    "mvpModalPoint2Title": "🤖 Assistente Magisterial (IA) & Banco de Dados",
+    "mvpModalPoint2Desc": "As consultas à Inteligência Artificial Teológica e a sincronização em nuvem estão funcionando com dados simulados/mockados de validação. O motor teológico RAG com o Catecismo e a Bíblia está em desenvolvimento ativo para a versão oficial.",
+    "mvpModalBtn": "Compreendi, fechar"
   },
   "Header": {
     "sanctuary": "Santuário",

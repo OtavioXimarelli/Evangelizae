@@ -76,7 +76,8 @@ export function CathedralHeader() {
     }
   };
 
-  const navItems = [
+  // Full navigation items for Drawer & Footer
+  const allNavItems = [
     { href: '/sanctuary', label: t('sanctuary'), icon: Church },
     { href: '/rosary', label: t('rosary'), icon: Sparkles },
     { href: '/liturgy', label: t('liturgy'), icon: BookOpen },
@@ -86,62 +87,81 @@ export function CathedralHeader() {
     { href: '/about', label: t('about'), icon: ShieldCheck },
   ];
 
+  // Primary top-bar items (ONLY shown on xl: 1280px+ wide screens to guarantee 100% ZERO overlap)
+  const primaryNavItems = [
+    { href: '/sanctuary', label: t('sanctuary'), icon: Church },
+    { href: '/rosary', label: t('rosary'), icon: Sparkles },
+    { href: '/liturgy', label: t('liturgy'), icon: BookOpen },
+    { href: '/intentions', label: t('intentions'), icon: Heart },
+  ];
+
   const currentLocale = typeof window !== 'undefined' && window.location.pathname.startsWith('/en') ? 'en' : 'pt';
   const targetLocale = currentLocale === 'pt' ? 'en' : 'pt';
 
   return (
     <>
       <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/90 dark:border-slate-800/90 backdrop-blur-md shadow-2xs transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
           
           {/* Brand Logo & Mission Title */}
-          <Link href="/sanctuary" className="flex items-center gap-3 shrink-0 group">
-            <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-xl cathedral-gradient flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
+          <Link href="/sanctuary" className="flex items-center gap-2.5 sm:gap-3 shrink-0 group">
+            <div className="w-9 sm:w-11 h-9 sm:h-11 rounded-xl cathedral-gradient flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
               <span className="font-serif text-lg sm:text-xl font-bold">E✝</span>
             </div>
             <div className="flex flex-col">
               <span className="font-serif font-bold text-base sm:text-xl leading-tight tracking-wide text-slate-900 dark:text-white">
                 Evangelizae
               </span>
-              <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-sacred-gold font-bold">
+              <span className="text-[9px] sm:text-[11px] uppercase tracking-wider text-sacred-gold font-bold">
                 Veritas • Communio • Missio
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation (Visible only on lg: 1024px+) */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {navItems.map((item) => {
+          {/* Desktop Primary Navigation (Visible cleanly ONLY on xl: 1280px+ where there are 1400px+ of space) */}
+          <nav className="hidden xl:flex items-center gap-1.5 2xl:gap-2 flex-1 justify-center px-4">
+            {primaryNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname.startsWith(item.href);
-              const isAbout = item.href === '/about';
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-1.5 px-3 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all shrink-0 ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
                     isActive
                       ? 'bg-sacred-gold/15 text-sacred-gold border border-sacred-gold/30 shadow-xs font-bold'
-                      : isAbout
-                      ? 'text-amber-700 dark:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30'
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sacred-gold'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-sacred-gold animate-pulse' : isAbout ? 'text-sacred-gold' : 'text-slate-500 dark:text-slate-400 group-hover:text-sacred-gold'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-sacred-gold animate-pulse' : 'text-slate-500 dark:text-slate-400 group-hover:text-sacred-gold'}`} />
                   <span>{item.label}</span>
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Header Controls: Locale Switcher, Theme Toggle, and Hamburger Button */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Right Header Controls: Profile, Locale Switcher, Theme Toggle, and Menu Trigger */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* Profile Button (Sleek Icon/Label for quick access on desktop & tablet) */}
+            <Link
+              href="/profile"
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                pathname.startsWith('/profile')
+                  ? 'bg-sacred-gold/15 text-sacred-gold border border-sacred-gold/30 shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'
+              }`}
+              title={t('profile')}
+            >
+              <User className="w-3.5 h-3.5 text-sacred-gold shrink-0" />
+              <span className="hidden lg:inline">{t('profile')}</span>
+            </Link>
+
             {/* Locale Switcher */}
             <Link
               href={pathname}
               locale={targetLocale}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 shadow-2xs"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 shadow-2xs"
               title="Switch Language / Mudar Idioma"
             >
               <Globe className="w-3.5 h-3.5 text-sacred-gold shrink-0" />
@@ -159,10 +179,10 @@ export function CathedralHeader() {
               </button>
             )}
 
-            {/* Hamburger Menu Trigger Button (Visible on screens under 1024px) */}
+            {/* Hamburger Menu Trigger Button (Visible on ALL devices for instant access to Drawer & full menu) */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden flex items-center gap-1.5 px-3.5 py-2 rounded-xl cathedral-gradient text-white font-bold text-xs shadow-md active:scale-95 transition-transform"
+              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl cathedral-gradient text-white font-bold text-xs shadow-md active:scale-95 transition-transform shrink-0 hover:opacity-95"
               aria-label="Open Navigation Menu"
             >
               <Menu className="w-4 h-4 shrink-0" />
@@ -172,9 +192,9 @@ export function CathedralHeader() {
         </div>
       </header>
 
-      {/* Full-Screen / Side Drawer Backdrop Modal for Mobile & Tablet (<1024px) */}
+      {/* Full-Screen / Side Drawer Backdrop Modal */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-slate-950/70 backdrop-blur-md animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/70 backdrop-blur-md animate-fadeIn">
           
           {/* Drawer Panel */}
           <div className="flex flex-col w-full max-w-md ml-auto h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl overflow-y-auto animate-slideLeft">
@@ -213,13 +233,40 @@ export function CathedralHeader() {
                 <span>100% Gratuito & Código Aberto Para Sempre • Sem Anúncios ou Paywalls</span>
               </div>
 
+              {/* Mission & Philosophy Highlighted Card (`/about`) inside Drawer */}
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-sacred-gold px-2">
+                  Manifesto & Propósito
+                </span>
+                <Link
+                  href="/about"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
+                    pathname.startsWith('/about')
+                      ? 'bg-sacred-gold text-white font-bold shadow-md'
+                      : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 dark:text-amber-200 border border-amber-500/30 font-bold'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-sacred-gold/20 text-sacred-gold">
+                      <ShieldCheck className="w-5 h-5 text-sacred-gold" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold">{t('about')}</span>
+                      <span className="text-[11px] opacity-80 font-normal">Veritas • Communio • Missio</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+
               {/* Core Daily Habit Section */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2">
                   Pilar I & II: Oração & Palavra
                 </span>
                 
-                {navItems.slice(0, 3).map((item) => {
+                {allNavItems.slice(0, 3).map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname.startsWith(item.href);
                   return (
@@ -251,7 +298,7 @@ export function CathedralHeader() {
                   Pilar III & IV: Comunhão & Formação
                 </span>
                 
-                {navItems.slice(3, 6).map((item) => {
+                {allNavItems.slice(3, 6).map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname.startsWith(item.href);
                   return (
@@ -275,30 +322,6 @@ export function CathedralHeader() {
                     </Link>
                   );
                 })}
-              </div>
-
-              {/* Mission & Philosophy Section */}
-              <div className="flex flex-col gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <Link
-                  href="/about"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
-                    pathname.startsWith('/about')
-                      ? 'bg-sacred-gold text-white font-bold shadow-md'
-                      : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 dark:text-amber-200 border border-amber-500/30 font-bold'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-sacred-gold/20 text-sacred-gold">
-                      <ShieldCheck className="w-5 h-5 text-sacred-gold" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold">{t('about')}</span>
-                      <span className="text-[11px] opacity-80 font-normal">Veritas • Communio • Missio</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
               </div>
 
             </div>

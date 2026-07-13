@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { CathedralHeader } from '@/components/layout/CathedralHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
+import { PrototypeNoticeModal } from '@/components/common/PrototypeNoticeModal';
 
 export default async function LocaleLayout({
   children,
@@ -24,6 +25,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <div className="flex flex-col min-h-screen">
         <CathedralHeader />
+        <PrototypeNoticeModal />
         <div className="flex-grow">{children}</div>
         <PublicFooter />
       </div>

@@ -13,7 +13,15 @@
     "save": "Save",
     "back": "Back",
     "continue": "Continue",
-    "freeForeverNotice": "100% Free & Open Source Forever • No Ads or Paywalls • Sustained by Divine Providence & Voluntary Donations"
+    "freeForeverNotice": "100% Free & Open Source Forever • No Ads or Paywalls • Sustained by Divine Providence & Voluntary Donations",
+    "mvpModalTitle": "Prototype & Development Notice (MVP)",
+    "mvpModalBadge": "Demonstration Version 0.1.0-alpha",
+    "mvpModalIntro": "Welcome to Evangelizae — our 100% free, open-source Catholic digital missionary platform without ads.",
+    "mvpModalPoint1Title": "🎯 Current Status (Interactive Prototype)",
+    "mvpModalPoint1Desc": "The entire interface (Sanctuary, sensory Rosary with haptic vibration, Liturgy, and Intercessory Wall) is operating in a high-fidelity local demonstration mode for visual and spiritual validation.",
+    "mvpModalPoint2Title": "🤖 Magisterium AI Assistant & Backend Data",
+    "mvpModalPoint2Desc": "The Theological Artificial Intelligence queries and real-time cloud database are currently operating with mock/simulated validation data. The official Magisterial RAG engine with Scripture and Catechism is under active development.",
+    "mvpModalBtn": "I understand, close"
   },
   "Header": {
     "sanctuary": "Sanctuary",
