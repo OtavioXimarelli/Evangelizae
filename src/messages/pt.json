@@ -21,7 +21,8 @@
     "liturgy": "Liturgia Diária",
     "intentions": "Intenções",
     "ai": "Assistente Magisterial",
-    "profile": "Meu Perfil"
+    "profile": "Meu Perfil",
+    "about": "A Missão"
   },
   "Footer": {
     "missionText": "Evangelizae não substitui a Igreja, o sacerdote ou a vida paroquial. Existimos como um companheiro diário para conduzir almas a Cristo, aos Sacramentos e à comunhão física na Paróquia.",
@@ -29,6 +30,32 @@
     "copyright": "© 2026 Evangelizae. Em fiel conformidade com o Magistério da Igreja Católica.",
     "privacy": "Privacidade & Tradição",
     "contact": "Fale Conosco"
+  },
+  "About": {
+    "title": "A Missão Sagrada do Evangelizae",
+    "subtitle": "\"A Tecnologia a Serviço da Fé e da Vida Cristã\" — Veritas • Communio • Missio",
+    "badge": "Manifesto & Filosofia Apostólica",
+    "introTitle": "Por Que o Evangelizae Existe?",
+    "introText": "O mundo digital moderno foi estruturado por algoritmos de dispersão, ansiedade e vaidade instantânea. Mesmo ferramentas e aplicativos católicos, com certa frequência, caem na armadilha da 'gamificação secular': placares de líderes, medalhas de ego e comparações públicas que transformam a vida interior e a oração em uma competição de produtividade.",
+    "introText2": "O Evangelizae nasce como um refúgio purificado e uma resposta missionária fiel ao Sagrado Magistério da Igreja Católica. Nossa missão não é prender sua atenção na tela. Para nós, a tecnologia é apenas um meio transitório, nunca um fim em si mesmo.",
+    "goalBoxTitle": "O Grande Objetivo: Da Tela para o Altar",
+    "goalBoxQuote": "\"O maior êxito desta plataforma acontece no exato momento em que você desliga a tela, ajoelha-se diante de Deus no Sacrário e vive a caridade na sua Paróquia física.\"",
+    "goalBoxSub": "Não queremos retê-lo no celular. Queremos preparar o seu coração para a Confissão, a Adoração Eucarística e a Vida Sacramental em sua comunidade.",
+    "pillarsHeader": "Os 4 Compromissos Inegociáveis",
+    "pillarsSub": "Alicerces espirituais que regem cada código e cada decisão deste projeto",
+    "c1Title": "1. Fidelidade Integral ao Magistério (Veritas)",
+    "c1Desc": "Em estrita conformidade com o Depósito da Fé (Depositum Fidei). Todas as reflexões e nosso Assistente Teológico de IA são fundamentados estritamente na Sagrada Escritura, no Catecismo (CIC) e nos Documentos do Vaticano, sem especulações particulares.",
+    "c2Title": "2. Fidelidade Sem Vaidade (Zero Competição)",
+    "c2Desc": "Abolimos intencionalmente rankings, placares de quem reza mais ou medalhas de exibição. Seu progresso espiritual e constância no Terço são segredos entre a sua alma, Deus e Sua Santa Igreja.",
+    "c3Title": "3. Silêncio Sagrado e Comunhão Fraterna (Communio)",
+    "c3Desc": "No Muro Orante, não permitimos comentários, debates ou julgamentos públicos. Quando um irmão partilha uma dor ou intenção, a única resposta da comunidade é a caridade silenciosa: '🙏 Rezei por você'.",
+    "c4Title": "4. 100% Gratuito & Open Source Para Sempre",
+    "c4Desc": "Nunca cobraremos taxas, nunca venderemos assinaturas 'Pro/Premium', nunca exibiremos anúncios comerciais e nunca colocaremos paywalls na Palavra de Deus. A sustentação ocorre unicamente por providência e doações voluntárias.",
+    "ctaTitle": "Consagração & Convite à Oração",
+    "ctaText": "Esta obra é consagrada ao Imaculado Coração de Maria e ao patrocínio de São José. Junte-se a nós nesta caminhada para santificar a rotina diária.",
+    "btnSanctuary": "Entrar no Santuário ✝",
+    "btnRosary": "Rezar o Terço 📿",
+    "btnDonate": "Apoiar a Obra por Doação ❤️"
   },
   "Sanctuary": {
     "title": "Santuário Diário",

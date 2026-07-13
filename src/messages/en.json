@@ -21,7 +21,8 @@
     "liturgy": "Daily Liturgy",
     "intentions": "Intentions",
     "ai": "Magisterium AI",
-    "profile": "My Profile"
+    "profile": "My Profile",
+    "about": "Our Mission"
   },
   "Footer": {
     "missionText": "Evangelizae does not replace the Church, the priest, or parish life. We exist as a daily companion to lead souls to Christ, the Sacraments, and physical parish communion.",
@@ -29,6 +30,32 @@
     "copyright": "© 2026 Evangelizae. In faithful adherence to the Magisterium of the Catholic Church.",
     "privacy": "Privacy & Tradition",
     "contact": "Contact Us"
+  },
+  "About": {
+    "title": "The Sacred Mission of Evangelizae",
+    "subtitle": "\"Technology in Service of Faith and Christian Life\" — Veritas • Communio • Missio",
+    "badge": "Manifesto & Apostolic Philosophy",
+    "introTitle": "Why Does Evangelizae Exist?",
+    "introText": "The modern digital world has been shaped by algorithms of distraction, anxiety, and instant vanity. Even Catholic apps and tools often fall into the trap of 'secular gamification': leaderboards, ego badges, and public rankings that turn prayer and interior life into a productivity competition.",
+    "introText2": "Evangelizae was born as a purified refuge and a faithful missionary response aligned with the Sacred Magisterium of the Catholic Church. Our mission is not to trap your attention on a screen. For us, technology is merely a transitory tool, never an end in itself.",
+    "goalBoxTitle": "The Ultimate Goal: From Screen to Altar",
+    "goalBoxQuote": "\"The true success of this platform happens at the exact moment you turn off the screen, kneel before the Blessed Sacrament in the Tabernacle, and live out practical charity in your physical Parish.\"",
+    "goalBoxSub": "We do not want to keep you glued to your phone. We want to prepare your heart for Confession, Eucharistic Adoration, and Sacramental Life in your local community.",
+    "pillarsHeader": "The 4 Immutable Commitments",
+    "pillarsSub": "Spiritual foundations that govern every line of code and decision in this project",
+    "c1Title": "1. Complete Fidelity to the Magisterium (Veritas)",
+    "c1Desc": "In strict adherence to the Deposit of Faith (Depositum Fidei). All reflections and our Theological AI Assistant are grounded strictly in Sacred Scripture, the Catechism (CCC), and Vatican Documents, without private speculation.",
+    "c2Title": "2. Fidelity Without Vanity (Zero Competition)",
+    "c2Desc": "We intentionally abolished leaderboards, public rankings, and display badges. Your spiritual streak and Rosary consistency are a sacred secret between your soul, God, and His Holy Church.",
+    "c3Title": "3. Sacred Silence & Fraternal Communion (Communio)",
+    "c3Desc": "On the Intercessory Wall, we do not allow debate comments or public judgment. When a brother or sister shares a sorrow or intention, the community's only response is silent charity: '🙏 I prayed for you'.",
+    "c4Title": "4. 100% Free & Open Source Forever",
+    "c4Desc": "We will never charge fees, never sell 'Pro/Premium' subscriptions, never display commercial advertisements, and never put paywalls on the Word of God. Our support comes purely through divine providence and voluntary donations.",
+    "ctaTitle": "Consecration & Invitation to Prayer",
+    "ctaText": "This platform is consecrated to the Immaculate Heart of Mary under the patronage of St. Joseph. Join us on this journey to sanctify daily routine.",
+    "btnSanctuary": "Enter Sanctuary ✝",
+    "btnRosary": "Pray Rosary 📿",
+    "btnDonate": "Support via Free-Will Donation ❤️"
   },
   "Sanctuary": {
     "title": "Daily Sanctuary",
