@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 import { PageContainer } from '@/components/ui/PageContainer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EditorialCard } from '@/components/ui/EditorialCard';
-import { Sparkles, BookOpen, Heart, CheckCircle2, ArrowRight, ShieldCheck, Flame } from 'lucide-react';
+import { Sparkles, BookOpen, Heart, CheckCircle2, ArrowRight, ShieldCheck, Flame, HeartHandshake } from 'lucide-react';
 import { usePrayerStore } from '@/store/usePrayerStore';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
@@ -37,6 +37,12 @@ export default function SanctuaryPage() {
             ) : null
           }
         />
+
+        {/* 100% Free Forever Pledge Notice */}
+        <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-amber-950 dark:text-amber-200 text-xs sm:text-sm font-bold shadow-2xs">
+          <HeartHandshake className="w-5 h-5 text-sacred-gold flex-shrink-0" />
+          <span>{tCommon('freeForeverNotice')}</span>
+        </div>
 
         {/* Saint of the Day Banner */}
         <EditorialCard variant="liturgical" className="p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">

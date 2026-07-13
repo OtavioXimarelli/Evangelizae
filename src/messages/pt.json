@@ -12,7 +12,8 @@
     "localeSwitch": "EN (English)",
     "save": "Salvar",
     "back": "Voltar",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "freeForeverNotice": "100% Gratuito & Código Aberto Para Sempre • Sem Anúncios ou Paywalls • Sustentado por Providência & Doações Voluntárias"
   },
   "Header": {
     "sanctuary": "Santuário",
@@ -24,9 +25,10 @@
   },
   "Footer": {
     "missionText": "Evangelizae não substitui a Igreja, o sacerdote ou a vida paroquial. Existimos como um companheiro diário para conduzir almas a Cristo, aos Sacramentos e à comunhão física na Paróquia.",
+    "freePledge": "Plataforma 100% Gratuita e de Código Aberto para Sempre • Sem Anúncios ou Paywalls • A única e eventual sustentação da obra ocorre por providência e doações voluntárias de irmãos em Cristo.",
     "copyright": "© 2026 Evangelizae. Em fiel conformidade com o Magistério da Igreja Católica.",
     "privacy": "Privacidade & Tradição",
-    "contact": "Fale Consoante"
+    "contact": "Fale Conosco"
   },
   "Sanctuary": {
     "title": "Santuário Diário",
@@ -116,9 +118,9 @@
     "themeToggle": "Alternar Tema Sagrado (Vaticano Branco / Sombra Mariana)"
   },
   "Landing": {
-    "badge": "Plataforma Missionária Digital • 100% Católica",
+    "badge": "Plataforma Missionária Digital • 100% Católica & Gratuita",
     "heroTitle": "A Tecnologia a Serviço da Fé e da Vida Cristã",
-    "heroSubtitle": "Evangelizae é o seu companheiro diário para oração, formação doutrinal e comunhão fraterna. Criado para conduzir almas a Cristo, aos Sacramentos e à vida física na sua Paróquia.",
+    "heroSubtitle": "Evangelizae é o seu companheiro diário para oração, formação doutrinal e comunhão fraterna. 100% Gratuito e Código Aberto para sempre, sem anúncios ou paywalls.",
     "btnSanctuary": "Entrar no Santuário Diário ✝",
     "btnRosary": "Rezar o Terço Guiado 📿",
     "pillarsTitle": "Os 4 Pilares do Evangelizae",
@@ -132,12 +134,14 @@
     "pillarChurchTitle": "Pilar IV: Igreja (Da Tela ao Altar)",
     "pillarChurchDesc": "O Evangelizae não substitui a comunidade real. Nosso objetivo é nutrir sua alma para a adoração eucarística e a vida paroquial.",
     "philTitle": "Por Que o Evangelizae é Diferente?",
-    "philSubtitle": "Nossa filosofia recusa a vaidade digital e as métricas viciantes das redes sociais",
+    "philSubtitle": "Nossa filosofia recusa a vaidade digital, as métricas viciantes e a mercantilização da fé",
     "philNoAddiction": "Sem Algoritmos Viciantes",
     "philNoAddictionDesc": "Não queremos prender sua atenção na tela. Quanto menos tempo precisar no app para rezar e ir à Igreja, melhor.",
     "philNoRanking": "Sem Competições ou Rankings",
     "philNoRankingDesc": "Sua caminhada espiritual é um diálogo amoroso com Deus. Apenas você acompanha seus dias de perseverança.",
     "philMagisterium": "100% Fiel ao Magistério",
-    "philMagisteriumDesc": "Todas as respostas, reflexões e orações estão rigorosamente alinhadas com a Tradição, Escritura e Magistério Pontifício."
+    "philMagisteriumDesc": "Todas as respostas, reflexões e orações estão rigorosamente alinhadas com a Tradição, Escritura e Magistério Pontifício.",
+    "philFreeForever": "100% Gratuito & Open Source Para Sempre",
+    "philFreeForeverDesc": "Nunca haverá anúncios, assinaturas pagas ou paywalls. A única e eventual sustentação virá por providência e doações voluntárias."
   }
 }

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { PageContainer } from '@/components/ui/PageContainer';
 import { EditorialCard } from '@/components/ui/EditorialCard';
-import { Sparkles, Church, BookOpen, ShieldCheck, ArrowRight, Award } from 'lucide-react';
+import { Sparkles, Church, BookOpen, ShieldCheck, ArrowRight, Award, HeartHandshake } from 'lucide-react';
 
 export default function LandingPage() {
   const t = useTranslations('Landing');
@@ -153,7 +153,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Product Philosophy Card */}
+      {/* Product Philosophy & 100% Free Forever Manifesto */}
       <EditorialCard variant="liturgical" className="p-8 sm:p-12 flex flex-col gap-8 my-2 shadow-xl border border-white/20">
         <div className="flex flex-col gap-2 max-w-3xl">
           <span className="text-xs font-bold uppercase tracking-widest text-sacred-gold-badge">
@@ -167,7 +167,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-white/20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-4 border-t border-white/20">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-sacred-gold font-bold text-base">
               <ShieldCheck className="w-5 h-5" />
@@ -195,6 +195,17 @@ export default function LandingPage() {
             </div>
             <p className="text-xs sm:text-sm text-white/85 leading-relaxed">
               {t('philMagisteriumDesc')}
+            </p>
+          </div>
+
+          {/* 4th Immutable Promise: 100% Free Forever & Open Source */}
+          <div className="flex flex-col gap-2 bg-black/20 p-4 rounded-xl border border-sacred-gold/40">
+            <div className="flex items-center gap-2 text-sacred-gold font-bold text-base">
+              <HeartHandshake className="w-5 h-5" />
+              <span>{t('philFreeForever')}</span>
+            </div>
+            <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-semibold">
+              {t('philFreeForeverDesc')}
             </p>
           </div>
         </div>

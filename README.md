@@ -1,7 +1,8 @@
 # Evangelizae ✝ — Plataforma Missionária Digital Católica
 
 > **"A Tecnologia a Serviço da Fé e da Vida Cristã"**  
-> *Veritas • Communio • Missio* — Verdade, Comunhão e Missão
+> *Veritas • Communio • Missio* — Verdade, Comunhão e Missão  
+> 🛡️ **Plataforma 100% Gratuita & Código Aberto Para Sempre • Sem Anúncios ou Paywalls • Sustentada Exclusivamente por Doações e Providência**
 
 ---
 
@@ -17,9 +18,9 @@ Nossa missão não é reter você diante das telas, nem alimentar vaidades digit
 
 ---
 
-## 🛡️ O Propósito da Aplicação & Os 3 Compromissos Inegociáveis
+## 🛡️ O Propósito da Aplicação & Os 4 Compromissos Inegociáveis
 
-Todo o desenho, a engenharia e as decisões arquitetônicas do Evangelizae foram forjados sob três pilares de fidelidade espiritual:
+Todo o desenho, a engenharia e as decisões arquitetônicas do Evangelizae foram forjados sob quatro pilares sagrados e imutáveis:
 
 ### 1. Fidelidade Integral e Incondicional ao Magistério (`Veritas`)
 Em uma época de relativismo e especulações doutrinais absurdas, o Evangelizae é **100% ancorado na pureza do Depósito da Fé (Depositum Fidei)**.
@@ -34,6 +35,12 @@ A vida espiritual é um caminho interior de conversão diária diante da Santís
 ### 3. Silêncio Sagrado e Comunhão das Almas (`Communio`)
 No **Muro Sagrado de Intenções**, irmãos de diferentes paróquias e nações intercedem pelas necessidades físicas, morais e espirituais uns dos outros.
 - **Sem Debates ou Polêmicas:** Para proteger a paz fraterna, o Muro Orante não permite comentários, discussões ou julgamentos. A única resposta possível diante da dor do outro é o ato de amor silencioso: clicar em **"Em oração por você"**.
+
+### 4. Gratuidade Eterna & Open Source Para Sempre (`Zero Mercantilização da Fé`)
+> *"De graça recebestes, de graça dai."* — **Mateus 10, 8**
+O Evangelizae é uma obra de apostolado e evangelização entregue como um dom à Santa Igreja:
+- **100% Gratuito e Código Aberto Para Sempre:** **Nunca** cobraremos taxas, nunca venderemos assinaturas ("Evangelizae Pro/Premium"), nunca exibiremos anúncios comerciais publicitários e nunca implementaremos paywalls que bloqueiem orações ou formações catequéticas.
+- **Sustentado por Providência & Doações Voluntárias:** A única e eventual forma de monetização e sustentação financeira da infraestrutura tecnológica da plataforma ocorrerá de modo livre e desprendido, exclusivamente através de **doações voluntárias (Providência Divina)** de benfeitores e irmãos em Cristo que desejarem apoiar a expansão desta obra apostólica.
 
 ---
 
