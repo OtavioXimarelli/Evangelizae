@@ -6,6 +6,7 @@ import { PageContainer } from '@/components/ui/PageContainer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 import { Bot, Send, ShieldAlert, Sparkles, BookCheck, HelpCircle } from 'lucide-react';
+import { Input, Button, Tag, Alert } from 'antd';
 
 interface ChatMessage {
   id: string;
@@ -123,13 +124,14 @@ export default function AiAssistantPage() {
         icon={<Bot className="w-4 h-4 text-sacred-gold" />}
       />
 
-      {/* Guardrail Warning Banner */}
-      <div className="flex items-start gap-3 p-4 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-950 dark:text-amber-200 text-xs sm:text-sm font-medium shadow-xs">
-        <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-        <p className="leading-relaxed">
-          {t('guardrailWarning')}
-        </p>
-      </div>
+      {/* Ant Design Guardrail Warning Alert Banner */}
+      <Alert
+        message={t('guardrailWarning')}
+        type="warning"
+        showIcon
+        icon={<ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        className="rounded-2xl border border-amber-500/40 bg-amber-500/15 text-xs sm:text-sm font-medium shadow-xs"
+      />
 
       {/* Main Layout: Chat Interface & Suggested Questions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -153,9 +155,9 @@ export default function AiAssistantPage() {
                 <div className="flex items-center justify-between gap-4 text-[11px] font-bold uppercase tracking-wider opacity-80">
                   <span>{msg.sender === 'user' ? 'Você' : 'Assistente Magisterial'}</span>
                   {msg.isGuardrailTriggered && (
-                    <span className="text-amber-600 dark:text-amber-400 font-extrabold flex items-center gap-1">
+                    <Tag color="warning" className="font-extrabold flex items-center gap-1 border-none m-0">
                       ⚠️ Guardrail Ativado
-                    </span>
+                    </Tag>
                   )}
                 </div>
 
@@ -163,18 +165,19 @@ export default function AiAssistantPage() {
                   {msg.text}
                 </div>
 
-                {/* Sources Citation Badge */}
+                {/* Sources Citation Badge with Antd Tag */}
                 {msg.sources && msg.sources.length > 0 && (
                   <div className="mt-2.5 pt-2.5 border-t border-black/10 dark:border-white/10 flex flex-wrap items-center gap-1.5 text-xs">
                     <BookCheck className="w-3.5 h-3.5 text-sacred-gold" />
-                    <span className="font-bold text-[11px] uppercase text-sacred-gold">{t('sourcesTitle')}</span>
+                    <span className="font-bold text-[11px] uppercase text-sacred-gold mr-1">{t('sourcesTitle')}</span>
                     {msg.sources.map((src, i) => (
-                      <span
+                      <Tag
                         key={i}
-                        className="px-2.5 py-0.5 rounded-md bg-sacred-gold/15 text-sacred-gold font-bold text-[11px] border border-sacred-gold/30"
+                        color="#d4af37"
+                        className="font-bold text-[11px] rounded-md text-white border-none shadow-xs"
                       >
                         [{src}]
-                      </span>
+                      </Tag>
                     ))}
                   </div>
                 )}
@@ -189,27 +192,29 @@ export default function AiAssistantPage() {
             )}
           </div>
 
-          {/* Input Form */}
+          {/* Input Form with Antd Input and Button */}
           <form onSubmit={handleSend} className="flex items-center gap-2 pt-3 border-t border-slate-200 dark:border-slate-700">
-            <input
-              type="text"
+            <Input
+              size="large"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={t('inputPlaceholder')}
-              className="flex-grow text-sm px-4 py-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-sacred-gold font-medium text-slate-900 dark:text-white transition-colors"
+              className="flex-grow text-sm font-medium"
             />
-            <button
-              type="submit"
+            <Button
+              type="primary"
+              size="large"
+              htmlType="submit"
               disabled={isLoading || !input.trim()}
-              className="px-6 py-3.5 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white font-bold text-sm shadow-md gold-glow disabled:opacity-40 transition-all flex items-center gap-2"
+              icon={<Send className="w-4 h-4" />}
+              className="px-6 font-bold shadow-md bg-sacred-gold hover:bg-sacred-gold-light border-none gold-glow flex items-center gap-2"
             >
-              <span>Perguntar</span>
-              <Send className="w-4 h-4" />
-            </button>
+              Perguntar
+            </Button>
           </form>
         </EditorialCard>
 
-        {/* Suggested Questions Sidebar */}
+        {/* Suggested Questions Sidebar with Antd Button */}
         <div className="flex flex-col gap-6">
           <EditorialCard className="p-5 flex flex-col gap-4 border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-2 text-sacred-gold border-b border-slate-200 dark:border-slate-700 pb-3">
@@ -224,13 +229,14 @@ export default function AiAssistantPage() {
 
             <div className="flex flex-col gap-2.5">
               {SUGGESTED_QUESTIONS.map((item, idx) => (
-                <button
+                <Button
                   key={idx}
                   onClick={() => handleSuggestedClick(item.q)}
-                  className="text-left p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-sacred-gold/15 hover:border-sacred-gold/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all duration-200 shadow-2xs"
+                  block
+                  className="text-left h-auto py-3 px-3.5 rounded-xl text-xs font-bold whitespace-normal shadow-2xs hover:border-sacred-gold"
                 >
                   ✝ {item.q}
-                </button>
+                </Button>
               ))}
             </div>
           </EditorialCard>

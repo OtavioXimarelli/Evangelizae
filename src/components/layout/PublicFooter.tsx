@@ -57,7 +57,7 @@ export function PublicFooter() {
           <div className="lg:col-span-3 flex flex-col gap-4">
             <h4 className="font-serif text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white flex items-center gap-2">
               <Church className="w-4 h-4 text-sacred-gold" />
-              <span>Vida Devocional & Liturgia</span>
+              <span>{t('colDevotional')}</span>
             </h4>
             <ul className="flex flex-col gap-2.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
               <li>
@@ -69,19 +69,19 @@ export function PublicFooter() {
               <li>
                 <Link href="/rosary" className="hover:text-sacred-gold transition-colors flex items-center gap-2 py-0.5">
                   <span>📿</span>
-                  <span>{tHeader('rosary')} Guiado</span>
+                  <span>{t('rosaryGuided')}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/liturgy" className="hover:text-sacred-gold transition-colors flex items-center gap-2 py-0.5">
                   <span>📖</span>
-                  <span>{tHeader('liturgy')} & Lectio Divina</span>
+                  <span>{t('liturgyLectio')}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/intentions" className="hover:text-sacred-gold transition-colors flex items-center gap-2 py-0.5">
                   <span>🙏</span>
-                  <span>{tHeader('intentions')} Fraternas</span>
+                  <span>{t('intentionsFraternal')}</span>
                 </Link>
               </li>
             </ul>
@@ -91,7 +91,7 @@ export function PublicFooter() {
           <div className="lg:col-span-2 flex flex-col gap-4">
             <h4 className="font-serif text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-sacred-gold" />
-              <span>Formação & IA</span>
+              <span>{t('colFormation')}</span>
             </h4>
             <ul className="flex flex-col gap-2.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
               <li>
@@ -109,7 +109,7 @@ export function PublicFooter() {
               <li>
                 <Link href="/sanctuary" className="hover:text-sacred-gold transition-colors flex items-center gap-2 py-0.5">
                   <Award className="w-3.5 h-3.5 text-sacred-gold" />
-                  <span>Plano 30 Dias</span>
+                  <span>{t('plan30Days')}</span>
                 </Link>
               </li>
             </ul>
@@ -119,24 +119,24 @@ export function PublicFooter() {
           <div className="lg:col-span-2 flex flex-col gap-4">
             <h4 className="font-serif text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white flex items-center gap-2">
               <Compass className="w-4 h-4 text-sacred-gold" />
-              <span>A Missão & Apoio</span>
+              <span>{t('colMission')}</span>
             </h4>
             <ul className="flex flex-col gap-2.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
               <li>
                 <Link href="/about" className="text-sacred-gold font-bold hover:underline transition-colors flex items-center gap-1.5 py-0.5">
-                  <span>{tHeader('about')} (Manifesto)</span>
+                  <span>{t('aboutManifesto')}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="hover:text-sacred-gold transition-colors flex items-center gap-2 py-0.5">
                   <Heart className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                  <span>Doação (Providência)</span>
+                  <span>{t('supportDonation')}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="hover:text-sacred-gold transition-colors flex items-center gap-2 py-0.5">
-                  <span>🛡️ 3+1 Compromissos</span>
+                  <span>{t('commitments')}</span>
                 </Link>
               </li>
               <li>
@@ -157,7 +157,7 @@ export function PublicFooter() {
             <span className="font-bold text-sacred-gold">AMDG</span>
           </div>
           <div className="italic text-center sm:text-right font-medium">
-            &ldquo;De graça recebestes, de graça dai.&rdquo; (Mateus 10, 8)
+            {t('scriptureQuote')}
           </div>
         </div>
 

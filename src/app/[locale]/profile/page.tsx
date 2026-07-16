@@ -6,6 +6,7 @@ import { PageContainer } from '@/components/ui/PageContainer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 import { User, Flame, Sparkles, CheckCircle2, Church, Moon, Sun, ShieldCheck } from 'lucide-react';
+import { Progress, Input, Button, Tag, Statistic, Switch } from 'antd';
 import { usePrayerStore } from '@/store/usePrayerStore';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
@@ -65,10 +66,10 @@ export default function ProfilePage() {
         <EditorialCard variant="accent" className="p-8 flex flex-col justify-between gap-6 border-2 border-amber-500/40">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sacred-gold text-white shadow-xs">
-                <Flame className="w-3.5 h-3.5 fill-white" />
+              <Tag color="#d4af37" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white border-none shadow-xs">
+                <Flame className="w-3.5 h-3.5 fill-white shrink-0" />
                 <span>Constância Diária</span>
-              </span>
+              </Tag>
               {lastCheckInDate && (
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
                   Último registro: {lastCheckInDate}
@@ -102,17 +103,20 @@ export default function ProfilePage() {
 
             <div className="grid grid-cols-2 gap-4 my-2">
               <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col gap-1 border border-slate-200 dark:border-slate-700">
-                <span className="text-2xl sm:text-3xl font-bold font-serif text-sacred-gold">
-                  {totalRosariesPrayed}
-                </span>
+                <Statistic
+                  value={totalRosariesPrayed}
+                  prefix={<Sparkles className="w-4 h-4 text-sacred-gold inline mr-1" />}
+                  valueStyle={{ fontWeight: 'bold', fontSize: '1.75rem', color: '#d4af37' }}
+                />
                 <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                   Terços Rezados
                 </span>
               </div>
               <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col gap-1 border border-slate-200 dark:border-slate-700">
-                <span className="text-2xl sm:text-3xl font-bold font-serif text-purple-600 dark:text-purple-400">
-                  7 / 30
-                </span>
+                <Statistic
+                  value="7 / 30"
+                  valueStyle={{ fontWeight: 'bold', fontSize: '1.75rem', color: '#9333ea' }}
+                />
                 <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                   Dias do Plano Espiritual
                 </span>
@@ -136,9 +140,18 @@ export default function ProfilePage() {
               {t('planTitle')} (O Oferecimento da Manhã)
             </h3>
           </div>
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+          <Tag color="success" className="text-xs font-bold px-3 py-1 rounded-full border-none">
             Fase 1: Construindo o Hábito
-          </span>
+          </Tag>
+        </div>
+
+        {/* Ant Design Smooth Progress Bar */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-300">
+            <span>Progresso Geral do Mês</span>
+            <span>23% (Dia 7 de 30)</span>
+          </div>
+          <Progress percent={23} strokeColor="#d4af37" status="active" showInfo={false} className="w-full" />
         </div>
 
         {/* Checkmark Milestones */}
@@ -171,7 +184,7 @@ export default function ProfilePage() {
         
         {/* Parish Connection Bridge */}
         <EditorialCard className="p-6 flex flex-col justify-between gap-4 border-slate-200 dark:border-slate-700">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2 text-sacred-gold">
               <Church className="w-5 h-5" />
               <h3 className="font-serif font-bold text-lg text-slate-900 dark:text-white">
@@ -181,25 +194,28 @@ export default function ProfilePage() {
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
               O Evangelizae existe para te guiar à Igreja física. Registre sua paróquia e capela de adoração eucarística:
             </p>
-            <input
-              type="text"
+            <Input
+              size="large"
               value={parish}
               onChange={(e) => setParish(e.target.value)}
               placeholder={t('parishPlaceholder')}
-              className="mt-2 w-full text-sm px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-sacred-gold font-medium text-slate-900 dark:text-white"
+              prefix={<Church className="w-4 h-4 text-sacred-gold mr-2" />}
+              className="mt-1 text-sm font-medium"
             />
           </div>
-          <button
+          <Button
+            type="primary"
+            size="large"
             onClick={() => alert('Paróquia atualizada em seu perfil pessoal.')}
-            className="self-start px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-700 text-white text-xs font-bold hover:bg-slate-800 transition-colors shadow-xs"
+            className="self-start px-6 font-bold shadow-xs bg-sacred-gold hover:bg-sacred-gold-light border-none"
           >
             {tCommon('save')}
-          </button>
+          </Button>
         </EditorialCard>
 
         {/* Sacred Theme Toggle Card */}
         <EditorialCard className="p-6 flex flex-col justify-between gap-4 border-slate-200 dark:border-slate-700">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <h3 className="font-serif font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
               {isDark ? <Moon className="w-5 h-5 text-sacred-gold" /> : <Sun className="w-5 h-5 text-sacred-gold" />}
               <span>{t('themeToggle')}</span>
@@ -208,13 +224,17 @@ export default function ProfilePage() {
               Alterne entre o tema <strong>Vaticano Branco</strong> (Luminoso e Solene) e o tema <strong>Sombra Mariana</strong> (Noturno, de paz e recolhimento para oração).
             </p>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="w-full py-3.5 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white font-bold text-sm shadow-md gold-glow transition-all flex items-center justify-center gap-2"
-          >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            <span>Ativar Tema {isDark ? 'Vaticano Branco (Claro)' : 'Sombra Mariana (Escuro)'}</span>
-          </button>
+          <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+              {isDark ? '🌙 Sombra Mariana (Escuro)' : '☀️ Vaticano Branco (Claro)'}
+            </span>
+            <Switch
+              checked={isDark}
+              onChange={toggleTheme}
+              checkedChildren="Noite"
+              unCheckedChildren="Solene"
+            />
+          </div>
         </EditorialCard>
 
       </div>

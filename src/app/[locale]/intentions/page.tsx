@@ -6,6 +6,7 @@ import { PageContainer } from '@/components/ui/PageContainer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 import { Heart, PlusCircle, ShieldCheck, Check, Sparkles } from 'lucide-react';
+import { Modal, Form, Input, Select, Button, Tag, Tooltip } from 'antd';
 
 interface IntentionItem {
   id: string;
@@ -86,9 +87,7 @@ export default function IntentionsPage() {
   const tCommon = useTranslations('Common');
   const [intentions, setIntentions] = React.useState<IntentionItem[]>(INITIAL_INTENTIONS);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState('categoryHealth');
-  const [authorInput, setAuthorInput] = React.useState('');
-  const [textInput, setTextInput] = React.useState('');
+  const [form] = Form.useForm();
 
   const handlePrayedClick = (id: string) => {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
@@ -112,10 +111,7 @@ export default function IntentionsPage() {
     );
   };
 
-  const handlePostIntention = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!textInput.trim()) return;
-
+  const handlePostIntention = (values: any) => {
     const categoryNames: Record<string, string> = {
       categoryHealth: t('categoryHealth'),
       categoryVocation: t('categoryVocation'),
@@ -125,20 +121,21 @@ export default function IntentionsPage() {
       categoryThanksgiving: t('categoryThanksgiving')
     };
 
+    const chosenCat = values.selectedCategory || 'categoryHealth';
+
     const newItem: IntentionItem = {
       id: `int-${Date.now()}`,
-      authorName: authorInput.trim() || 'Irmão em Cristo',
-      category: categoryNames[selectedCategory] || t('categoryHealth'),
-      categoryKey: selectedCategory,
-      text: textInput.trim(),
+      authorName: values.authorInput?.trim() || 'Irmão em Cristo',
+      category: categoryNames[chosenCat] || t('categoryHealth'),
+      categoryKey: chosenCat,
+      text: values.textInput?.trim() || '',
       prayedCount: 1,
       hasPrayed: true,
       timeAgo: 'Agora mesmo'
     };
 
     setIntentions([newItem, ...intentions]);
-    setTextInput('');
-    setAuthorInput('');
+    form.resetFields();
     setIsModalOpen(false);
   };
 
@@ -151,13 +148,15 @@ export default function IntentionsPage() {
         badge="Pilar III — Communio"
         icon={<Heart className="w-4 h-4 text-purple-500 fill-purple-500" />}
         rightAction={
-          <button
+          <Button
+            type="primary"
+            size="large"
+            icon={<PlusCircle className="w-5 h-5 mr-1" />}
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white font-bold text-sm shadow-md gold-glow transition-all hover:scale-105"
+            className="px-6 font-bold shadow-md bg-sacred-gold hover:bg-sacred-gold-light border-none"
           >
-            <PlusCircle className="w-5 h-5" />
-            <span>{t('btnSubmit')}</span>
-          </button>
+            {t('btnSubmit')}
+          </Button>
         }
       />
 
@@ -178,9 +177,9 @@ export default function IntentionsPage() {
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold border border-sacred-gold/30">
+                <Tag color="#d4af37" className="font-bold px-3 py-1 rounded-full text-white border-none">
                   {item.category}
-                </span>
+                </Tag>
                 <span className="text-slate-500 dark:text-slate-400 font-medium">{item.timeAgo}</span>
               </div>
               
@@ -193,121 +192,91 @@ export default function IntentionsPage() {
               </span>
             </div>
 
-            {/* Prayed Button Action Strip */}
+            {/* Prayed Button Action Strip with Antd Button */}
             <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
               <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
                 <strong className="text-sacred-gold font-extrabold text-sm">{item.prayedCount}</strong> {tCommon('peoplePrayed')}
               </span>
 
-              <button
-                onClick={() => handlePrayedClick(item.id)}
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 ${
-                  item.hasPrayed
-                    ? 'bg-emerald-600 text-white shadow-md scale-105'
-                    : 'bg-white dark:bg-slate-800 border-2 border-sacred-gold/60 text-sacred-gold hover:bg-sacred-gold hover:text-white shadow-xs'
-                }`}
-              >
-                {item.hasPrayed ? (
-                  <>
-                    <Check className="w-4 h-4 stroke-[3]" />
-                    <span>Em oração por você</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4" />
-                    <span>{tCommon('prayedForYou')}</span>
-                  </>
-                )}
-              </button>
+              <Tooltip title={item.hasPrayed ? 'Você já rezou por esta intenção hoje' : 'Interceder em silêncio'}>
+                <Button
+                  type={item.hasPrayed ? 'default' : 'primary'}
+                  icon={item.hasPrayed ? <Check className="w-4 h-4 text-emerald-600 stroke-[3] inline mr-1" /> : <Sparkles className="w-4 h-4 inline mr-1" />}
+                  onClick={() => handlePrayedClick(item.id)}
+                  className={`px-4 font-bold ${
+                    item.hasPrayed
+                      ? 'border-emerald-600 text-emerald-600 bg-emerald-500/10'
+                      : 'bg-sacred-gold hover:bg-sacred-gold-light text-white border-none shadow-xs'
+                  }`}
+                >
+                  {item.hasPrayed ? 'Em oração por você' : tCommon('prayedForYou')}
+                </Button>
+              </Tooltip>
             </div>
           </EditorialCard>
         ))}
       </div>
 
-      {/* Submit Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full border border-slate-300 dark:border-slate-700 shadow-2xl flex flex-col gap-6">
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
-              <h3 className="font-serif font-bold text-xl text-slate-900 dark:text-white">
-                {t('modalTitle')}
-              </h3>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-slate-500 hover:text-slate-900 dark:hover:text-white text-xl font-bold px-2"
-              >
-                ×
-              </button>
-            </div>
+      {/* Ant Design Submit Modal */}
+      <Modal
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        title={<span className="font-serif font-bold text-xl text-slate-900 dark:text-white">{t('modalTitle')}</span>}
+        footer={null}
+        centered
+        destroyOnClose
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handlePostIntention}
+          initialValues={{ selectedCategory: 'categoryHealth' }}
+          className="flex flex-col gap-3 pt-4"
+        >
+          <Form.Item
+            name="authorInput"
+            label={<span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Seu Nome ou Paróquia (Opcional)</span>}
+          >
+            <Input size="large" placeholder="Ex: João Silva (Paróquia N. Sra. do Carmo)" className="text-sm font-medium" />
+          </Form.Item>
 
-            <form onSubmit={handlePostIntention} className="flex flex-col gap-4">
-              {/* Author field */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                  Seu Nome ou Paróquia (Opcional)
-                </label>
-                <input
-                  type="text"
-                  value={authorInput}
-                  onChange={(e) => setAuthorInput(e.target.value)}
-                  placeholder="Ex: João Silva (Paróquia N. Sra. do Carmo)"
-                  className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-sacred-gold font-medium text-slate-900 dark:text-white"
-                />
-              </div>
+          <Form.Item
+            name="selectedCategory"
+            label={<span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">{t('modalCategoryLabel')}</span>}
+            rules={[{ required: true, message: 'Selecione uma categoria espiritual' }]}
+          >
+            <Select size="large" className="text-sm font-medium">
+              <Select.Option value="categoryHealth">{t('categoryHealth')}</Select.Option>
+              <Select.Option value="categoryVocation">{t('categoryVocation')}</Select.Option>
+              <Select.Option value="categoryFamily">{t('categoryFamily')}</Select.Option>
+              <Select.Option value="categoryConversion">{t('categoryConversion')}</Select.Option>
+              <Select.Option value="categoryDeceased">{t('categoryDeceased')}</Select.Option>
+              <Select.Option value="categoryThanksgiving">{t('categoryThanksgiving')}</Select.Option>
+            </Select>
+          </Form.Item>
 
-              {/* Category */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                  {t('modalCategoryLabel')}
-                </label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-sacred-gold font-medium text-slate-900 dark:text-white"
-                >
-                  <option value="categoryHealth">{t('categoryHealth')}</option>
-                  <option value="categoryVocation">{t('categoryVocation')}</option>
-                  <option value="categoryFamily">{t('categoryFamily')}</option>
-                  <option value="categoryConversion">{t('categoryConversion')}</option>
-                  <option value="categoryDeceased">{t('categoryDeceased')}</option>
-                  <option value="categoryThanksgiving">{t('categoryThanksgiving')}</option>
-                </select>
-              </div>
+          <Form.Item
+            name="textInput"
+            label={<span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">{t('modalTextLabel')}</span>}
+            rules={[{ required: true, message: 'Escreva sua intenção de oração' }]}
+          >
+            <Input.TextArea
+              rows={4}
+              placeholder={t('modalTextPlaceholder')}
+              className="resize-none text-sm font-medium"
+            />
+          </Form.Item>
 
-              {/* Text */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                  {t('modalTextLabel')}
-                </label>
-                <textarea
-                  rows={4}
-                  value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
-                  placeholder={t('modalTextPlaceholder')}
-                  required
-                  className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-sacred-gold resize-none font-medium text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white text-xs font-bold shadow-md gold-glow"
-                >
-                  {t('btnPost')}
-                </button>
-              </div>
-            </form>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button size="large" onClick={() => setIsModalOpen(false)} className="font-bold">
+              Cancelar
+            </Button>
+            <Button type="primary" size="large" htmlType="submit" className="font-bold px-6 bg-sacred-gold hover:bg-sacred-gold-light border-none shadow-md gold-glow">
+              {t('btnPost')}
+            </Button>
           </div>
-        </div>
-      )}
+        </Form>
+      </Modal>
     </PageContainer>
   );
 }
