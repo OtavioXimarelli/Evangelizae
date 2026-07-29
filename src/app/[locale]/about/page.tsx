@@ -42,7 +42,7 @@ export default function AboutPage() {
 
       {/* Intro Manifesto & Canonical Quote */}
       <EditorialCard variant="liturgical" className="p-8 sm:p-12 flex flex-col gap-6 max-w-5xl mx-auto shadow-2xl border border-white/20">
-        <div className="flex items-center gap-2 text-sacred-gold-badge text-xs font-bold uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-sacred-gold-badge text-xs font-bold uppercase tracking-widest font-serif">
           <Compass className="w-4 h-4" />
           <span>{t('introTitle')}</span>
         </div>
@@ -55,16 +55,16 @@ export default function AboutPage() {
           {t('introText2')}
         </p>
 
-        <div className="border-t border-white/20 pt-6 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-white/80 italic font-medium">
-          <span>&ldquo;A sagrada Tradição e a sagrada Escritura constituem um só depósito sagrado da palavra de Deus.&rdquo;</span>
-          <span className="font-bold text-sacred-gold">— Dei Verbum, 10</span>
+        <div className="border-t border-white/20 pt-6 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-white/80 italic font-medium font-serif">
+          <span>{t('deiVerbumQuote')}</span>
+          <span className="font-bold text-sacred-gold">{t('deiVerbumRef')}</span>
         </div>
       </EditorialCard>
 
       {/* The Core Goal: From Screen to Altar */}
       <div className="max-w-4xl mx-auto w-full">
         <EditorialCard variant="accent" className="p-8 sm:p-10 flex flex-col gap-5 border-2 border-amber-500/50 shadow-xl bg-gradient-to-br from-amber-500/10 via-white to-amber-500/5 dark:from-amber-500/15 dark:via-slate-900 dark:to-amber-500/10">
-          <div className="flex items-center gap-2.5 text-amber-600 dark:text-amber-400 font-bold text-sm uppercase tracking-wider">
+          <div className="flex items-center gap-2.5 text-amber-600 dark:text-amber-400 font-bold text-sm uppercase tracking-wider font-serif">
             <Flame className="w-5 h-5 text-sacred-gold" />
             <span>{t('goalBoxTitle')}</span>
           </div>
@@ -77,9 +77,9 @@ export default function AboutPage() {
             {t('goalBoxSub')}
           </p>
 
-          <div className="flex items-center gap-2 text-xs font-bold text-sacred-gold pt-2">
+          <div className="flex items-center gap-2 text-xs font-bold text-sacred-gold pt-2 font-serif">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Sem notificações ansiosas • Sem vaidade digital • Fiel aos Sacramentos</span>
+            <span>{t('goalBoxBullets')}</span>
           </div>
         </EditorialCard>
       </div>
@@ -199,9 +199,9 @@ export default function AboutPage() {
           </Link>
         </div>
 
-        <div className="text-xs text-white/70 font-bold pt-2 flex items-center gap-1.5">
+        <div className="text-xs text-white/70 font-bold pt-2 flex items-center gap-1.5 font-serif">
           <ShieldCheck className="w-4 h-4 text-sacred-gold" />
-          <span>{t('btnDonate')} • Providência Divina & Amor à Igreja</span>
+          <span>{t('btnDonate')} • {t('providenceFooter')}</span>
         </div>
       </EditorialCard>
     </PageContainer>

@@ -127,13 +127,13 @@ export default function IntentionsPage() {
 
     const newItem: IntentionItem = {
       id: `int-${Date.now()}`,
-      authorName: authorInput.trim() || 'Irmão em Cristo',
+      authorName: authorInput.trim() || t('brotherInChrist'),
       category: categoryNames[selectedCategory] || t('categoryHealth'),
       categoryKey: selectedCategory,
       text: textInput.trim(),
       prayedCount: 1,
       hasPrayed: true,
-      timeAgo: 'Agora mesmo'
+      timeAgo: t('justNow')
     };
 
     setIntentions([newItem, ...intentions]);
@@ -148,7 +148,7 @@ export default function IntentionsPage() {
       <SectionHeader
         title={t('title')}
         subtitle={t('subtitle')}
-        badge="Pilar III — Communio"
+        badge={t('communionBadge')}
         icon={<Heart className="w-4 h-4 text-purple-500 fill-purple-500" />}
         rightAction={
           <button
@@ -165,7 +165,7 @@ export default function IntentionsPage() {
       <div className="flex items-center gap-3 p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 text-purple-900 dark:text-purple-200 text-xs sm:text-sm font-medium shadow-xs">
         <ShieldCheck className="w-5 h-5 text-purple-500 flex-shrink-0" />
         <p>
-          <strong className="font-bold">Silêncio Sagrado:</strong> Para preservar a paz fraterna e evitar debates ou opiniões particulares, este muro funciona exclusivamente por intercessão orante (`{tCommon('prayedForYou')}`).
+          <strong className="font-bold font-serif">Silêncio Sagrado:</strong> {t('sacredSilenceNotice')} (`{tCommon('prayedForYou')}`).
         </p>
       </div>
 
@@ -178,7 +178,7 @@ export default function IntentionsPage() {
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold border border-sacred-gold/30">
+                <span className="font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold border border-sacred-gold/30 font-serif">
                   {item.category}
                 </span>
                 <span className="text-slate-500 dark:text-slate-400 font-medium">{item.timeAgo}</span>
@@ -210,7 +210,7 @@ export default function IntentionsPage() {
                 {item.hasPrayed ? (
                   <>
                     <Check className="w-4 h-4 stroke-[3]" />
-                    <span>Em oração por você</span>
+                    <span>{t('inPrayerForYou')}</span>
                   </>
                 ) : (
                   <>
@@ -243,21 +243,21 @@ export default function IntentionsPage() {
             <form onSubmit={handlePostIntention} className="flex flex-col gap-4">
               {/* Author field */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                  Seu Nome ou Paróquia (Opcional)
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 font-serif">
+                  {t('authorLabel')}
                 </label>
                 <input
                   type="text"
                   value={authorInput}
                   onChange={(e) => setAuthorInput(e.target.value)}
-                  placeholder="Ex: João Silva (Paróquia N. Sra. do Carmo)"
+                  placeholder={t('authorPlaceholder')}
                   className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-sacred-gold font-medium text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* Category */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 font-serif">
                   {t('modalCategoryLabel')}
                 </label>
                 <select
@@ -276,7 +276,7 @@ export default function IntentionsPage() {
 
               {/* Text */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 font-serif">
                   {t('modalTextLabel')}
                 </label>
                 <textarea
@@ -295,7 +295,7 @@ export default function IntentionsPage() {
                   onClick={() => setIsModalOpen(false)}
                   className="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
                 >
-                  Cancelar
+                  {t('cancel')}
                 </button>
                 <button
                   type="submit"

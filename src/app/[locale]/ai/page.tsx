@@ -119,7 +119,7 @@ export default function AiAssistantPage() {
       <SectionHeader
         title={t('title')}
         subtitle={t('subtitle')}
-        badge="Pilar II — Veritas (Formação Doutrinal)"
+        badge={t('veritasBadge')}
         icon={<Bot className="w-4 h-4 text-sacred-gold" />}
       />
 
@@ -151,10 +151,10 @@ export default function AiAssistantPage() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-4 text-[11px] font-bold uppercase tracking-wider opacity-80">
-                  <span>{msg.sender === 'user' ? 'Você' : 'Assistente Magisterial'}</span>
+                  <span>{msg.sender === 'user' ? t('userSender') : t('assistantSender')}</span>
                   {msg.isGuardrailTriggered && (
-                    <span className="text-amber-600 dark:text-amber-400 font-extrabold flex items-center gap-1">
-                      ⚠️ Guardrail Ativado
+                    <span className="text-amber-600 dark:text-amber-400 font-extrabold flex items-center gap-1 font-serif">
+                      {t('guardrailActivated')}
                     </span>
                   )}
                 </div>
@@ -167,11 +167,11 @@ export default function AiAssistantPage() {
                 {msg.sources && msg.sources.length > 0 && (
                   <div className="mt-2.5 pt-2.5 border-t border-black/10 dark:border-white/10 flex flex-wrap items-center gap-1.5 text-xs">
                     <BookCheck className="w-3.5 h-3.5 text-sacred-gold" />
-                    <span className="font-bold text-[11px] uppercase text-sacred-gold">{t('sourcesTitle')}</span>
+                    <span className="font-bold text-[11px] uppercase text-sacred-gold font-serif">{t('sourcesTitle')}</span>
                     {msg.sources.map((src, i) => (
                       <span
                         key={i}
-                        className="px-2.5 py-0.5 rounded-md bg-sacred-gold/15 text-sacred-gold font-bold text-[11px] border border-sacred-gold/30"
+                        className="px-2.5 py-0.5 rounded-md bg-sacred-gold/15 text-sacred-gold font-bold text-[11px] border border-sacred-gold/30 font-serif"
                       >
                         [{src}]
                       </span>
@@ -182,9 +182,9 @@ export default function AiAssistantPage() {
             ))}
 
             {isLoading && (
-              <div className="self-start bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+              <div className="self-start bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-serif">
                 <Sparkles className="w-4 h-4 animate-spin text-sacred-gold" />
-                <span>Consultando o Catecismo da Igreja Católica e Documentos Magisteriais...</span>
+                <span>{t('consultingMagisterium')}</span>
               </div>
             )}
           </div>
@@ -203,7 +203,7 @@ export default function AiAssistantPage() {
               disabled={isLoading || !input.trim()}
               className="px-6 py-3.5 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white font-bold text-sm shadow-md gold-glow disabled:opacity-40 transition-all flex items-center gap-2"
             >
-              <span>Perguntar</span>
+              <span>{t('askButton')}</span>
               <Send className="w-4 h-4" />
             </button>
           </form>
@@ -215,11 +215,11 @@ export default function AiAssistantPage() {
             <div className="flex items-center gap-2 text-sacred-gold border-b border-slate-200 dark:border-slate-700 pb-3">
               <HelpCircle className="w-5 h-5" />
               <h3 className="font-serif font-bold text-base text-slate-900 dark:text-white">
-                Perguntas Frequentes de Formação
+                {t('faqTitle')}
               </h3>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
-              Clique em qualquer questão doutrinal abaixo para consultar imediatamente a resposta fundamentada:
+              {t('faqDesc')}
             </p>
 
             <div className="flex flex-col gap-2.5">
@@ -227,7 +227,7 @@ export default function AiAssistantPage() {
                 <button
                   key={idx}
                   onClick={() => handleSuggestedClick(item.q)}
-                  className="text-left p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-sacred-gold/15 hover:border-sacred-gold/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all duration-200 shadow-2xs"
+                  className="text-left p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-sacred-gold/15 hover:border-sacred-gold/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all duration-200 shadow-2xs font-serif"
                 >
                   ✝ {item.q}
                 </button>
@@ -237,10 +237,10 @@ export default function AiAssistantPage() {
 
           <EditorialCard variant="default" className="p-5 bg-gradient-to-br from-white to-purple-500/10 dark:from-slate-800 dark:to-purple-500/15 border-slate-200 dark:border-slate-700">
             <h4 className="font-serif font-bold text-sm text-purple-700 dark:text-purple-300">
-              Sobre a Inteligência Artificial Católica
+              {t('aboutAiTitle')}
             </h4>
             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mt-2 font-medium">
-              Nossa tecnologia RAG é estritamente configurada sem especulações particulares. Ela não opina, mas proclama com reverência a verdade imutável confiada à Santa Igreja.
+              {t('aboutAiDesc')}
             </p>
           </EditorialCard>
         </div>

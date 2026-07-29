@@ -53,7 +53,7 @@ export default function ProfilePage() {
       <SectionHeader
         title={t('title')}
         subtitle={t('subtitle')}
-        badge="Fidelidade Pessoal (Sem Comparações)"
+        badge={t('personalFidelityBadge')}
         icon={<User className="w-4 h-4 text-sacred-gold" />}
       />
 
@@ -66,17 +66,17 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sacred-gold text-white shadow-xs">
                 <Flame className="w-3.5 h-3.5 fill-white" />
-                <span>Constância Diária</span>
+                <span>{t('dailyConsistency')}</span>
               </span>
               {lastCheckInDate && (
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
-                  Último registro: {lastCheckInDate}
+                  {t('lastRecord')}: {lastCheckInDate}
                 </span>
               )}
             </div>
 
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-              <span>{consecutiveDays} Dias Fies</span>
+              <span>{t('streakDays', { days: consecutiveDays })}</span>
               <Flame className="w-8 h-8 fill-sacred-gold text-sacred-gold animate-bounce" />
             </h2>
             <p className="text-sm font-bold text-sacred-gold leading-relaxed">
@@ -85,7 +85,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-            <strong className="font-bold">Fidelidade sem Vaidade:</strong> No Evangelizae, não existem rankings públicos ou competições. Sua oração é um diálogo íntimo com Deus e Sua Santa Igreja.
+            {t('fidelityNotice')}
           </div>
         </EditorialCard>
 
@@ -94,7 +94,7 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
               <span className="font-serif font-bold text-lg text-slate-900 dark:text-white">
-                Resumo de Orações Concluídas
+                {t('prayerSummary')}
               </span>
               <Sparkles className="w-5 h-5 text-sacred-gold" />
             </div>
@@ -104,22 +104,22 @@ export default function ProfilePage() {
                 <span className="text-2xl sm:text-3xl font-bold font-serif text-sacred-gold">
                   {totalRosariesPrayed}
                 </span>
-                <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                  Terços Rezados
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider font-serif">
+                  {t('rosariesPrayed')}
                 </span>
               </div>
               <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col gap-1 border border-slate-200 dark:border-slate-700">
                 <span className="text-2xl sm:text-3xl font-bold font-serif text-purple-600 dark:text-purple-400">
                   7 / 30
                 </span>
-                <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                  Dias do Plano Espiritual
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider font-serif">
+                  {t('planDays')}
                 </span>
               </div>
             </div>
 
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-              Ao concluir o Terço no Santuário, o seu progresso espiritual é atualizado automaticamente, fortalecendo o hábito da oração mariana em sua rotina diária.
+              {t('rosaryProgressNotice')}
             </p>
           </div>
         </EditorialCard>
@@ -132,11 +132,11 @@ export default function ProfilePage() {
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-sacred-gold" />
             <h3 className="font-serif font-bold text-xl text-slate-900 dark:text-white">
-              {t('planTitle')} (O Oferecimento da Manhã)
+              {t('planTitle')}
             </h3>
           </div>
           <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-            Fase 1: Construindo o Hábito
+            {t('habitPhase')}
           </span>
         </div>
 
@@ -155,9 +155,9 @@ export default function ProfilePage() {
                     ? 'bg-sacred-gold/20 text-sacred-gold border-sacred-gold/40'
                     : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400'
                 }`}
-                title={`Dia ${dayNum} do Plano Espiritual`}
+                title={t('dayNum', { day: dayNum })}
               >
-                <span>Dia {dayNum}</span>
+                <span>{t('dayNum', { day: dayNum })}</span>
                 {isDone && <CheckCircle2 className="w-4 h-4 mt-1 stroke-[3]" />}
               </div>
             );
@@ -178,7 +178,7 @@ export default function ProfilePage() {
               </h3>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-              O Evangelizae existe para te guiar à Igreja física. Registre sua paróquia e capela de adoração eucarística:
+              {t('parishBridgeDesc')}
             </p>
             <input
               type="text"
@@ -189,7 +189,7 @@ export default function ProfilePage() {
             />
           </div>
           <button
-            onClick={() => alert('Paróquia atualizada em seu perfil pessoal.')}
+            onClick={() => alert(t('parishSavedAlert'))}
             className="self-start px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-700 text-white text-xs font-bold hover:bg-slate-800 transition-colors shadow-xs"
           >
             {tCommon('save')}
@@ -204,7 +204,7 @@ export default function ProfilePage() {
               <span>{t('themeToggle')}</span>
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-              Alterne entre o tema <strong>Vaticano Branco</strong> (Luminoso e Solene) e o tema <strong>Sombra Mariana</strong> (Noturno, de paz e recolhimento para oração).
+              {t('themeToggleDesc')}
             </p>
           </div>
           <button
@@ -212,7 +212,7 @@ export default function ProfilePage() {
             className="w-full py-3.5 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white font-bold text-sm shadow-md gold-glow transition-all flex items-center justify-center gap-2"
           >
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            <span>Ativar Tema {isDark ? 'Vaticano Branco (Claro)' : 'Sombra Mariana (Escuro)'}</span>
+            <span>{isDark ? t('activateLightTheme') : t('activateDarkTheme')}</span>
           </button>
         </EditorialCard>
 

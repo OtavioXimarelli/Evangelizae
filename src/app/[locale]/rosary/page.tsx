@@ -113,7 +113,7 @@ export default function RosaryPage() {
             {t('completedBanner')}
           </h2>
           <p className="text-sm max-w-xl text-slate-700 dark:text-slate-200 font-medium">
-            Sua fidelidade diária foi registrada. Que o Santo Rosário seja sempre sua arma espiritual e fonte de paz.
+            {t('completionDesc')}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <button
@@ -128,7 +128,7 @@ export default function RosaryPage() {
               className="px-5 py-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors inline-flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4" />
-              <span>Reiniciar Terço</span>
+              <span>{t('btnRestart')}</span>
             </button>
           </div>
         </EditorialCard>
@@ -142,8 +142,8 @@ export default function RosaryPage() {
             {/* Step Top Metadata */}
             <div className="flex flex-col gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-sacred-gold">
-                  Passo {currentStep.stepNumber} de {totalSteps}
+                <span className="text-xs font-bold uppercase tracking-wider text-sacred-gold font-serif">
+                  {t('stepCounter', { current: currentStep.stepNumber, total: totalSteps })}
                 </span>
                 {currentStep.latinText && (
                   <button
@@ -153,7 +153,7 @@ export default function RosaryPage() {
                     }`}
                   >
                     <Volume2 className="w-4 h-4" />
-                    <span>{showLatin ? 'Latim (Tradicional)' : 'Ver em Latim'}</span>
+                    <span>{showLatin ? t('latinActive') : t('viewLatin')}</span>
                   </button>
                 )}
               </div>
@@ -177,11 +177,13 @@ export default function RosaryPage() {
               {/* Mystery Contemplation Card if inside decade */}
               {currentStep.mystery && currentStep.type !== 'mystery_intro' && (
                 <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col gap-1 text-xs sm:text-sm">
-                  <span className="font-bold text-sacred-gold uppercase">Meditação do {currentStep.decadeNumber}º Mistério:</span>
+                  <span className="font-bold text-sacred-gold uppercase font-serif">
+                    {t('decadeMeditation', { decade: currentStep.decadeNumber ?? 1 })}
+                  </span>
                   <span className="font-serif italic text-sm sm:text-base text-slate-800 dark:text-slate-200 font-medium">
                     {currentStep.mystery.namePt}
                   </span>
-                  <span className="text-slate-600 dark:text-slate-300 mt-1 font-semibold">🙏 Fruto: {currentStep.mystery.fruitPt}</span>
+                  <span className="text-slate-600 dark:text-slate-300 mt-1 font-semibold">🙏 {t('fruitLabel')}: {currentStep.mystery.fruitPt}</span>
                 </div>
               )}
             </div>
@@ -209,7 +211,7 @@ export default function RosaryPage() {
                 onClick={handleNextStep}
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-sacred-gold hover:bg-sacred-gold-light text-white font-bold text-sm sm:text-base shadow-md gold-glow transition-all hover:scale-105"
               >
-                <span>{currentStepIndex + 1 === totalSteps ? 'Concluir Terço ✝' : t('btnNextBead')}</span>
+                <span>{currentStepIndex + 1 === totalSteps ? t('finishRosary') : t('btnNextBead')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -222,14 +224,14 @@ export default function RosaryPage() {
             <EditorialCard className="flex flex-col gap-4 p-5 border-slate-200 dark:border-slate-700">
               <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-3">
                 <ShieldCheck className="w-5 h-5 text-sacred-gold" />
-                <h3 className="font-serif font-bold text-base text-slate-900 dark:text-white">Suas Intenções Pessoais</h3>
+                <h3 className="font-serif font-bold text-base text-slate-900 dark:text-white">{t('personalIntentions')}</h3>
               </div>
               
               {/* Intentions List */}
               <div className="flex flex-col gap-2 max-h-48 overflow-y-auto">
                 {intentions.length === 0 ? (
                   <p className="text-xs text-slate-600 dark:text-slate-300 italic font-medium">
-                    Nenhuma intenção adicionada. Coloque as intenções de sua família e conversão antes de rezar.
+                    {t('noIntentions')}
                   </p>
                 ) : (
                   intentions.map((item, idx) => (
@@ -255,7 +257,7 @@ export default function RosaryPage() {
                   type="text"
                   value={newIntention}
                   onChange={(e) => setNewIntention(e.target.value)}
-                  placeholder="Adicionar intenção..."
+                  placeholder={t('addIntentionPlaceholder')}
                   className="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:border-sacred-gold font-medium"
                 />
                 <button
@@ -270,7 +272,7 @@ export default function RosaryPage() {
             {/* Quick Step Jump List */}
             <EditorialCard className="flex flex-col gap-3 p-5 border-slate-200 dark:border-slate-700">
               <h3 className="font-serif font-bold text-sm border-b border-slate-200 dark:border-slate-700 pb-2 text-slate-900 dark:text-white">
-                Navegação Rápida do Terço
+                {t('quickRosaryNav')}
               </h3>
               <div className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
                 {steps.map((s, idx) => {

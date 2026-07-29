@@ -78,12 +78,12 @@ export default function SanctuaryPage() {
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sacred-gold text-white shadow-xs">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Terço Guiado</span>
+                <span>{t('guidedRosary')}</span>
               </span>
               {hasCheckedInToday && (
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-4 h-4" />
-                  Concluído hoje
+                  {t('completedToday')}
                 </span>
               )}
             </div>
@@ -94,7 +94,7 @@ export default function SanctuaryPage() {
               {t('rosaryCardSubtitle')}
             </p>
             <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 mt-1 leading-relaxed font-medium">
-              Guia passo a passo com áudio-vibração sensorial e meditação das Sagradas Escrituras em cada dezena.
+              {t('rosaryCardDesc')}
             </p>
           </div>
           <Link
@@ -112,7 +112,7 @@ export default function SanctuaryPage() {
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30">
                 <BookOpen className="w-3.5 h-3.5" />
-                <span>Palavra de Deus</span>
+                <span>{t('wordOfGod')}</span>
               </span>
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('gospelCardRef')}</span>
             </div>
@@ -140,11 +140,11 @@ export default function SanctuaryPage() {
         <EditorialCard className="lg:col-span-2 flex flex-col justify-between gap-6 border-slate-200 dark:border-slate-700">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-sacred-gold">
+              <span className="text-xs font-bold uppercase tracking-wider text-sacred-gold font-serif">
                 ✝ {t('planCardTitle')}
               </span>
               <span className="text-xs font-bold px-3 py-1 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                23% Concluído
+                {t('planPercent', { percent: 23 })}
               </span>
             </div>
             <h3 className="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
@@ -172,22 +172,22 @@ export default function SanctuaryPage() {
         {/* Community Intercessory Wall Callout */}
         <EditorialCard className="flex flex-col justify-between gap-6 bg-gradient-to-br from-white to-amber-500/10 dark:from-slate-800 dark:to-amber-500/15 border-slate-200 dark:border-slate-700">
           <div className="flex flex-col gap-3">
-            <span className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-xs font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30">
+            <span className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-xs font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 font-serif">
               <Heart className="w-3.5 h-3.5" />
-              <span>Comunhão das Almas</span>
+              <span>{t('communionOfSouls')}</span>
             </span>
             <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white">
               {t('communityCardTitle')}
             </h3>
             <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-              {t('communityCardSubtitle')}. Reze em silêncio por quem necessita ou coloque a sua intenção de saúde, vocação ou família.
+              {t('communityCardSubtitle')}. {t('communityCardDesc')}
             </p>
           </div>
           <Link
             href="/intentions"
             className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-sacred-gold/60 text-sacred-gold font-bold text-sm hover:bg-sacred-gold hover:text-white transition-all shadow-xs"
           >
-            <span>Acessar Muro Sagrado</span>
+            <span>{t('accessPrayerWall')}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </EditorialCard>

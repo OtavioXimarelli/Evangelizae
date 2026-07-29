@@ -16,8 +16,7 @@ import {
   ShieldCheck, 
   Menu, 
   X, 
-  ChevronRight,
-  HeartHandshake
+  ChevronRight
 } from 'lucide-react';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
@@ -222,7 +221,7 @@ export function CathedralHeader() {
                     Evangelizae
                   </span>
                   <span className="text-[10px] uppercase font-bold text-sacred-gold tracking-wider">
-                    Navegação Sagrada
+                    {t('sacredNav')}
                   </span>
                 </div>
               </div>
@@ -239,16 +238,10 @@ export function CathedralHeader() {
             {/* Drawer Navigation Items List */}
             <div className="flex flex-col px-6 py-6 gap-6 flex-1">
               
-              {/* 100% Free Forever Pledge Banner inside Drawer */}
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-amber-950 dark:text-amber-200 text-xs font-bold leading-relaxed shadow-xs">
-                <HeartHandshake className="w-5 h-5 text-sacred-gold shrink-0" />
-                <span>100% Gratuito & Código Aberto Para Sempre • Sem Anúncios ou Paywalls</span>
-              </div>
-
               {/* Mission & Philosophy Highlighted Card (`/about`) inside Drawer */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-sacred-gold px-2">
-                  Manifesto & Propósito
+                  {t('manifestoTitle')}
                 </span>
                 <Link
                   href="/about"
@@ -275,7 +268,7 @@ export function CathedralHeader() {
               {/* Core Daily Habit Section */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2">
-                  Pilar I & II: Oração & Palavra
+                  {t('pillarPrayerGroup')}
                 </span>
                 
                 {allNavItems.slice(0, 3).map((item) => {
@@ -307,7 +300,7 @@ export function CathedralHeader() {
               {/* Formation, Communion & Profile Section */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2">
-                  Pilar III & IV: Comunhão & Formação
+                  {t('pillarCommunionGroup')}
                 </span>
                 
                 {allNavItems.slice(3, 6).map((item) => {
@@ -341,7 +334,7 @@ export function CathedralHeader() {
             {/* Drawer Footer Note */}
             <div className="px-6 py-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-center flex flex-col gap-2">
               <span className="text-xs font-serif italic text-slate-600 dark:text-slate-400 font-medium">
-                &ldquo;A santidade consiste em fazer as coisas comuns com um amor extraordinário.&rdquo;
+                {t('saintQuote')}
               </span>
               <span className="text-[11px] font-bold text-sacred-gold uppercase tracking-wider">
                 Ad Maiorem Dei Gloriam (AMDG)

@@ -49,7 +49,7 @@ export default function LiturgyPage() {
       <SectionHeader
         title={t('title')}
         subtitle={t('subtitle')}
-        badge="Tempo Comum — Liturgia da Palavra"
+        badge={t('liturgyBadge')}
         icon={<BookOpen className="w-4 h-4" />}
         rightAction={
           <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 p-1.5 rounded-xl shadow-xs">
@@ -112,7 +112,7 @@ export default function LiturgyPage() {
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
             {currentReading.title}
           </h2>
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold self-start sm:self-auto border border-sacred-gold/30">
+          <span className="text-xs font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold self-start sm:self-auto border border-sacred-gold/30 font-serif">
             ✝ {currentReading.ref}
           </span>
         </div>
@@ -135,8 +135,8 @@ export default function LiturgyPage() {
           {t('reflectionContent')}
         </p>
         <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 pt-3 border-t border-sacred-gold/30 font-medium">
-          <span>Fonte de Consulta:</span>
-          <span className="font-bold text-sacred-gold">Catecismo da Igreja Católica (§1825) & São João Crisóstomo</span>
+          <span>{t('sourceLabel')}</span>
+          <span className="font-bold text-sacred-gold">{t('sourceValue')}</span>
         </div>
       </EditorialCard>
     </PageContainer>
