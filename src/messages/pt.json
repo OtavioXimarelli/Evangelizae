@@ -72,7 +72,7 @@
     "ctaTitle": "Consagração & Convite à Oração",
     "ctaText": "Esta obra é consagrada ao Imaculado Coração de Maria e ao patrocínio de São José. Junte-se a nós nesta caminhada para santificar a rotina diária.",
     "btnSanctuary": "Entrar no Santuário ✝",
-    "btnRosary": "Rezar o Terço 📿",
+    "btnRosary": "Rezar o Terço ✝",
     "btnDonate": "Apoiar por Doação Voluntária",
     "providenceFooter": "Providência Divina & Amor à Igreja"
   },
@@ -104,7 +104,12 @@
     "communityCardSubtitle": "Almas conectadas em oração silenciosa e fraterna",
     "communityCardDesc": "Reze em silêncio pelas intenções dos irmãos ou coloque o seu pedido de oração.",
     "communionOfSouls": "Comunhão das Almas",
-    "accessPrayerWall": "Acessar Muro Orante"
+    "accessPrayerWall": "Acessar Muro Orante",
+    "planDevBadge": "Em Desenvolvimento",
+    "planDevTitle": "Plano Espiritual de 30 Dias — Em Breve",
+    "planDevDesc": "Esta jornada espiritual estruturada está sendo preparada com cuidado e fidelidade ao Magistério. Em breve estará disponível para sua edificação.",
+    "wallDevTitle": "Muro Orante — Em Breve",
+    "wallDevDesc": "A comunhão fraterna de intercessão estará disponível em breve, conectando almas em oração silenciosa."
   },
   "Rosary": {
     "title": "O Santo Rosário",
@@ -147,7 +152,10 @@
     "reflectionTitle": "Reflexão Catequética e Meditação dos Padres da Igreja",
     "reflectionContent": "\"O bom samaritano não fez perguntas sobre a origem, raça ou religião do homem ferido. Ele estendeu a mão com caridade misericordiosa. A caridade é a própria essência do Evangelho de Nosso Senhor Jesus Cristo.\"",
     "sourceLabel": "Fonte de Consulta:",
-    "sourceValue": "Catecismo da Igreja Católica (§1825) & São João Crisóstomo"
+    "sourceValue": "Catecismo da Igreja Católica (§1825) & São João Crisóstomo",
+    "saintOfDayLabel": "Santo do Dia",
+    "offlineFallbackNotice": "Você está offline ou a API de liturgia está indisponível. Exibindo leitura de referência local.",
+    "retryFetch": "Tentar novamente"
   },
   "Intentions": {
     "title": "Muro Orante de Intercessão",
@@ -194,6 +202,13 @@
     "aboutAiTitle": "Sobre a Inteligência Artificial Católica",
     "aboutAiDesc": "Nossa tecnologia RAG é estritamente configurada sem especulações particulares. Ela não opina, mas proclama com reverência a verdade imutável confiada à Santa Igreja."
   },
+  "BeadMap": {
+    "decadeStart": "Início da Dezena (1ª Ave Maria)",
+    "decadeEnd": "Conclusão (10ª)",
+    "prayingBead": "Rezando a {bead}ª Ave Maria deste Mistério",
+    "beadPrompt": "Pressione o botão de avanço para meditar a dezena",
+    "beadTitle": "Conta {bead} — Ave Maria"
+  },
   "Profile": {
     "title": "Seu Progresso Espiritual Pessoal",
     "subtitle": "Fidelidade constante a Cristo (Sem tabelas de classificação ou comparações)",
@@ -219,7 +234,9 @@
     "themeToggle": "Alternar Tema Sagrado",
     "themeToggleDesc": "Alterne entre o tema Vaticano Branco (Luminoso e Solene) e o tema Sombra Mariana (Noturno, de paz e recolhimento para oração).",
     "activateLightTheme": "Ativar Tema Vaticano Branco (Claro)",
-    "activateDarkTheme": "Ativar Tema Sombra Mariana (Escuro)"
+    "activateDarkTheme": "Ativar Tema Sombra Mariana (Escuro)",
+    "cloudSyncWarningTitle": "Sincronização em Nuvem — Fase 2",
+    "cloudSyncWarningDesc": "O perfil em nuvem e o histórico sincronizado chegam em breve. Seu progresso local (terços rezados e constância) já é salvo automaticamente neste dispositivo."
   },
   "Landing": {
     "badge": "Refúgio Católico de Oração • 100% Gratuito & Fraterno",
@@ -262,6 +279,7 @@
     "donationBannerTitle": "Sustentado por Providência & Gestos de Caridade",
     "donationBannerDesc": "Este projeto é inteiramente gratuito para todos. Se o Evangelizae tiver sido uma bênção na sua jornada e você desejar contribuir voluntariamente com qualquer valor para cobrir custos técnicos, sua ajuda será acolhida com profunda gratidão e oração.",
     "btnAboutWork": "Saiba Mais sobre a Obra",
-    "stAugustineQuote": "“Fizeste-nos para ti, Senhor, e o nosso coração permanece inquieto enquanto não repousar em ti.” — Santo Agostinho (Confissões, I, 1)"
+    "stAugustineQuote": "“Fizeste-nos para ti, Senhor, e o nosso coração permanece inquieto enquanto não repousar em ti.” — Santo Agostinho (Confissões, I, 1)",
+    "btnRosaryAbout": "Rezar o Terço ✝"
   }
 }

@@ -72,7 +72,7 @@
     "ctaTitle": "Consecration & Prayer Invitation",
     "ctaText": "This work is consecrated to the Immaculate Heart of Mary and St. Joseph. Join us in sanctifying daily routine.",
     "btnSanctuary": "Enter Sanctuary ✝",
-    "btnRosary": "Pray the Rosary 📿",
+    "btnRosary": "Pray the Rosary ✝",
     "btnDonate": "Support via Free-Will Donation",
     "providenceFooter": "Divine Providence & Love for the Church"
   },
@@ -104,7 +104,12 @@
     "communityCardSubtitle": "Souls connected in silent fraternal prayer",
     "communityCardDesc": "Silently pray for your brothers and sisters or submit your own prayer request.",
     "communionOfSouls": "Communion of Souls",
-    "accessPrayerWall": "Access Prayer Wall"
+    "accessPrayerWall": "Access Prayer Wall",
+    "planDevBadge": "Under Development",
+    "planDevTitle": "30-Day Spiritual Plan — Coming Soon",
+    "planDevDesc": "This structured spiritual journey is being prepared with care and fidelity to the Magisterium. It will be available soon for your edification.",
+    "wallDevTitle": "Prayer Wall — Coming Soon",
+    "wallDevDesc": "Fraternal intercessory communion will be available soon, connecting souls in silent prayer."
   },
   "Rosary": {
     "title": "The Holy Rosary",
@@ -147,7 +152,10 @@
     "reflectionTitle": "Catechetical Reflection & Patristic Meditation",
     "reflectionContent": "\"The Good Samaritan asked no questions about the wounded man's origin, race, or religion. He reached out with merciful charity. Charity is the very essence of the Gospel of Our Lord Jesus Christ.\"",
     "sourceLabel": "Source Reference:",
-    "sourceValue": "Catechism of the Catholic Church (§1825) & St. John Chrysostom"
+    "sourceValue": "Catechism of the Catholic Church (§1825) & St. John Chrysostom",
+    "saintOfDayLabel": "Saint of the Day",
+    "offlineFallbackNotice": "You are offline or the liturgy API is unavailable. Showing local reference reading.",
+    "retryFetch": "Try again"
   },
   "Intentions": {
     "title": "Prayer Intercession Wall",
@@ -194,6 +202,13 @@
     "aboutAiTitle": "About Catholic Artificial Intelligence",
     "aboutAiDesc": "Our RAG technology is strictly configured without private speculation. It does not opine, but reverently proclaims the unchangeable truth entrusted to the Holy Church."
   },
+  "BeadMap": {
+    "decadeStart": "Decade Opening (1st Hail Mary)",
+    "decadeEnd": "Completion (10th)",
+    "prayingBead": "Praying the {bead}th Hail Mary of this Mystery",
+    "beadPrompt": "Press the advance button to meditate on the decade",
+    "beadTitle": "Bead {bead} — Hail Mary"
+  },
   "Profile": {
     "title": "Your Personal Spiritual Progress",
     "subtitle": "Steady fidelity to Christ (Zero leaderboards or rankings)",
@@ -219,7 +234,9 @@
     "themeToggle": "Toggle Sacred Theme",
     "themeToggleDesc": "Switch between Vatican White (Luminous & Solemn) and Marian Shadow (Nighttime peace and recollection for prayer).",
     "activateLightTheme": "Activate Vatican White Theme (Light)",
-    "activateDarkTheme": "Activate Marian Shadow Theme (Dark)"
+    "activateDarkTheme": "Activate Marian Shadow Theme (Dark)",
+    "cloudSyncWarningTitle": "Cloud Sync — Phase 2",
+    "cloudSyncWarningDesc": "Cloud profile and synced history are coming soon. Your local progress (rosaries prayed and streak) is already saved automatically on this device."
   },
   "Landing": {
     "badge": "Catholic Prayer Refuge • 100% Free & Fraternal",
@@ -262,6 +279,7 @@
     "donationBannerTitle": "Sustained by Providence & Charitable Gifts",
     "donationBannerDesc": "This project is completely free for everyone. If Evangelizae has been a blessing to your journey and you wish to voluntarily support technical hosting costs, your kindness will be welcomed with heartfelt gratitude and prayer.",
     "btnAboutWork": "Learn More About the Work",
-    "stAugustineQuote": "“You have made us for yourself, O Lord, and our heart is restless until it rests in you.” — St. Augustine (Confessions, I, 1)"
+    "stAugustineQuote": "“You have made us for yourself, O Lord, and our heart is restless until it rests in you.” — St. Augustine (Confessions, I, 1)",
+    "btnRosaryAbout": "Pray the Rosary ✝"
   }
 }

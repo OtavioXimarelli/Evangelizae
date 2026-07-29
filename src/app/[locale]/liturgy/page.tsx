@@ -5,43 +5,84 @@ import { useTranslations } from 'next-intl';
 import { PageContainer } from '@/components/ui/PageContainer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EditorialCard } from '@/components/ui/EditorialCard';
-import { BookOpen, Sparkles, ShieldCheck, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { GoldFiligreeDivider, SacredScriptureEmblem } from '@/components/ui/SacredEmblems';
+import { BookOpen, Sparkles, ShieldCheck, ZoomIn, ZoomOut, Maximize2, RefreshCw, WifiOff } from 'lucide-react';
+import { getDailyLiturgy, clearLiturgyCache, DailyLiturgyData, LiturgicalColor } from '@/services/liturgyService';
+
+// Liturgical color → warm visual accent mapping
+const COLOR_ACCENTS: Record<LiturgicalColor, { ring: string; badge: string; label: string }> = {
+  green:  { ring: 'border-emerald-500/40', badge: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30', label: '🟢' },
+  purple: { ring: 'border-purple-500/40',  badge: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30', label: '🟣' },
+  white:  { ring: 'border-amber-300/60',   badge: 'bg-amber-300/15 text-amber-700 dark:text-amber-300 border-amber-300/40', label: '⚪' },
+  red:    { ring: 'border-red-500/40',     badge: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30', label: '🔴' },
+  rose:   { ring: 'border-pink-400/40',   badge: 'bg-pink-400/15 text-pink-700 dark:text-pink-300 border-pink-400/30', label: '🌸' },
+};
 
 export default function LiturgyPage() {
   const t = useTranslations('Liturgy');
   const [activeTab, setActiveTab] = React.useState<'first' | 'psalm' | 'second' | 'gospel'>('gospel');
   const [fontSize, setFontSize] = React.useState<'normal' | 'large' | 'xl'>('large');
+  const [liturgy, setLiturgy] = React.useState<DailyLiturgyData | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const readings = {
-    first: {
-      title: '1ª Leitura (Deuteronômio 30, 10-14)',
-      snippet: `Moisés falou ao povo, dizendo: "Obedece à voz do Senhor teu Deus, guardando os seus mandamentos e preceitos escritos neste livro da Lei, e volta para o Senhor teu Deus de todo o teu coração e de toda a tua alma.\n\nPois este mandamento que hoje te prescrevo não é alto demais para ti nem está fora do teu alcance. Não está no céu, para que digas: 'Quem subirá ao céu por nós para trazê-lo e proclamá-lo a nós, a fim de que o cumpramos?' Nem está além do mar, para que digas: 'Quem atravessará o mar por nós para trazê-lo e proclamá-lo?'\n\nPelo contrário, a palavra está muito perto de ti, na tua boca e no teu coração, para que a ponhas em prática."`,
-      ref: 'Dt 30, 10-14'
-    },
-    psalm: {
-      title: 'Salmo Responsorial (Salmo 68/69)',
-      snippet: `R. Humildes, buscai a Deus e o vosso coração reviverá!\n\n1. O vosso amor é bondade e compaixão; olhai para mim com a vossa imensa ternura! Não escondais o vosso rosto ao vosso servo; estou em angústia, respondei-me depressa!\n\n2. Vejam os humildes e se alegrem; vós que buscais a Deus, reviva o vosso coração! Pois o Senhor ouve os pobres e não despreza os seus cativos. Louvem-no os céus e a terra, os mares e tudo o que neles se move!`,
-      ref: 'Sl 68(69), 14-31'
-    },
-    second: {
-      title: '2ª Leitura (Colossenses 1, 15-20)',
-      snippet: `Irmãos: Cristo é a imagem do Deus invisível, o primogênito de toda a criatura; porque nele foram criadas todas as coisas, nos céus e na terra, as visíveis e as invisíveis: Tronos, Soberanias, Principados, Potestades. Tudo foi criado por meio dele e para ele.\n\nEle existe antes de todas as coisas e nele tudo subsiste. Ele é também a Cabeça do corpo, que é a Igreja. Ele é o Princípio, o primogênito dentre os mortos, de sorte que em tudo tem a primazia, porque aprouve a Deus fazer habitar nele toda a plenitude e por ele reconciliar consigo todas as coisas, pacificando pelo sangue da sua cruz tanto as coisas da terra como as dos céus.`,
-      ref: 'Cl 1, 15-20'
-    },
-    gospel: {
-      title: 'Santo Evangelho segundo São Lucas (10, 25-37)',
-      snippet: `Naquele tempo, um mestre da Lei se levantou e, querendo pôr Jesus à prova, perguntou: "Mestre, que devo fazer para receber em herança a vida eterna?"\n\nJesus lhe disse: "O que está escrito na Lei? Como lês?" Ele respondeu: "Amarás o Senhor teu Deus de todo o teu coração e de toda a tua alma, com toda a tua força e com todo o teu entendimento; e ao teu próximo como a ti mesmo!" Jesus lhe disse: "Respondeste corretamente. Faze isso e viverás."\n\nMas o mestre da Lei, querendo justificar-se, disse a Jesus: "E quem é o meu próximo?" Jesus respondeu: "Um homem descia de Jerusalém para Jericó e caiu nas mãos de assaltantes. Estes arrancaram-lhe tudo, espancaram-no e foram-se embora, deixando-o quase morto. Por acaso, um sacerdote estava descendo por aquele mesmo caminho; quando viu o homem, passou adiante, pelo outro lado. O mesmo aconteceu com um levita... Mas um samaritano, que estava viajando, chegou perto dele, viu e teve compaixão..."\n\nJesus perguntou: "Qual dos três te parece ter sido o próximo daquele que caiu nas mãos dos assaltantes?" O mestre da Lei respondeu: "Aquele que usou de compaixão para com ele." Então Jesus lhe disse: "Vai e faze tu a mesma coisa."`,
-      ref: 'Lc 10, 25-37'
+  const handleRefresh = React.useCallback(async () => {
+    setIsRefreshing(true);
+    clearLiturgyCache();
+    try {
+      const data = await getDailyLiturgy();
+      setLiturgy(data);
+      if (!data.gospel?.text && data.firstReading?.text) {
+        setActiveTab('first');
+      }
+    } catch { /* safety net */ } finally {
+      setIsRefreshing(false);
     }
-  };
+  }, []);
 
-  const currentReading = readings[activeTab];
+  // Initial data load — runs only once on mount
+  React.useEffect(() => {
+    let cancelled = false;
+    getDailyLiturgy().then((data) => {
+      if (cancelled) return;
+      setLiturgy(data);
+      setIsLoading(false);
+      if (!data.gospel?.text && data.firstReading?.text) {
+        setActiveTab('first');
+      }
+    }).catch(() => {
+      if (!cancelled) setIsLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   const fontSizes = {
     normal: 'text-base leading-relaxed',
     large: 'text-lg sm:text-xl leading-relaxed sm:leading-loose',
-    xl: 'text-xl sm:text-2xl leading-loose'
+    xl: 'text-xl sm:text-2xl leading-loose',
   };
+
+  // Determine which tabs are available
+  const tabs = React.useMemo(() => {
+    if (!liturgy) return [];
+    return [
+      { id: 'first' as const,  label: t('tabFirstReading'),  available: !!liturgy.firstReading?.text },
+      { id: 'psalm' as const,  label: t('tabPsalm'),         available: !!liturgy.psalm?.text },
+      { id: 'second' as const, label: t('tabSecondReading'), available: !!liturgy.secondReading?.text },
+      { id: 'gospel' as const, label: t('tabGospel'),        available: !!liturgy.gospel?.text, isGospel: true },
+    ].filter((tab) => tab.available);
+  }, [liturgy, t]);
+
+  const currentReading = React.useMemo(() => {
+    if (!liturgy) return null;
+    if (activeTab === 'first')  return { title: liturgy.firstReading.title, ref: liturgy.firstReading.ref, text: liturgy.firstReading.text };
+    if (activeTab === 'psalm')  return { title: liturgy.psalm.title, ref: liturgy.psalm.ref, text: `${liturgy.psalm.response ? `R. ${liturgy.psalm.response}\n\n` : ''}${liturgy.psalm.text}` };
+    if (activeTab === 'second' && liturgy.secondReading) return { title: liturgy.secondReading.title, ref: liturgy.secondReading.ref, text: liturgy.secondReading.text };
+    if (activeTab === 'gospel') return { title: liturgy.gospel.title, ref: liturgy.gospel.ref, text: liturgy.gospel.text };
+    return null;
+  }, [liturgy, activeTab]);
+
+  const colorAccent = liturgy ? (COLOR_ACCENTS[liturgy.color] ?? COLOR_ACCENTS.green) : COLOR_ACCENTS.green;
 
   return (
     <PageContainer>
@@ -49,7 +90,7 @@ export default function LiturgyPage() {
       <SectionHeader
         title={t('title')}
         subtitle={t('subtitle')}
-        badge={t('liturgyBadge')}
+        badge={liturgy ? `${liturgy.colorLabel}` : t('liturgyBadge')}
         icon={<BookOpen className="w-4 h-4" />}
         rightAction={
           <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 p-1.5 rounded-xl shadow-xs">
@@ -74,54 +115,120 @@ export default function LiturgyPage() {
             >
               <Maximize2 className="w-4 h-4" />
             </button>
+            <div className="w-px h-5 bg-slate-300 dark:bg-slate-600 mx-0.5" />
+            <button
+              onClick={() => handleRefresh()}
+              disabled={isRefreshing}
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors disabled:opacity-40"
+              title="Atualizar liturgia"
+            >
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            </button>
           </div>
         }
       />
 
+      {/* Offline / Fallback notice */}
+      {liturgy?.isOfflineFallback && (
+        <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 font-medium">
+          <WifiOff className="w-4 h-4 flex-shrink-0" />
+          <span>{t('offlineFallbackNotice')}</span>
+          <button
+            onClick={() => handleRefresh()}
+            className="ml-auto text-sacred-gold font-bold hover:underline"
+          >
+            {t('retryFetch')}
+          </button>
+        </div>
+      )}
+
+      {/* Saint of the Day Banner */}
+      {liturgy && (liturgy.saintName && liturgy.saintName !== 'Santo do Dia') && (
+        <EditorialCard variant="liturgical" className="p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-start gap-3 flex-grow">
+            <SacredScriptureEmblem className="w-8 h-8 text-white/80 flex-shrink-0 mt-0.5" />
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold uppercase tracking-widest text-white/60">
+                ✝ {t('saintOfDayLabel')}
+              </span>
+              <span className="font-serif text-lg font-bold text-white">
+                {liturgy.saintName}
+              </span>
+              {liturgy.saintTitle && (
+                <span className="text-xs text-white/80 font-medium">{liturgy.saintTitle}</span>
+              )}
+              {liturgy.saintQuote && (
+                <p className="font-serif italic text-sm text-white/90 mt-1">{liturgy.saintQuote}</p>
+              )}
+            </div>
+          </div>
+          <span className={`self-start sm:self-auto text-xs font-bold px-3 py-1.5 rounded-full border ${colorAccent.badge}`}>
+            {colorAccent.label} {liturgy.colorLabel}
+          </span>
+        </EditorialCard>
+      )}
+
       {/* Tabs */}
-      <div className="flex flex-wrap items-center gap-2.5 border-b border-slate-200 dark:border-slate-800 pb-3">
-        {[
-          { id: 'first', label: t('tabFirstReading') },
-          { id: 'psalm', label: t('tabPsalm') },
-          { id: 'second', label: t('tabSecondReading') },
-          { id: 'gospel', label: t('tabGospel'), isGospel: true }
-        ].map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as 'first' | 'psalm' | 'second' | 'gospel')}
-              className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
-                isActive
-                  ? tab.isGospel
-                    ? 'bg-sacred-gold text-white shadow-md scale-105'
-                    : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-md'
-                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-sacred-gold border border-slate-300 dark:border-slate-700'
-              }`}
-            >
-              {tab.isGospel && <Sparkles className="w-4 h-4" />}
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {isLoading ? (
+        <div className="flex flex-wrap items-center gap-2.5 pb-3 animate-pulse">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-10 w-28 rounded-xl bg-slate-200 dark:bg-slate-800" />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center gap-2.5 border-b border-slate-200 dark:border-slate-800 pb-3">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
+                  isActive
+                    ? tab.isGospel
+                      ? 'bg-sacred-gold text-white shadow-md scale-105'
+                      : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-md'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-sacred-gold border border-slate-300 dark:border-slate-700'
+                }`}
+              >
+                {tab.isGospel && <Sparkles className="w-4 h-4" />}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Reading Card */}
-      <EditorialCard className="p-6 sm:p-10 flex flex-col gap-6 min-h-[440px] border-slate-200 dark:border-slate-700">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-            {currentReading.title}
-          </h2>
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold self-start sm:self-auto border border-sacred-gold/30 font-serif">
-            ✝ {currentReading.ref}
-          </span>
-        </div>
+      {isLoading ? (
+        <EditorialCard className="p-6 sm:p-10 flex flex-col gap-6 min-h-[440px] border-slate-200 dark:border-slate-700 animate-pulse">
+          <div className="h-8 w-3/4 rounded-xl bg-slate-200 dark:bg-slate-800" />
+          <div className="h-4 w-1/4 rounded-xl bg-slate-200 dark:bg-slate-800" />
+          <div className="flex flex-col gap-3 mt-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className={`h-4 rounded-xl bg-slate-200 dark:bg-slate-800 ${i === 5 ? 'w-2/3' : 'w-full'}`} />
+            ))}
+          </div>
+        </EditorialCard>
+      ) : currentReading ? (
+        <EditorialCard className={`p-6 sm:p-10 flex flex-col gap-6 min-h-[440px] border-2 ${colorAccent.ring}`}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+              {currentReading.title}
+            </h2>
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-sacred-gold/15 text-sacred-gold self-start sm:self-auto border border-sacred-gold/30 font-serif">
+              ✝ {currentReading.ref}
+            </span>
+          </div>
 
-        {/* Scripture Text */}
-        <div className={`font-serif text-slate-900 dark:text-white whitespace-pre-line py-4 font-medium ${fontSizes[fontSize]}`}>
-          {currentReading.snippet}
-        </div>
-      </EditorialCard>
+          {/* Scripture Text */}
+          <div className={`font-serif text-slate-900 dark:text-white whitespace-pre-line py-4 font-medium ${fontSizes[fontSize]}`}>
+            {currentReading.text}
+          </div>
+        </EditorialCard>
+      ) : null}
+
+      <GoldFiligreeDivider />
 
       {/* Theological Reflection Card */}
       <EditorialCard variant="accent" className="p-6 sm:p-8 flex flex-col gap-4 border-2 border-amber-500/40">

@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import { PageContainer } from '@/components/ui/PageContainer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EditorialCard } from '@/components/ui/EditorialCard';
-import { User, Flame, Sparkles, CheckCircle2, Church, Moon, Sun, ShieldCheck } from 'lucide-react';
+import { GoldFiligreeDivider } from '@/components/ui/SacredEmblems';
+import { User, Flame, Sparkles, CheckCircle2, Church, Moon, Sun, ShieldCheck, Cloud, CloudOff } from 'lucide-react';
 import { usePrayerStore } from '@/store/usePrayerStore';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
@@ -56,6 +57,16 @@ export default function ProfilePage() {
         badge={t('personalFidelityBadge')}
         icon={<User className="w-4 h-4 text-sacred-gold" />}
       />
+
+      {/* Cloud Sync Phase 2 Notice */}
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium">
+        <CloudOff className="w-5 h-5 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5" />
+        <div className="flex flex-col gap-0.5">
+          <span className="font-bold text-slate-900 dark:text-white">{t('cloudSyncWarningTitle')}</span>
+          <span>{t('cloudSyncWarningDesc')}</span>
+        </div>
+        <Cloud className="w-5 h-5 text-slate-400 flex-shrink-0 ml-auto mt-0.5 opacity-50" />
+      </div>
 
       {/* Main Grid: Streak Card & Rosary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -125,6 +136,8 @@ export default function ProfilePage() {
         </EditorialCard>
 
       </div>
+
+      <GoldFiligreeDivider />
 
       {/* 30-Day Spiritual Plan Progression Bar */}
       <EditorialCard className="p-6 sm:p-8 flex flex-col gap-6 border-slate-200 dark:border-slate-700">
