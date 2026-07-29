@@ -90,7 +90,7 @@ export default function LiturgyPage() {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'first' | 'psalm' | 'second' | 'gospel')}
               className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
                 isActive
                   ? tab.isGospel

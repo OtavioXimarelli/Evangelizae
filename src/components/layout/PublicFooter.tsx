@@ -7,7 +7,6 @@ import {
   ShieldCheck, 
   Heart, 
   Church, 
-  Sparkles, 
   BookOpen, 
   Bot, 
   User, 

@@ -5,11 +5,11 @@
 
 @theme inline {
   --color-vatican-white: #ffffff;
-  --color-vatican-bg: #f8f9fa;
-  --color-vatican-border: #cbd5e1;
+  --color-vatican-bg: #faf8f5;
+  --color-vatican-border: #e2e8f0;
   
-  --color-marian-midnight: #0f172a;
-  --color-marian-surface: #1e293b;
+  --color-marian-midnight: #090d16;
+  --color-marian-surface: #111827;
   --color-marian-card: #1e293b;
   --color-marian-hover: #334155;
   --color-marian-border: #334155;
@@ -19,25 +19,25 @@
   --color-sacred-gold-badge: #fef3c7;
   
   --color-liturgical-purple: #6b21a8;
-  --color-liturgical-green: #10b981;
-  --color-liturgical-blue: #3b82f6;
-  --color-liturgical-red: #ef4444;
+  --color-liturgical-green: #047857;
+  --color-liturgical-blue: #1d4ed8;
+  --color-liturgical-red: #be123c;
 }
 
 :root {
-  --background: #f8f9fa;
+  --background: #faf8f5;
   --foreground: #0f172a;
   --card-bg: #ffffff;
-  --card-border: #cbd5e1;
+  --card-border: #e2e8f0;
   --muted-text: #475569;
   --accent-gold: #d97706;
 }
 
 .dark {
-  --background: #0f172a;
+  --background: #090d16;
   --foreground: #f8f9fa;
-  --card-bg: #1e293b;
-  --card-border: #334155;
+  --card-bg: #111827;
+  --card-border: #1f2937;
   --muted-text: #94a3b8;
   --accent-gold: #f59e0b;
 }
@@ -46,67 +46,95 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
 }
 
-/* Modern Cathedral UI Utilities */
-.glass-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+/* Custom Sacred & Cathedral UI Design System Utilities */
+
+.gold-leaf-text {
+  background: linear-gradient(135deg, #fef08a 0%, #f59e0b 45%, #d97706 85%, #92400e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-leaf-text-light {
+  background: linear-gradient(135deg, #ffffff 0%, #fef3c7 40%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stained-glass-bg {
+  background: radial-gradient(circle at 50% -10%, rgba(217, 119, 6, 0.18) 0%, rgba(30, 27, 75, 0.12) 45%, transparent 75%);
+}
+
+.dark .stained-glass-bg {
+  background: radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.22) 0%, rgba(15, 23, 42, 0.95) 60%, rgba(9, 13, 22, 1) 100%);
+}
+
+.cathedral-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+}
+
+.dark .cathedral-card {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.22);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
 }
 
 .cathedral-gradient {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #581c87 100%);
+  background: linear-gradient(135deg, #090d16 0%, #171c2e 40%, #2e1065 100%);
 }
 
 .gold-glow {
-  box-shadow: 0 0 20px rgba(217, 119, 6, 0.35);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
 }
 
 .bead-active {
   background-color: var(--accent-gold);
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.7);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.8);
   transform: scale(1.18);
+}
+
+.illuminated-cap::first-letter {
+  font-family: var(--font-serif);
+  float: left;
+  font-size: 3.25rem;
+  line-height: 2.75rem;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-bottom: 4px;
+  margin-right: 8px;
+  color: #d97706;
+  font-weight: 800;
 }
 
 /* Custom Keyframes for Premium Micro-Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideLeft {
-  from {
-    transform: translateX(100%);
-    opacity: 0.6;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes scaleUp {
-  from {
-    transform: scale(0.92);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-slideLeft {
-  animation: slideLeft 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-slowRotate {
+  animation: slowRotate 90s linear infinite;
 }
 
-.animate-scaleUp {
-  animation: scaleUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-pulseGlow {
+  animation: pulseGlow 4s ease-in-out infinite;
 }

@@ -16,13 +16,12 @@ export default function ProfilePage() {
   const { consecutiveDays, totalRosariesPrayed, lastCheckInDate } = usePrayerStore();
 
   const [parish, setParish] = React.useState('Paróquia Nossa Senhora do Carmo - São Paulo/SP');
-  const [isDark, setIsDark] = React.useState(false);
-
-  React.useEffect(() => {
+  const [isDark, setIsDark] = React.useState(() => {
     if (typeof document !== 'undefined') {
-      setIsDark(document.documentElement.classList.contains('dark'));
+      return document.documentElement.classList.contains('dark');
     }
-  }, []);
+    return false;
+  });
 
   const toggleTheme = () => {
     if (typeof document !== 'undefined') {
