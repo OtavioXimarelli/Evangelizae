@@ -153,14 +153,14 @@ export default function LandingPage() {
                 href="/liturgy"
                 className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white font-semibold text-xs sm:text-sm hover:bg-sacred-gold transition-colors shadow-sm border border-slate-700/50"
               >
-                <span>Liturgia Diária</span>
+                <span>{t('btnLiturgy')}</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/rosary"
                 className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-900 dark:text-amber-200 font-semibold text-xs sm:text-sm hover:bg-sacred-gold hover:text-white transition-colors border border-amber-500/30"
               >
-                <span>Santo Terço</span>
+                <span>{t('btnRosary')}</span>
                 <Sparkles className="w-4 h-4 text-sacred-gold" />
               </Link>
             </div>
@@ -195,7 +195,7 @@ export default function LandingPage() {
                       <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                         <SacredRosaryEmblem className="w-7 h-7" />
                       </div>
-                      <span className="text-xs font-serif font-medium text-amber-700 dark:text-amber-300 tracking-wide">Oração Diária</span>
+                      <span className="text-xs font-serif font-medium text-amber-700 dark:text-amber-300 tracking-wide">{t('categoryPrayer')}</span>
                     </div>
                     
                     <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white group-hover:text-sacred-gold transition-colors">
@@ -208,7 +208,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="flex items-center gap-2 text-xs font-bold text-sacred-gold pt-3 border-t border-slate-200/60 dark:border-slate-800">
-                    <span>Aprecie um momento de terço guiado</span>
+                    <span>{t('actionRosaryCard')}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </div>
@@ -227,7 +227,7 @@ export default function LandingPage() {
                       <div className="w-12 h-12 rounded-2xl bg-blue-600/15 text-blue-600 dark:text-blue-400 border border-blue-600/30 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                         <SacredScriptureEmblem className="w-7 h-7" />
                       </div>
-                      <span className="text-xs font-serif font-medium text-blue-700 dark:text-blue-300 tracking-wide">Formação & Verdade</span>
+                      <span className="text-xs font-serif font-medium text-blue-700 dark:text-blue-300 tracking-wide">{t('categoryFormation')}</span>
                     </div>
 
                     <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -240,7 +240,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 pt-3 border-t border-slate-200/60 dark:border-slate-800">
-                    <span>Ler as leituras de hoje e doutrina</span>
+                    <span>{t('actionLiturgyCard')}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </div>
@@ -259,7 +259,7 @@ export default function LandingPage() {
                       <div className="w-12 h-12 rounded-2xl bg-purple-600/15 text-purple-600 dark:text-purple-400 border border-purple-600/30 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                         <IntercessionCandleEmblem className="w-7 h-7" />
                       </div>
-                      <span className="text-xs font-serif font-medium text-purple-700 dark:text-purple-300 tracking-wide">Comunhão Fraterna</span>
+                      <span className="text-xs font-serif font-medium text-purple-700 dark:text-purple-300 tracking-wide">{t('categoryCommunion')}</span>
                     </div>
 
                     <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
@@ -272,7 +272,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="flex items-center gap-2 text-xs font-bold text-purple-600 dark:text-purple-400 pt-3 border-t border-slate-200/60 dark:border-slate-800">
-                    <span>Deixar uma intenção ou rezar em silêncio</span>
+                    <span>{t('actionIntentionsCard')}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export default function LandingPage() {
                       <div className="w-12 h-12 rounded-2xl bg-emerald-600/15 text-emerald-600 dark:text-emerald-400 border border-emerald-600/30 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                         <CathedralSpireEmblem className="w-7 h-7" />
                       </div>
-                      <span className="text-xs font-serif font-medium text-emerald-700 dark:text-emerald-300 tracking-wide">Vida Sacramental</span>
+                      <span className="text-xs font-serif font-medium text-emerald-700 dark:text-emerald-300 tracking-wide">{t('categoryChurch')}</span>
                     </div>
 
                     <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
@@ -304,7 +304,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 pt-3 border-t border-slate-200/60 dark:border-slate-800">
-                    <span>Ver constância e registrar paróquia física</span>
+                    <span>{t('actionProfileCard')}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export default function LandingPage() {
             <div className="flex flex-col gap-3 max-w-3xl">
               <span className="text-xs font-serif font-bold uppercase tracking-[0.25em] text-sacred-gold-badge flex items-center gap-2">
                 <span>✝</span>
-                <span>CARTA DE APRESENTAÇÃO & FRATERNIDADE</span>
+                <span>{t('manifestoBadge')}</span>
               </span>
               <h2 className="font-serif text-2xl sm:text-4xl font-bold text-white leading-snug">
                 {t('philTitle')}
@@ -403,14 +403,14 @@ export default function LandingPage() {
                 href="/about"
                 className="px-5 py-2.5 rounded-xl bg-sacred-gold/20 hover:bg-sacred-gold text-sacred-gold hover:text-slate-950 font-bold text-xs transition-colors shrink-0 border border-sacred-gold/40 self-end sm:self-center"
               >
-                Saiba Mais sobre a Obra
+                {t('btnAboutWork')}
               </Link>
             </div>
 
             {/* Saint Augustin Closing Quote */}
             <div className="flex items-center justify-center pt-2 text-center">
               <p className="text-xs font-serif italic text-sacred-gold/90 max-w-xl">
-                &ldquo;Fizeste-nos para ti, Senhor, e o nosso coração permanece inquieto enquanto não repousar em ti.&rdquo; — Santo Agostinho (Confissões, I, 1)
+                {t('stAugustineQuote')}
               </p>
             </div>
 
@@ -421,4 +421,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
 
