@@ -14,7 +14,7 @@ export default function SanctuaryPage() {
   const t = useTranslations('Sanctuary');
   const tCommon = useTranslations('Common');
   const isMounted = useIsMounted();
-  const { consecutiveDays, totalRosariesPrayed, lastCheckInDate } = usePrayerStore();
+  const { consecutiveDays, lastCheckInDate } = usePrayerStore();
 
   const todayStr = typeof window !== 'undefined' ? new Date().toISOString().split('T')[0] : '';
   const hasCheckedInToday = isMounted && lastCheckInDate === todayStr;

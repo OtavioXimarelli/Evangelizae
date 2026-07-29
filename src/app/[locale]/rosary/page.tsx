@@ -44,7 +44,7 @@ export default function RosaryPage() {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
       try {
         navigator.vibrate([15]);
-      } catch (e) {}
+      } catch {}
     }
     advanceStep(totalSteps);
   };
@@ -70,8 +70,6 @@ export default function RosaryPage() {
       </PageContainer>
     );
   }
-
-  const mysteryGroup = ROSARY_MYSTERIES[activeMysteryType || 'gloriosos'];
 
   return (
     <PageContainer>

@@ -94,7 +94,7 @@ export default function IntentionsPage() {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
       try {
         navigator.vibrate([15]);
-      } catch (e) {}
+      } catch {}
     }
 
     setIntentions((prev) =>

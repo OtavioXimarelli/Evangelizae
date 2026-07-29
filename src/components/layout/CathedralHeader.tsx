@@ -25,24 +25,36 @@ export function CathedralHeader() {
   const t = useTranslations('Header');
   const pathname = usePathname();
   const isMounted = useIsMounted();
-  const [isDark, setIsDark] = React.useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
+  const [isDark, setIsDark] = React.useState(() => {
     if (typeof document !== 'undefined') {
       const stored = localStorage.getItem('evangelizae-theme');
-      if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const shouldBeDark = stored === 'dark' || (!stored && prefersDark);
+      if (shouldBeDark) {
         document.documentElement.classList.add('dark');
-        setIsDark(true);
       } else {
         document.documentElement.classList.remove('dark');
-        setIsDark(false);
+      }
+      return shouldBeDark;
+    }
+    return false;
+  });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Sync document root class when isDark changes
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
     }
-  }, []);
+  }, [isDark]);
 
-  // Close mobile drawer on route change
+  // Close mobile menu on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileMenuOpen(false);
   }, [pathname]);
 

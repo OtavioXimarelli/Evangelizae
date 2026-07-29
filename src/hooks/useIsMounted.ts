@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
+
+const emptySubscribe = () => () => {};
 
 /**
- * Hydration shield hook.
- * Prevents SSR hydration mismatches when rendering client state derived from localStorage or Zustand persist stores.
+ * Hydration shield hook using useSyncExternalStore.
+ * Returns true on client after hydration and false during SSR, with zero cascading render overhead.
  */
 export function useIsMounted(): boolean {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  return isMounted;
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 }
