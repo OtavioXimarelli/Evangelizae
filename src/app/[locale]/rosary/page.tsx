@@ -198,7 +198,6 @@ export default function RosaryPage() {
             {isDailyMystery && <span className="daily-mystery-chip">{t('todayBadge')}</span>}
             {t(mysteryTranslation[prayer.activeMysteryType])}
           </span>
-          <span className="prayer-toolbar-progress" aria-hidden="true">{progressPercent}%</span>
           <span className="prayer-toolbar-actions">
             <button ref={intentionsTriggerRef} className="button button-quiet" onClick={() => setShowIntentions(!showIntentions)} aria-expanded={showIntentions} aria-controls="intentions-panel">{t('intentionsTitle')}</button>
             <button className="button button-quiet" onClick={() => setShowLatin(!showLatin)} disabled={!currentStep.latinText}>{showLatin ? t('hideLatin') : t('showLatin')}</button>

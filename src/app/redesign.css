@@ -1276,19 +1276,10 @@ body {
   min-width: 0;
 }
 
-.prayer-toolbar-progress {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted-ink);
-  padding: 0.25rem 0.5rem;
-  background: var(--paper-deep);
-  border-radius: var(--radius-sm);
-}
-
 .prayer-toolbar-actions {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.6rem;
 }
 
 .prayer-step {
