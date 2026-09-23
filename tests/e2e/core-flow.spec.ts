@@ -93,13 +93,13 @@ test('new visitor can personalize the sanctuary and start a resumable Rosary', a
   await page.getByLabel(/como podemos chamar/i).fill('Ana');
   const next = page.getByRole('button', {name: 'Continuar'});
   await next.click();
-  await expect(page.getByLabel(/horário do lembrete/i)).toBeVisible();
+  await expect(page.getByLabel(/aviso interno/i)).toBeVisible();
   await next.click();
   await expect(page.getByRole('group', {name: /tamanho do texto/i})).toBeVisible();
   await page.getByRole('button', {name: /entrar no meu santuário/i}).click();
   await expect(page).toHaveURL(/\/pt\/sanctuary$/);
   await expect(page.getByRole('heading', {name: /ana/i})).toBeVisible();
-  await page.getByRole('link', {name: /iniciar o rosário/i}).click();
+  await page.getByRole('link', {name: /rezar o primeiro rosário|iniciar o rosário/i}).click();
   await expect(page.getByLabel(/passo 1 de 73/i)).toBeVisible();
   await page.getByRole('button', {name: /próxima oração/i}).click();
   await page.reload();

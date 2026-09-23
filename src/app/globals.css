@@ -157,6 +157,14 @@ a {
   transition: top 0.2s;
 }
 
+/* Dark theme flips --oxblood/-deep to light blush tones (text colors on the
+   dark surface); neither passes 4.5:1 behind ivory text, so the skip link
+   uses the dark raised surface with ink text instead. */
+.dark .skip-link {
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
 .skip-link:focus {
   top: 0;
 }
@@ -302,6 +310,13 @@ blockquote {
   text-underline-offset: 0.22em;
 }
 
+/* --oxblood 4.2:1 in dark mode misses the 4.5:1 AA bar; the light variant
+   (#e39aa4) clears it on dark raised surfaces. */
+.dark .text-link {
+  color: #e39aa4;
+  text-decoration-color: color-mix(in srgb, #e39aa4 45%, transparent);
+}
+
 .site-header,
 .focus-header {
   position: sticky;
@@ -441,17 +456,18 @@ blockquote {
   }
 
   /* Theme access on product pages: the header is hidden there, so a compact
-     toggle floats at the tab bar's top edge instead. */
+     toggle docks inside the tab bar's right end instead of floating free
+     (a free-floating button intercepts taps on adjacent content). */
   .bottom-nav-theme {
     position: fixed;
-    right: 0.5rem;
-    top: 0.5rem;
+    right: 0.25rem;
+    bottom: calc(4.05rem + env(safe-area-inset-bottom, 0px));
     z-index: 40;
   }
 
   .bottom-nav-theme .theme-toggle {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 2.1rem;
+    height: 2.1rem;
     background: color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(10px);
   }
