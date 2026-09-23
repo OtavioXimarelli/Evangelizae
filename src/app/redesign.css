@@ -1928,7 +1928,7 @@ body {
 
   .site-footer { grid-template-columns: 1fr; margin-top: 4rem; }
 
-  .site-main { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)); }
+  .site-main { padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px) + 4.5rem); }
 }
 
 @media (max-width: 380px) {
