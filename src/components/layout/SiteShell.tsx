@@ -137,8 +137,8 @@ export function SiteShell({children}: {children: React.ReactNode}) {
           )}
         </header>
       )}
-      {isProductShell && !isOffline && <BetaNotice />}
       <main id="main-content" className={isOnboarding ? 'onboarding-main' : 'site-main'}>{children}</main>
+      {isProductShell && !isOffline && <BetaNotice />}
       {!isOnboarding && !isProductShell && (
         <footer className="site-footer">
           <div><BrandMark /></div>

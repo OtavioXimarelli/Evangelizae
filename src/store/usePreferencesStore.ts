@@ -16,13 +16,15 @@ export interface PreferencesState {
   readerScale: ReaderScale;
   onboardedAt: string | null;
   reminderDismissedDate: string | null;
+  betaNoticeDismissed: boolean;
   setProfile: (profile: Partial<Pick<PreferencesState, 'firstName' | 'prayerWindow' | 'reminderTime' | 'theme' | 'readerScale'>>) => void;
   completeOnboarding: () => void;
   dismissReminderToday: () => void;
+  dismissBetaNotice: () => void;
   resetPreferences: () => void;
 }
 
-const initialPreferences = {
+export const initialPreferences = {
   firstName: '',
   prayerWindow: 'morning' as PrayerWindow,
   reminderTime: '07:00',
@@ -30,6 +32,7 @@ const initialPreferences = {
   readerScale: 'large' as ReaderScale,
   onboardedAt: null as string | null,
   reminderDismissedDate: null as string | null,
+  betaNoticeDismissed: false as boolean,
 };
 
 export function isReminderDue(reminderTime: string, dismissedDate: string | null, now: Date = new Date()) {
@@ -48,11 +51,19 @@ export const usePreferencesStore = create<PreferencesState>()(
         set({onboardedAt: new Date().toISOString()});
       },
       dismissReminderToday: () => set({reminderDismissedDate: getLocalDateKey()}),
+      dismissBetaNotice: () => set({betaNoticeDismissed: true}),
       resetPreferences: () => {
         document.cookie = 'evangelizae_onboarded=; Path=/; Max-Age=0; SameSite=Lax';
         set({...initialPreferences});
       },
     }),
-    {name: 'evangelizae-preferences', version: 1},
+    {
+      name: 'evangelizae-preferences',
+      version: 2,
+      migrate: (persisted, version) => ({
+        ...(persisted as Record<string, unknown>),
+        betaNoticeDismissed: version >= 2 ? Boolean((persisted as Record<string, unknown>).betaNoticeDismissed) : false,
+      }),
+    },
   ),
 );
