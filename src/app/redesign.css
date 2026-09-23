@@ -1120,6 +1120,11 @@ body {
   margin: 0;
 }
 
+.mystery-gate-cta {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
 .mystery-gate-grid {
   width: 100%;
   margin-top: 1.4rem;

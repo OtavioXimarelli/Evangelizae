@@ -12,7 +12,7 @@ import {usePrayerStore} from '@/store/usePrayerStore';
 
 const mysteryTranslation = {gozosos: 'joyful', luminosos: 'luminous', dolorosos: 'sorrowful', gloriosos: 'glorious'} as const;
 
-function MysteryGate({todayMystery}: {todayMystery: MysteryType}) {
+export function MysteryGate({todayMystery}: {todayMystery: MysteryType}) {
   const t = useTranslations('Rosary');
   const locale = useLocale();
   const prayer = usePrayerStore();
@@ -23,6 +23,9 @@ function MysteryGate({todayMystery}: {todayMystery: MysteryType}) {
         <span className="eyebrow">{t('gateEyebrow')}</span>
         <h1 className="page-title">{t('chooseMystery')}</h1>
         <p className="lede">{t('gateSubtitle')}</p>
+        <button type="button" className="button mystery-gate-cta" onClick={() => prayer.initRosary(todayMystery)}>
+          {t('prayTodayAction')}
+        </button>
         <div className="mystery-gate-grid">
           {(Object.keys(ROSARY_MYSTERIES) as MysteryType[]).map((type) => {
             const group = ROSARY_MYSTERIES[type];
