@@ -50,15 +50,21 @@ test('responsive shells do not clip and mobile navigation stays usable', async (
     expect(widths.document).toBeLessThanOrEqual(widths.viewport);
   }
 
-  await page.goto('/pt/sanctuary');
   if (isMobile) {
-    await page.getByRole('button', {name: 'Abrir menu'}).click();
-    const navigation = page.getByRole('navigation', {name: 'Menu de navegação'});
-    await expect(navigation).toBeVisible();
-    await navigation.getByRole('link', {name: 'A missão'}).click();
-    await expect(page).toHaveURL(/\/pt\/about$/);
+    // Product pages rely exclusively on the tab bar.
+    await page.goto('/pt/sanctuary');
     const bottomNav = page.getByRole('navigation', {name: 'Navegação do aplicativo'});
     await expect(bottomNav.getByRole('link', {name: 'Ajustes'})).toBeVisible();
+    await expect(bottomNav.getByRole('link', {name: 'Liturgia'})).toBeVisible();
+  } else {
+    await page.goto('/pt/inicio');
+    await expect(page.getByRole('navigation', {name: 'Navegação principal'})).toBeVisible();
+  }
+
+  // Public pages keep the standard header (hamburger) navigation.
+  await page.goto('/pt/about');
+  if (isMobile) {
+    await expect(page.getByRole('button', {name: 'Abrir menu'})).toBeVisible();
   } else {
     await expect(page.getByRole('navigation', {name: 'Navegação principal'})).toBeVisible();
   }
@@ -98,6 +104,19 @@ test('new visitor can personalize the sanctuary and start a resumable Rosary', a
   await page.getByRole('button', {name: /próxima oração/i}).click();
   await page.reload();
   await expect(page.getByLabel(/passo 2 de 73/i)).toBeVisible();
+});
+
+test('mobile product pages use the tab bar without a hamburger', async ({page, isMobile}) => {
+  test.skip(!isMobile, 'Product tab bar is a phone-layout concern');
+  for (const route of ['sanctuary', 'liturgy', 'settings']) {
+    await page.goto(`/pt/${route}`);
+    await expect(
+      page.getByRole('button', {name: 'Abrir menu'}),
+      `/pt/${route} must not show a hamburger button`,
+    ).toHaveCount(0);
+    const bottomNav = page.getByRole('navigation', {name: 'Navegação do aplicativo'});
+    await expect(bottomNav).toBeVisible();
+  }
 });
 
 test('legacy and English routes preserve a clear destination', async ({page}) => {

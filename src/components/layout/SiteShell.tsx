@@ -153,7 +153,12 @@ export function SiteShell({children}: {children: React.ReactNode}) {
           ))}
         </nav>
       )}
-      {isProductShell && !isOffline && <PwaInstallPrompt />}
+      {isProductShell && !isOffline && (
+        <>
+          <PwaInstallPrompt />
+          <div className="bottom-nav-theme"><ThemeToggle /></div>
+        </>
+      )}
     </div>
   );
 }

@@ -439,6 +439,22 @@ blockquote {
   .desktop-nav .theme-toggle {
     display: none;
   }
+
+  /* Theme access on product pages: the header is hidden there, so a compact
+     toggle floats at the tab bar's top edge instead. */
+  .bottom-nav-theme {
+    position: fixed;
+    right: 0.5rem;
+    top: 0.5rem;
+    z-index: 40;
+  }
+
+  .bottom-nav-theme .theme-toggle {
+    width: 2.35rem;
+    height: 2.35rem;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+  }
 }
 
 .mobile-menu {
@@ -1061,6 +1077,12 @@ blockquote {
 @media (max-width: 860px) {
   .site-main {
     padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Product pages navigate via the bottom tab bar; the header hamburger is
+     redundant mobile chrome, so the entire product header is hidden. */
+  .site-header.product-header {
+    display: none;
   }
 
   .desktop-nav {
