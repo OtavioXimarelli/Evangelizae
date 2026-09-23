@@ -119,6 +119,20 @@ test('mobile product pages use the tab bar without a hamburger', async ({page, i
   }
 });
 
+test('main content fades in once, and respects reduced motion', async ({page, isMobile}) => {
+  test.skip(isMobile, 'Desktop validation; mobile visual check happens on real-device smoke');
+  await page.goto('/pt/sanctuary');
+  const main = page.locator('main.site-main');
+  await expect(main).toHaveClass(/site-main/);
+  const nameDefault = await main.evaluate((el) => getComputedStyle(el).animationName);
+  expect(nameDefault).toBe('route-fade-in');
+
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await page.reload();
+  await page.goto('/pt/sanctuary');
+  expect(await main.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+});
+
 test('legacy and English routes preserve a clear destination', async ({page}) => {
   await page.goto('/pt/profile');
   await expect(page).toHaveURL(/\/pt\/settings$/);
