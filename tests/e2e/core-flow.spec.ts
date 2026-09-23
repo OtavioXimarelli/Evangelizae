@@ -119,6 +119,13 @@ test('mobile product pages use the tab bar without a hamburger', async ({page, i
   }
 });
 
+test('onboarding step 2 explains the reminder is an in-app banner, not a push notification', async ({page}) => {
+  await page.goto('/pt/comecar');
+  await page.getByLabel(/como podemos chamar/i).fill('Teste');
+  await page.getByRole('button', {name: 'Continuar'}).click();
+  await expect(page.getByText(/aviso dentro do aplicativo, não uma notificação do celular/i)).toBeVisible();
+});
+
 test('main content fades in once, and respects reduced motion', async ({page, isMobile}) => {
   test.skip(isMobile, 'Desktop validation; mobile visual check happens on real-device smoke');
   await page.goto('/pt/sanctuary');

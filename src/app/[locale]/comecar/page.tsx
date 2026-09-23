@@ -99,7 +99,7 @@ export default function OnboardingPage() {
                   ))}
                 </div>
               </fieldset>
-              <div className="field"><label htmlFor="reminder-time">{t('timeLabel')}</label><input id="reminder-time" type="time" value={preferences.reminderTime} onChange={(event) => preferences.setProfile({reminderTime: event.target.value})} /></div>
+              <div className="field"><label htmlFor="reminder-time">{t('timeLabel')}</label><input id="reminder-time" type="time" value={preferences.reminderTime} onChange={(event) => preferences.setProfile({reminderTime: event.target.value})} /><p style={{color: 'var(--muted-ink)', fontSize: '.84rem', margin: 0}}>{t('timeHint')}</p></div>
             </>
           )}
           {step === 3 && (
