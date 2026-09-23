@@ -1849,8 +1849,16 @@ body {
   .statement-header::after { top: -9rem; right: -12rem; }
   .sanctuary-masthead::before { right: -6rem; opacity: 0.7; }
   .sanctuary-masthead::after { display: none; }
-  .sanctuary-masthead .page-title { max-width: 9ch; }
+  .sanctuary-masthead .page-title { max-width: 9ch; font-size: clamp(2.2rem, 8vw, 3.2rem); }
   .sanctuary-page .dashboard-grid { padding-top: 1rem; }
+
+  /* Info hierarchy: CTA before stats strip on phones (DOM order unchanged) */
+  .sanctuary-page { display: flex; flex-direction: column; }
+  .sanctuary-page .sanctuary-masthead { order: 0; }
+  .sanctuary-page .reminder-line,
+  .sanctuary-page .status-message { order: 1; }
+  .sanctuary-page .prayer-invitation { order: 1; }
+  .sanctuary-page .week-strip { order: 2; }
 
   .paper-panel { border-radius: 1rem 1rem 1rem 0.2rem; }
   .prayer-invitation { min-height: 390px; padding: 1.75rem 1.35rem; }
