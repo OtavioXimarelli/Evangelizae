@@ -27,6 +27,8 @@ vi.mock('@/hooks/useDayContext', () => ({
   useDayContext: () => ({mystery: 'gloriosos'}),
 }));
 
+import {MysteryGate} from '@/components/rosary/MysteryGate';
+
 describe('MysteryGate primary CTA', () => {
   beforeEach(() => {
     initRosary.mockClear();
@@ -34,8 +36,6 @@ describe('MysteryGate primary CTA', () => {
   });
 
   it('renders the primary CTA and starts today’s mysteries on click', async () => {
-    const page = await import('./page');
-    const MysteryGate = page.MysteryGate;
     render(<MysteryGate todayMystery="gloriosos" />);
     const cta = screen.getByRole('button', {name: 'prayTodayAction'});
     expect(cta).toHaveClass('button', 'mystery-gate-cta');
