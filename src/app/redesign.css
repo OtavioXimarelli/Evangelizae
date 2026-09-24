@@ -1388,6 +1388,7 @@ body {
 }
 
 .decade-bead {
+  position: relative;
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
@@ -1396,6 +1397,15 @@ body {
   background: transparent;
   cursor: pointer;
   transition: transform 200ms var(--ease-sacred), background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.decade-bead::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 
 .decade-bead[data-complete] {
