@@ -1,9 +1,29 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {getDailyLiturgy} from './liturgyService';
 
-describe('embedded daily liturgy client', () => {
-  beforeEach(() => { vi.useFakeTimers(); localStorage.clear(); });
-  afterEach(() => { vi.useRealTimers(); vi.clearAllMocks(); });
+function apiLiturgy(date: string, freshness: 'LIVE' | 'CACHED' = 'LIVE') {
+  return {
+    date,
+    title: 'Liturgia de teste',
+    color: 'GREEN',
+    prayers: {},
+    groups: [{kind: 'GOSPEL', items: [{title: 'Evangelho', reference: 'Jo 1,1', text: 'No princípio era o Verbo.'}]}],
+    source: {provider: 'API de teste', fetchedAt: `${date}T12:00:00.000Z`, freshness},
+  };
+}
+
+describe('daily liturgy client', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', '');
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllEnvs();
+    vi.clearAllMocks();
+  });
 
   it('returns the embedded readings without making a network request', async () => {
     vi.setSystemTime(new Date('2026-08-26T15:00:00Z'));
@@ -41,8 +61,57 @@ describe('embedded daily liturgy client', () => {
     await expect(getDailyLiturgy()).resolves.toMatchObject({date: '2026-08-25'});
   });
 
-  it('fails closed after the declared embedded range', async () => {
+  it('fails closed after the declared embedded range when the API is unavailable', async () => {
     vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
-    await expect(getDailyLiturgy()).rejects.toThrow('LITURGY_NOT_EMBEDDED_FOR_DATE_2026-09-02');
+    await expect(getDailyLiturgy()).rejects.toThrow('LITURGY_API_URL_MISSING');
+  });
+
+  it('fetches the current day from the external API and caches it', async () => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    const fetchSpy = vi.fn().mockResolvedValue({ok: true, status: 200, json: async () => apiLiturgy('2026-09-02')});
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const first = await getDailyLiturgy();
+    const second = await getDailyLiturgy();
+
+    expect(first.source.freshness).toBe('LIVE');
+    expect(second.source.freshness).toBe('CACHED');
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      expect.stringContaining('/liturgy/today?timezone=America%2FSao_Paulo&locale=pt-BR'),
+      expect.objectContaining({cache: 'no-store'}),
+    );
+  });
+
+  it('returns the same-day cache when the API is unavailable', async () => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    const fetchSpy = vi.fn()
+      .mockResolvedValueOnce({ok: true, status: 200, json: async () => apiLiturgy('2026-09-02')})
+      .mockRejectedValueOnce(new Error('network down'));
+    vi.stubGlobal('fetch', fetchSpy);
+
+    await getDailyLiturgy();
+    const result = await getDailyLiturgy({force: true});
+
+    expect(result.source.freshness).toBe('CACHED');
+    expect(result.date).toBe('2026-09-02');
+  });
+
+  it('rejects a response for another date', async () => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: true, status: 200, json: async () => apiLiturgy('2026-09-01')}));
+
+    await expect(getDailyLiturgy()).rejects.toThrow('LITURGY_RESPONSE_INVALID');
+  });
+
+  it('rejects an API response when no same-day cache exists', async () => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: false, status: 503}));
+
+    await expect(getDailyLiturgy()).rejects.toThrow('LITURGY_API_503');
   });
 });

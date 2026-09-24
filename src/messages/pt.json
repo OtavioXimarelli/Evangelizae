@@ -227,7 +227,12 @@
     "retry": "Tentar novamente",
     "cachedNotice": "Exibindo a cópia de hoje guardada neste dispositivo.",
     "embeddedNotice": "Edição provisória local para 25 de agosto a 1º de setembro de 2026. As referências seguem o calendário da Igreja no Brasil; os textos usam a tradução católica da Vulgata do Pe. António Pereira de Figueiredo, identificada abaixo.",
-    "source": "Fonte: {provider}. Atualizada em {time}.",
+    "source": "Fonte: {provider}. Liturgia de {date}. Atualizada em {time}. Estado: {freshness}.",
+    "freshness": {
+      "live": "conteúdo atualizado agora",
+      "cached": "cópia local de hoje",
+      "embedded": "edição local provisória"
+    },
     "contents": "Nesta página",
     "FIRST_READING": "Primeira leitura",
     "PSALM": "Salmo responsorial",
@@ -289,7 +294,7 @@
     "localTitle": "Dados locais",
     "localBody": "Você pode exportar ou apagar tudo em Ajustes. Limpar os dados do navegador também remove essas informações.",
     "liturgyTitle": "Liturgia",
-    "liturgyBody": "Nesta edição provisória, as leituras de 25 de agosto a 1º de setembro de 2026 já vêm no aplicativo e não geram consultas externas. Depois desse período, a página indica a indisponibilidade e oferece o acesso à CNBB.",
+    "liturgyBody": "A liturgia é solicitada ao serviço de leituras do Evangelizae para a data de hoje em São Paulo. Se a conexão falhar, usamos apenas uma cópia do mesmo dia já guardada neste dispositivo; nunca apresentamos uma leitura antiga como a de hoje.",
     "telemetryTitle": "Erros e desempenho",
     "telemetryBody": "Quando configurado pelo operador, o monitoramento recebe somente erros técnicos e desempenho amostrado. Não enviamos nome, intenções, textos de oração ou histórico.",
     "essentialTitle": "Cookie essencial",
@@ -299,7 +304,7 @@
   "Offline": {
     "eyebrow": "Sem conexão",
     "title": "O silêncio continua disponível.",
-    "body": "Se você já abriu o Rosário neste dispositivo, pode continuar a oração normalmente. As leituras da edição provisória também ficam disponíveis no período declarado quando o aplicativo já foi carregado.",
+    "body": "Se você já abriu o Rosário neste dispositivo, pode continuar a oração normalmente. A liturgia depende de uma conexão ou de uma cópia do mesmo dia já carregada neste dispositivo.",
     "rosaryAction": "Abrir o Rosário",
     "sanctuaryAction": "Voltar ao santuário"
   }

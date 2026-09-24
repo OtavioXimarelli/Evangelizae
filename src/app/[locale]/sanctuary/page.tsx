@@ -6,7 +6,7 @@ import {Link} from '@/i18n/routing';
 import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {WeekDots, type WeekDayMark} from '@/components/common/WeekDots';
-import {getLocalDateKey} from '@/lib/date';
+import {getCalendarDateInTimeZone, getLocalDateKey} from '@/lib/date';
 import {buildRosarySequence, type MysteryType} from '@/services/rosaryEngine';
 import {getPrayerStats, usePrayerStore} from '@/store/usePrayerStore';
 import {isReminderDue, usePreferencesStore} from '@/store/usePreferencesStore';
@@ -44,13 +44,14 @@ export default function SanctuaryPage() {
   const reminderDue = isReminderDue(preferences.reminderTime, preferences.reminderDismissedDate) && !stats.completedToday;
   const hasHistory = prayer.completions.length > 0;
 
-  const dateLabel = new Intl.DateTimeFormat('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'}).format(new Date());
+  const calendarDate = getCalendarDateInTimeZone();
+  const dateLabel = new Intl.DateTimeFormat('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'}).format(calendarDate);
   const greeting = `${tDay(`greetings.${today.daypart}`)}${preferences.firstName ? `, ${preferences.firstName}` : ''}.`;
 
   const completionDates = new Set(prayer.completions.map((item) => item.localDate));
   const weekdayFormat = new Intl.DateTimeFormat('pt-BR', {weekday: 'short', day: 'numeric', month: 'short'});
   const weekMarks: WeekDayMark[] = Array.from({length: 7}, (_, index) => {
-    const date = new Date();
+    const date = new Date(calendarDate);
     date.setDate(date.getDate() - (6 - index));
     const key = getLocalDateKey(date);
     return {

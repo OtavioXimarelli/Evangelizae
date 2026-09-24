@@ -27,7 +27,7 @@ describe('private prayer statistics', () => {
 
 describe('in-app reminder', () => {
   it('is due after the selected time and can be dismissed for the date', () => {
-    const now = new Date(2026, 7, 20, 9, 30);
+    const now = new Date('2026-08-20T12:30:00Z');
     expect(isReminderDue('09:00', null, now)).toBe(true);
     expect(isReminderDue('10:00', null, now)).toBe(false);
     expect(isReminderDue('09:00', '2026-08-20', now)).toBe(false);

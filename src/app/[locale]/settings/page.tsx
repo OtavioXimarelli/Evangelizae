@@ -38,8 +38,9 @@ export default function SettingsPage() {
         intentions: prayer.intentions,
         reflection: prayer.reflection,
       },
-      preferences: {
-        prayerWindow: preferences.prayerWindow,
+       preferences: {
+         firstName: preferences.firstName,
+         prayerWindow: preferences.prayerWindow,
         reminderTime: preferences.reminderTime,
         theme: preferences.theme,
         readerSize: preferences.readerScale,

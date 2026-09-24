@@ -2,7 +2,7 @@
 
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
-import {getLocalDateKey} from '@/lib/date';
+import {getDatePartsInTimeZone, getLocalDateKey} from '@/lib/date';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type ReaderScale = 'normal' | 'large' | 'xl';
@@ -37,8 +37,9 @@ export const initialPreferences = {
 
 export function isReminderDue(reminderTime: string, dismissedDate: string | null, now: Date = new Date()) {
   if (dismissedDate === getLocalDateKey(now)) return false;
+  const {hour, minute} = getDatePartsInTimeZone(now);
   const [hours, minutes] = reminderTime.split(':').map(Number);
-  return now.getHours() * 60 + now.getMinutes() >= hours * 60 + minutes;
+  return hour * 60 + minute >= hours * 60 + minutes;
 }
 
 export const usePreferencesStore = create<PreferencesState>()(

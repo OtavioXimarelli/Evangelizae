@@ -329,7 +329,7 @@ body {
     position: relative;
     right: auto;
     bottom: auto;
-    z-index: auto;
+    z-index: 40;
     width: min(720px, calc(100% - 2rem));
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -360,8 +360,9 @@ body {
   }
 
   .beta-close {
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0.5rem;
+    right: 0.5rem;
+    transform: none;
   }
 }
 

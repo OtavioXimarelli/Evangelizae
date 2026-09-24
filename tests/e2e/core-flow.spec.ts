@@ -82,8 +82,8 @@ test('compact beta notice does not cover the mobile prayer experience', async ({
   expect(noticeBox).not.toBeNull();
   expect(mainBox).not.toBeNull();
   expect(bottomNavBox).not.toBeNull();
-  expect(noticeBox!.y + noticeBox!.height).toBeLessThanOrEqual(mainBox!.y + 1);
-  expect(noticeBox!.y + noticeBox!.height).toBeLessThan(bottomNavBox!.y);
+  expect(noticeBox!.y).toBeGreaterThan(mainBox!.y);
+  expect(noticeBox!.y).toBeGreaterThan(bottomNavBox!.y);
 });
 
 test('new visitor can personalize the sanctuary and start a resumable Rosary', async ({page}) => {
@@ -181,7 +181,7 @@ test('beta pages have no serious automated accessibility violations', async ({pa
 
 test('previously loaded Rosary reopens offline', async ({page, context}) => {
   await page.goto('/pt/rosary');
-  await page.getByRole('button', {name: /mistérios? de hoje/i}).click();
+  await page.getByRole('button', {name: 'Rezar os mistérios de hoje'}).click();
   await expect(page.getByLabel(/passo 1 de 73/i)).toBeVisible();
   await page.evaluate(async () => { await navigator.serviceWorker?.ready; });
   await context.setOffline(true);

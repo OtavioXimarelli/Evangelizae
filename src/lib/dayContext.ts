@@ -1,3 +1,4 @@
+import {getCalendarDateInTimeZone} from '@/lib/date';
 import {getDailyMysteryType} from '@/services/rosaryEngine';
 
 export type Daypart = 'dawn' | 'morning' | 'afternoon' | 'night';
@@ -96,9 +97,15 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeason {
 }
 
 export function getDayContext(now: Date = new Date()): DayContext {
+  const calendarDate = getCalendarDateInTimeZone(now);
+  const hour = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Sao_Paulo',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).format(new Date(now));
   return {
-    daypart: getDaypart(now.getHours()),
-    season: getLiturgicalSeason(now),
-    mystery: getDailyMysteryType(now),
+    daypart: getDaypart(Number(hour)),
+    season: getLiturgicalSeason(calendarDate),
+    mystery: getDailyMysteryType(calendarDate),
   };
 }

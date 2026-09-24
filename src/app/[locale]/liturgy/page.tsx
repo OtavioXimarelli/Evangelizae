@@ -4,12 +4,22 @@ import {useEffect, useState} from 'react';
 import {RefreshCw} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {useDayContext} from '@/hooks/useDayContext';
-import {clearLiturgyCache, DailyLiturgyDto, getDailyLiturgy, LiturgyGroupDto} from '@/services/liturgyService';
+import {DailyLiturgyDto, getDailyLiturgy, LiturgyGroupDto} from '@/services/liturgyService';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
 
 const groupIds: Record<LiturgyGroupDto['kind'], string> = {
   FIRST_READING: 'primeira-leitura', PSALM: 'salmo', SECOND_READING: 'segunda-leitura', GOSPEL: 'evangelho', EXTRA: 'outros-textos',
 };
+
+const freshnessKeys = {
+  LIVE: 'live',
+  CACHED: 'cached',
+  EMBEDDED: 'embedded',
+} as const;
+
+function formatLiturgyDate(date: string): string {
+  return new Intl.DateTimeFormat('pt-BR', {day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(`${date}T12:00:00`));
+}
 
 export default function LiturgyPage() {
   const t = useTranslations('Liturgy');
@@ -22,7 +32,6 @@ export default function LiturgyPage() {
 
   const load = async (force = false) => {
     setLoading(true); setFailed(false);
-    if (force) clearLiturgyCache();
     try { setLiturgy(await getDailyLiturgy({force})); } catch { setLiturgy(null); setFailed(true); } finally { setLoading(false); }
   };
 
@@ -48,7 +57,12 @@ export default function LiturgyPage() {
           <article className="reading-document">
             {liturgy.groups.map((group, groupIndex) => <section className="reading-group" id={`${groupIds[group.kind]}-${groupIndex}`} key={`${group.kind}-${groupIndex}`}><span className="eyebrow">{t(group.kind)}</span>{group.items.map((item, index) => <div className="reading-item" key={`${item.reference}-${index}`}><h2>{item.title}</h2>{item.reference && <p className="reading-reference">{item.reference}</p>}{item.refrain && <p className="reading-body"><strong>{item.refrain}</strong></p>}<div className={`reading-body${groupIndex === 0 && index === 0 ? ' drop-cap' : ''}`}>{item.text}</div></div>)}</section>)}
             {Object.entries(liturgy.prayers).map(([key, text]) => text && <section className="reading-group" key={key}><span className="eyebrow">{t(key as 'collect' | 'offerings' | 'communion')}</span><div className="reading-body">{text}</div></section>)}
-            <p className="liturgy-source">{t('source', {provider: liturgy.source.provider, time: new Intl.DateTimeFormat('pt-BR', {hour: '2-digit', minute: '2-digit'}).format(new Date(liturgy.source.fetchedAt))})}</p>
+            <p className="liturgy-source">{t('source', {
+              provider: liturgy.source.provider,
+              date: formatLiturgyDate(liturgy.date),
+              time: new Intl.DateTimeFormat('pt-BR', {hour: '2-digit', minute: '2-digit'}).format(new Date(liturgy.source.fetchedAt)),
+              freshness: t(`freshness.${freshnessKeys[liturgy.source.freshness]}`),
+            })}</p>
           </article>
         </div>
       </>}

@@ -8,7 +8,7 @@ import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {SacredOrnament} from '@/components/brand/SacredOrnament';
 import {MysteryGate} from '@/components/rosary/MysteryGate';
-import {buildRosarySequence, MysteryType, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
+import {buildRosarySequence, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
 import {usePrayerStore} from '@/store/usePrayerStore';
 
 const mysteryTranslation = {gozosos: 'joyful', luminosos: 'luminous', dolorosos: 'sorrowful', gloriosos: 'glorious'} as const;
@@ -185,7 +185,7 @@ export default function RosaryPage() {
         {showIntentions && (
           <section ref={intentionsRef} id="intentions-panel" className="intentions-panel" aria-label={t('intentionsTitle')}>
             <p className="intentions-hint">{t('intentionsHint')}</p>
-            <form onSubmit={addIntention} className="field intentions-form"><input aria-label={t('intentionPlaceholder')} maxLength={500} value={newIntention} onChange={(event) => setNewIntention(event.target.value)} placeholder={t('intentionPlaceholder')} /><button type="submit" className="button button-small" disabled={!newIntention.trim()}>{t('addIntention')}</button></form>
+            <form onSubmit={addIntention} className="field intentions-form"><input aria-label={t('intentionPlaceholder')} maxLength={140} value={newIntention} onChange={(event) => setNewIntention(event.target.value)} placeholder={t('intentionPlaceholder')} /><button type="submit" className="button button-small" disabled={!newIntention.trim() || prayer.intentions.length >= 5}>{t('addIntention')}</button></form>
             {prayer.intentions.map((intention, index) => <div className="quiet-row" key={`${intention}-${index}`}><span>{intention}</span><button type="button" className="button button-quiet" onClick={() => prayer.removeIntention(index)} aria-label={t('removeIntention')}>×</button></div>)}
           </section>
         )}

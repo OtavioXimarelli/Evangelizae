@@ -1,225 +1,137 @@
 # Evangelizae Development Checkpoint
 
-**Date:** 2026-09-07  
-**Status:** Phase A complete, Design Refinement Phase 1-3 complete, Phases B and C pending
+**Date:** 2026-09-23
+**Status:** Two UX passes complete (committed). External daily-liturgy API integration and E2E regression fixes are implemented and verified; changes remain uncommitted.
+**Branch:** `dev` — 11 commits ahead of `a7c41d9`, **nothing pushed**.
 
 ---
 
-## Phase A: Refine Beta Core ✅ COMPLETE
+## ⚠️ Read this first
 
-All items completed and verified with `pnpm check`.
+**The first UX pass was reported green on `pnpm check` alone, and that was wrong.**
+`pnpm check` (lint + typecheck + unit + build) cannot catch E2E failures. The complete
+production E2E suite has now been rerun successfully after the regression fixes.
 
-### Changes Made
-
-**A.1 Sanctuary** (`src/app/[locale]/sanctuary/page.tsx`)
-- Loading skeleton with `aria-busy` instead of empty div
-- Empty state for first-time users (no completions) with distinct copy
-- `aria-label` on week-strip section
-- New i18n keys: `emptyTitle`, `emptyBody`, `emptyAction`, `loading`
-
-**A.2 Rosary** (`src/app/[locale]/rosary/page.tsx`)
-- `beforeunload` guard during active prayer sessions
-- Focus trap for intentions panel (Tab/Shift+Tab/Escape)
-- Focus restore to trigger button on close
-- `aria-live="polite"` on prayer step for screen reader announcements
-- `aria-controls` linking trigger to panel
-
-**A.3 Settings** (`src/app/[locale]/settings/page.tsx`)
-- Export shape now matches `MigrateRequest` contract: `{version: 2, prayerState, preferences, completions}`
-- Includes `activeMysteryType`, `currentStepIndex`, `furthestStepIndex`, `sessionStartedAt`, `isCompleted`, `intentions`, `reflection`
-
-**A.4 Accessibility**
-- Added `.sr-only` class to `globals.css` (was missing, used by WeekDots)
-- `role="alert"` on liturgy error state
-- `role="status"` on liturgy loading state
+**Lesson for future passes: AGENTS.md requires `pnpm check` AND `pnpm test:e2e` before
+calling a broad UI/state change done. Both, every time.**
 
 ---
 
-## Design Refinement Phase ✅ COMPLETE (Phases 1-3)
+## Committed work (11 commits, `a7c41d9..7354362`)
 
-### Phase 1: Layout Foundations ✅
+### Environment fix (uncommitted, separate)
 
-**Spacing & Design Tokens** (`src/app/globals.css`)
-- Added unified spacing scale: `--space-xs` (0.5rem) through `--space-2xl` (4rem)
-- Added border-radius tokens: `--radius-sm` (0.25rem) through `--radius-xl` (1.35rem)
+| File | State |
+|---|---|
+| `next.config.ts` | **Modified, uncommitted.** Added `turbopack: { root: __dirname }`. |
 
-**Skip-to-Content Link** (`src/components/layout/SiteShell.tsx`)
-- Added skip link for keyboard users
-- Added `id="main-content"` to main element
-- Skip link styles in `globals.css` (hidden until focused)
+**Why it matters:** without this pin, Turbopack infers the workspace root as `$HOME`
+(there is a stray `pnpm-workspace.yaml` + `package.json` in `/home/otavio`) and hangs
+compiling at ~874% CPU with zero-byte responses. Symptom chain: first request never
+returns → stale `.next` chunks bake in thrown `Cannot find module 'next-intl'` stubs →
+every route 500s. Fix for that symptom: `rm -rf .next && pnpm dev`.
 
-**Theme Toggle Consolidation**
-- Removed duplicate theme toggle from header actions
-- Added theme toggle to mobile menu footer
-- Added `.mobile-menu-footer` styles
+**Decide whether to commit this.** Recommend yes.
 
-### Phase 2: Sanctuary Refinement ✅
+### Pass 1 — UX/layout review (6 commits)
 
-**Reorganized Layout** (`src/app/[locale]/sanctuary/page.tsx`)
-- Moved week strip above prayer invitation (establishes context before action)
-- Improved visual hierarchy
+| Commit | Change |
+|---|---|
+| `48dae06` | Mobile `.site-main` padding reserves bottom-nav height; sanctuary CTA no longer clipped behind the tab bar |
+| `a8b2b91` | BetaNotice persisted-dismiss via `usePreferencesStore` (persist v1→v2 with migration, legacy `localStorage` key honored); moved below `<main>` so the hero is the first glance |
+| `3efc787` | Mobile-only: prayer-invitation CTA ordered before week-strip; masthead title shrunk to `clamp(2.2rem, 8vw, 3.2rem)` |
+| `a357027` | Mystery gate gained a primary CTA `Rezar os mistérios de hoje` + i18n key + new TDD test |
+| `36907ed` | Prayer room: removed the redundant `%` chip (3 progress signals → 2) |
+| `744fe76` | **Build fix:** extracted `MysteryGate` to `src/components/rosary/MysteryGate.tsx` — a named export from a Next.js page file breaks `next build` |
 
-**Enhanced Liturgy Promo** (`src/app/redesign.css`)
-- Increased icon size from 2.4rem to 2.8rem
-- Added structured grid layout with proper content grouping
-- Added `.liturgy-promo-content`, `.liturgy-promo-title`, `.liturgy-promo-body` classes
-- Improved mobile responsive styles
+### Pass 2 — Standards-based audit (5 commits, plan at `.hermes/plans/2026-09-23_015500-ux-standards-audit-design-improvements.md`)
 
-### Phase 3: Rosary Polish ✅
+| Commit | Change |
+|---|---|
+| `3a18b37` | Christmas season accent `#9a7420` → `#7a5c12` (3.75:1 → **5.45:1**, WCAG AA). Added `src/app/tokens.contrast.test.ts` which **parses real hex values out of `globals.css`**, so palette regressions fail the suite |
+| `44046fc` | Decade beads: 44×44 CSS px pointer target via `::after` overlay; visual bead unchanged (24×24) |
+| `c5d68ed` → reverted in `e0d899d` | Mobile drawer utility links — **rejected**, see below |
+| `7354362` | Settings now links **A missão** (`/about`) and **Código aberto** (GitHub), reusing existing `Navigation` i18n keys. Zero new copy |
 
-**Increased Touch Targets** (`src/app/redesign.css`)
-- Increased decade bead size from 1rem to 1.5rem (better mobile usability)
+**Why the drawer change was reverted:** on product pages the mobile header is
+deliberately hidden (`globals.css:1100`, from `afd5dd8`), so the drawer cannot be opened
+there — the links were unreachable exactly where needed, and "A missão" appeared twice on
+public pages. Decision: keep the header hidden, put those links in Ajustes instead.
 
-**Completion Screen Enhancement** (`src/app/[locale]/rosary/page.tsx`)
-- Added reflection prompt textarea after completion
-- New i18n keys: `reflectionPrompt`, `reflectionPlaceholder`
-- Reflection saved to prayer store via `setReflection()`
-- Added `.completion-reflection` styles
+### Task skipped on evidence
 
-**Progress Indicator** (`src/app/[locale]/rosary/page.tsx`)
-- Added progress percentage display in toolbar
-- Added `.prayer-toolbar-progress` styles
-- Progress calculated and displayed as rounded percentage
-
----
-
-## Phase B: Liturgy Live API ⏳ PENDING
-
-Replace provisional embedded liturgy with live backend API.
-
-### Tasks
-
-1. **API Client** (`src/services/liturgyApi.ts`)
-   - Create client for `GET /liturgy/today?timezone=America/Sao_Paulo&locale=pt-BR`
-   - Handle `LIVE`, `CACHED`, `UNAVAILABLE` states
-   - Never serve yesterday as today
-   - Keep `America/Sao_Paulo` day logic
-
-2. **Liturgy Page** (`src/app/[locale]/liturgy/page.tsx`)
-   - Replace `embeddedDailyLiturgy.ts` import with API call
-   - Show freshness indicator (LIVE/CACHED)
-   - Show 503 UNAVAILABLE state with CNBB link
-   - Keep existing UI structure
-
-3. **Sanctuary Page** (`src/app/[locale]/sanctuary/page.tsx`)
-   - Add liturgy promo with live data preview (optional)
-
-4. **Cleanup**
-   - Remove `src/data/embeddedDailyLiturgy.ts` after 7 days green
-   - Remove `embeddedNotice` i18n key
-   - Update privacy copy for liturgy API
-
-5. **Testing**
-   - Provider down with cache → 200 CACHED
-   - Provider down no cache → 503 UNAVAILABLE
-   - Timezone edge cases
+**Dark-mode season accent lift** — measured on the live dark hero (`rgb(16,21,19)`):
+gold eyebrow `#d7b169` = **9.12:1**, lede = **12.48:1**. Far above AA. No change made, per
+the plan's own "do not change colors for taste."
 
 ---
 
-## Phase C: Accounts-First Gate ⏳ PENDING
+## External liturgy and E2E regression fixes (UNCOMMITTED)
 
-Major scope change: require login before sanctuary/rosary.
+The mobile beta notice now anchors its close control at the top-right and remains above the
+fixed tab bar when reached. The E2E placement assertion now matches the intended normal-flow
+position after `<main>`; the Rosary CTA selector is exact.
 
-### Documentation Updates Required
+`pnpm test:e2e` → **54 passed, 11 skipped, 0 failed** across desktop, dark, mobile, narrow,
+and tablet projects.
 
-1. **README.md**
-   - Update beta boundary: accounts required
-   - Remove "account-free" language
-   - Update privacy section
-
-2. **BETA_LAUNCH_CHECKLIST.md**
-   - Update gates for accounts
-   - Add auth verification steps
-
-3. **Privacy Page** (`src/app/[locale]/privacy/page.tsx`)
-   - Add server storage description
-   - Retention policy (completions until delete, idempotency 24h, logs 30d)
-   - Export/delete paths
-
-### New Routes
-
-1. **Login** (`/pt/entrar`)
-   - `POST /auth/login`
-   - Handle 401, 429 errors
-   - Link to password recovery
-
-2. **Register** (`/pt/criar-conta`)
-   - `POST /auth/register`
-   - Handle 409 EMAIL_TAKEN
-   - Migration prompt: keep local history?
-
-3. **Password Recovery** (`/pt/recuperar-senha`)
-   - `POST /auth/forgot-password`
-   - Always-204 response to prevent enumeration
-
-4. **Password Reset** (`/pt/redefinir-senha?token=`)
-   - `POST /auth/reset-password`
-
-5. **Email Verification** (`/pt/verificar-email`)
-   - `POST /auth/verify-email`
-   - 24h expiry state
-
-6. **Account Page** (`/pt/conta`)
-   - `GET /users/me` profile
-   - Stats from server
-   - `GET /spiritual-plans/current`
-   - Export (server), Delete account (LGPD), Logout
-
-7. **Spiritual Plan** (`/pt/plano`)
-   - `POST /spiritual-plans`
-   - `GET /current`, `PATCH status`
-   - Progress bar from completions window
-   - Goals: HABIT_FORMATION / DEEPEN_FAITH / RETURN_TO_CHURCH
-
-### Auth Infrastructure
-
-1. **API Client** (`src/services/authApi.ts`)
-   - Login, register, refresh, logout
-   - Token storage (memory + httpOnly cookie)
-   - No secrets in `NEXT_PUBLIC_*`
-
-2. **Sync Client** (`src/services/syncApi.ts`)
-   - `POST /prayer/checkin` with Idempotency-Key
-   - `GET /prayer/history`, `GET /prayer/stats`
-   - `GET /users/me/state` for reconciliation
-
-3. **Middleware** (`src/middleware.ts`)
-   - Route guard for `/sanctuary`, `/rosary`, `/conta`, `/plano`
-   - Redirect to `/entrar?next=` if unauthenticated
-
-4. **State Migration**
-   - Zustand migration v2 → v3
-   - Add `pendingSync[]`, `lastSyncAt`
-   - Offline-first queue with retry
-
-5. **Sanctuary Updates**
-   - Sync state indicator (sincronizado/pendente/offline)
-   - Server PrayerStats over local
-   - WeekDots from `GET /prayer/history`
-
-6. **Rosary Updates**
-   - Fire `POST /prayer/checkin` on completion
-   - Never block prayer on network
-   - Queue for offline retry
-
-7. **Settings Updates**
-   - Split Local vs Conta sections
-   - Profile/preferences push to server via `PATCH /users/me`
+The daily-liturgy client now calls the external API for dates outside the temporary local
+bridge, validates the São Paulo date and response shape, caches only same-day data, and marks
+fallback data as `CACHED`.
 
 ---
 
-## Verification Commands
+## Verification status
 
-```bash
-pnpm check          # lint + typecheck + unit + build
-pnpm test:e2e       # E2E tests (requires pnpm start)
-```
+| Gate | Result |
+|---|---|
+| `pnpm run lint` | 0 errors, 1 **pre-existing** warning (`scripts/prepare-standalone.mjs` unused `resolve`) |
+| `pnpm run typecheck` | clean |
+| `pnpm run test` | **8 files / 36 tests pass** |
+| `pnpm run check` | passes (includes production build) |
+| `pnpm run test:e2e` | **54 passed, 11 skipped, 0 failed** |
+
+Manual verification already performed (live browser):
+- 320 / 390 / 1280px sanctuary and Rosary: hero first, CTA reachable, 5 beads on one line
+  (`scrollWidth == clientWidth`), no horizontal overflow
+- Dark-mode hero legibility measured numerically (9.12:1 / 12.48:1)
+- Rosary keyboard nav: ArrowRight advances a step
+- Settings: new links navigate (`/pt/about`) and open GitHub in a new tab
 
 ---
 
-## Next Steps
+## Known issues not yet addressed
 
-1. **Phase B first** (lower risk, unblocks backend work)
-2. **Phase C second** (major scope change, requires documentation updates)
+1. **Install sheet overlaps the reminder line on desktop** — measured **380×69px** overlap
+   at 1280px; the sheet covers the right portion of "Este é o horário que você reservou para
+   rezar." Not fixed: it is a dismissible floating toast, so overlap is inherent to that
+   pattern and a fix is a product/design decision, not a clear bug fix.
+2. **Two lint warnings** (above) — pre-existing, untouched.
+3. **`/about` is not linked from Ajustes on desktop footer parity** — it is linked in the
+   Settings aside, which is reachable from the tab bar. Verified working.
 
-Phase C should be behind a feature flag initially to keep beta shippable.
+---
+
+## Open decisions for the owner
+
+1. **Commit `next.config.ts`?** Recommend yes — it is the fix for a machine-wide Turbopack
+   hang. Alternatively delete the stray `/home/otavio/pnpm-workspace.yaml` and
+   `/home/otavio/package.json`.
+2. **Pastoral/editorial review** of the new copy `Rezar os mistérios de hoje` before release
+   (AGENTS.md content-integrity gate; I judged it a neutral navigational label, but the
+   rule is yours to apply).
+3. **Push or open a PR?** Nothing has been pushed; 11 commits are local-only on `dev`.
+4. **Install-sheet overlap** — fix, relocate, or accept?
+
+---
+
+## Reference
+
+- Pass 1 plan: `.hermes/plans/2026-09-23_010321-ux-layout-review-sanctuary-rosary.md`
+- Pass 2 plan: `.hermes/plans/2026-09-23_015500-ux-standards-audit-design-improvements.md`
+- Next.js: pinned via `.mise.toml` (node 24.19.0, pnpm 11.22.0). Use pnpm only.
+- E2E requires the **production** server: `pnpm build && pnpm start`, then `pnpm run
+  test:e2e`. Dev intentionally unregisters the service worker, so service-worker assertions
+  fail under `pnpm dev` by design.
+- `.hermes/plans/*.md` are untracked planning artifacts; `next.config.ts` is modified but
+  intentionally uncommitted.

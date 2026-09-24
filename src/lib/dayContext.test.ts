@@ -73,10 +73,16 @@ describe('season boundaries', () => {
 
 describe('getDayContext', () => {
   it('composes daypart, season and daily mystery from one date', () => {
-    // December 27, 2026: a Sunday within Christmas time.
     const context = getDayContext(new Date(2026, 11, 27, 19, 30));
     expect(context.daypart).toBe('night');
     expect(context.season).toBe('christmas');
     expect(context.mystery).toBe('gloriosos');
+  });
+
+  it('uses the São Paulo calendar day at the UTC boundary', () => {
+    const context = getDayContext(new Date('2026-12-27T02:30:00Z'));
+    expect(context.daypart).toBe('night');
+    expect(context.season).toBe('christmas');
+    expect(context.mystery).toBe('gozosos');
   });
 });

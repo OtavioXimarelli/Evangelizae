@@ -4,7 +4,7 @@
 
 Esta implementação contém somente as leituras de 25 de agosto a 1º de setembro de 2026. A escolha da entrada usa a data civil de `America/Sao_Paulo`, independentemente do fuso do dispositivo.
 
-Não existe fallback para outro dia. Fora desse intervalo, a página declara a indisponibilidade e oferece o acesso à Liturgia Diária da CNBB. O código não consulta uma API ou outro site em tempo de execução.
+A interface consulta a API Java/Spring para a data civil de `America/Sao_Paulo`. A ponte local abaixo permanece apenas como fallback temporário para as datas já revisadas; nunca há fallback para outro dia.
 
 ## Calendário e seleção das leituras
 
@@ -32,10 +32,6 @@ Esta é uma tradução bíblica católica histórica e identificada, escolhida p
 
 Antes da publicação, uma pessoa responsável pela revisão pastoral/editorial deve conferir data, celebração, cor, referências, cortes de versículos e texto exibido em cada um dos oito dias.
 
-Quando a API Java/Spring estiver pronta:
+A integração com a API Java/Spring usa o contrato em `contracts/evangelizae-v1.openapi.yaml` e valida data, formato, fonte e estado de atualização antes de exibir uma resposta.
 
-1. restaurar em `src/services/liturgyService.ts` o cliente validado pelo contrato;
-2. remover `src/data/embeddedDailyLiturgy.ts` e os avisos provisórios da interface;
-3. restaurar a descrição da API em privacidade e offline;
-4. validar data, origem, licença, CORS, cache do mesmo dia e falha sem conteúdo antigo;
-5. executar `pnpm check` e `pnpm test:e2e` contra a build de produção.
+A ponte local é temporária e só poderá ser removida depois de a API ser comprovada em produção por sete dias consecutivos na fronteira de `America/Sao_Paulo`. A remoção exige revisar os testes, remover `src/data/embeddedDailyLiturgy.ts` e atualizar a documentação de privacidade e offline.
