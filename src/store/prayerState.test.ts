@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {getPrayerStats, PrayerCompletion} from './usePrayerStore';
-import {isReminderDue} from './usePreferencesStore';
+import {isReminderDue, initialPreferences, usePreferencesStore} from './usePreferencesStore';
 
 function completion(localDate: string, suffix = '1'): PrayerCompletion {
   return {id: `${localDate}-${suffix}`, localDate, completedAt: `${localDate}T12:00:00.000Z`, timeZone: 'America/Sao_Paulo', mysteryType: 'gloriosos'};
@@ -26,6 +26,13 @@ describe('private prayer statistics', () => {
 });
 
 describe('in-app reminder', () => {
+  it('is opt-in and can be enabled explicitly', () => {
+    expect(initialPreferences.reminderEnabled).toBe(false);
+    usePreferencesStore.setState({...initialPreferences}, false);
+    usePreferencesStore.getState().setProfile({reminderEnabled: true});
+    expect(usePreferencesStore.getState().reminderEnabled).toBe(true);
+  });
+
   it('is due after the selected time and can be dismissed for the date', () => {
     const now = new Date('2026-08-20T12:30:00Z');
     expect(isReminderDue('09:00', null, now)).toBe(true);

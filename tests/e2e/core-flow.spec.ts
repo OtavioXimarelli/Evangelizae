@@ -93,17 +93,19 @@ test('new visitor can personalize the sanctuary and start a resumable Rosary', a
   await page.getByLabel(/como podemos chamar/i).fill('Ana');
   const next = page.getByRole('button', {name: 'Continuar'});
   await next.click();
-  await expect(page.getByLabel(/aviso interno/i)).toBeVisible();
+   await expect(page.getByRole('checkbox', {name: /ativar o aviso interno/i})).toBeVisible();
   await next.click();
   await expect(page.getByRole('group', {name: /tamanho do texto/i})).toBeVisible();
   await page.getByRole('button', {name: /entrar no meu santuário/i}).click();
   await expect(page).toHaveURL(/\/pt\/sanctuary$/);
   await expect(page.getByRole('heading', {name: /ana/i})).toBeVisible();
   await page.getByRole('link', {name: /rezar o primeiro rosário|iniciar o rosário/i}).click();
+  await expect(page.locator('.prayer-step h1')).toBeFocused();
   await expect(page.getByLabel(/passo 1 de 73/i)).toBeVisible();
   await page.getByRole('button', {name: /próxima oração/i}).click();
   await page.reload();
   await expect(page.getByLabel(/passo 2 de 73/i)).toBeVisible();
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
 });
 
 test('mobile product pages use the tab bar without a hamburger', async ({page, isMobile}) => {
@@ -123,7 +125,9 @@ test('onboarding step 2 explains the reminder is an in-app banner, not a push no
   await page.goto('/pt/comecar');
   await page.getByLabel(/como podemos chamar/i).fill('Teste');
   await page.getByRole('button', {name: 'Continuar'}).click();
-  await expect(page.getByText(/aviso dentro do aplicativo, não uma notificação do celular/i)).toBeVisible();
+  await expect(page.getByRole('checkbox', {name: /ativar o aviso interno/i})).not.toBeChecked();
+  await page.getByRole('checkbox', {name: /ativar o aviso interno/i}).check();
+  await expect(page.getByLabel(/horário do seu aviso interno/i)).toBeEnabled();
 });
 
 test('main content fades in once, and respects reduced motion', async ({page, isMobile}) => {
@@ -145,6 +149,9 @@ test('legacy and English routes preserve a clear destination', async ({page}) =>
   await expect(page).toHaveURL(/\/pt\/settings$/);
   await page.goto('/en/about');
   await expect(page).toHaveURL(/\/pt\/about$/);
+  await page.goto('/pt/settings');
+  await page.getByRole('link', {name: /página inicial pública/i}).click();
+  await expect(page).toHaveURL(/\/pt\/inicio\?via=selo$/);
 });
 
 test('settings erase every Evangelizae browser record and return to a clean start', async ({page, context}) => {

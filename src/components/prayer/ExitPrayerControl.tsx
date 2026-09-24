@@ -4,10 +4,10 @@ import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {ArrowLeft} from 'lucide-react';
 import {useTranslations} from 'next-intl';
-import {useRouter} from '@/i18n/routing';
+import {Link, useRouter} from '@/i18n/routing';
 import {usePrayerStore} from '@/store/usePrayerStore';
 
-export function ExitPrayerControl() {
+export function ExitPrayerControl({hasActiveSession}: {hasActiveSession: boolean}) {
   const t = useTranslations('Rosary');
   const tNav = useTranslations('Navigation');
   const router = useRouter();
@@ -51,6 +51,10 @@ export function ExitPrayerControl() {
       trigger?.focus();
     };
   }, [open]);
+
+  if (!hasActiveSession) {
+    return <Link href="/sanctuary" className="focus-exit"><ArrowLeft size={16} aria-hidden="true" /><span>{tNav('backToSanctuary')}</span></Link>;
+  }
 
   return (
     <>

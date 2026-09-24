@@ -52,17 +52,20 @@ function isReadingKind(value: unknown): value is ReadingKind {
 
 function isLiturgyReading(value: unknown): value is LiturgyReadingDto {
   if (!isRecord(value) || typeof value.title !== 'string' || typeof value.text !== 'string') return false;
-  return value.reference === undefined || typeof value.reference === 'string';
+  return (value.reference === undefined || typeof value.reference === 'string') && (value.refrain === undefined || typeof value.refrain === 'string');
 }
 
 function isLiturgyGroup(value: unknown): value is LiturgyGroupDto {
-  return isRecord(value) && isReadingKind(value.kind) && Array.isArray(value.items) && value.items.every(isLiturgyReading);
+  return isRecord(value) && isReadingKind(value.kind) && Array.isArray(value.items) && value.items.length > 0 && value.items.every(isLiturgyReading);
 }
 
 function isDailyLiturgy(value: unknown, expectedDate: string): value is DailyLiturgyDto {
-  if (!isRecord(value) || value.date !== expectedDate || typeof value.title !== 'string' || !isLiturgicalColor(value.color)) return false;
-  if (!isRecord(value.prayers) || !Array.isArray(value.groups) || !value.groups.every(isLiturgyGroup)) return false;
-  if (!isRecord(value.source) || typeof value.source.provider !== 'string' || typeof value.source.fetchedAt !== 'string') return false;
+  if (!isRecord(value) || value.date !== expectedDate || typeof value.title !== 'string' || !value.title.trim() || !isLiturgicalColor(value.color)) return false;
+  if (!isRecord(value.prayers) || !Array.isArray(value.groups) || value.groups.length === 0 || !value.groups.every(isLiturgyGroup)) return false;
+  const prayerKeys = new Set(['collect', 'offerings', 'communion']);
+  if (Object.keys(value.prayers).some((key) => !prayerKeys.has(key)) || !Object.values(value.prayers).every((prayer) => prayer === undefined || typeof prayer === 'string')) return false;
+  if (!isRecord(value.source) || typeof value.source.provider !== 'string' || !value.source.provider.trim() || typeof value.source.fetchedAt !== 'string') return false;
+  if (Number.isNaN(Date.parse(value.source.fetchedAt))) return false;
   return value.source.freshness === 'LIVE' || value.source.freshness === 'CACHED';
 }
 
@@ -98,12 +101,25 @@ async function fetchDailyLiturgy(date: string): Promise<DailyLiturgyDto> {
   const url = new URL(`${getApiBaseUrl()}${LITURGY_PATH}`);
   url.searchParams.set('timezone', TIME_ZONE);
   url.searchParams.set('locale', LOCALE);
-  const response = await fetch(url.toString(), {cache: 'no-store'});
-  if (!response.ok) throw new Error(`LITURGY_API_${response.status}`);
-  const value: unknown = await response.json();
-  if (!isDailyLiturgy(value, date)) throw new Error('LITURGY_RESPONSE_INVALID');
-  writeCache(value);
-  return value;
+  const controller = new AbortController();
+  let timedOut = false;
+  const timeoutId = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, 12_000);
+  try {
+    const response = await fetch(url.toString(), {cache: 'no-store', signal: controller.signal});
+    if (!response.ok) throw new Error(`LITURGY_API_${response.status}`);
+    const value: unknown = await response.json();
+    if (!isDailyLiturgy(value, date)) throw new Error('LITURGY_RESPONSE_INVALID');
+    writeCache(value);
+    return value;
+  } catch (error) {
+    if (timedOut) throw new Error('LITURGY_API_TIMEOUT');
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 function asCached(liturgy: DailyLiturgyDto): DailyLiturgyDto {

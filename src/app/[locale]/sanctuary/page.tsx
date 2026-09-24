@@ -41,7 +41,7 @@ export default function SanctuaryPage() {
   const dailyMystery = today.mystery;
   const stats = getPrayerStats(prayer.completions);
   const activeSession = Boolean(prayer.sessionStartedAt) && !prayer.isCompleted && prayer.furthestStepIndex > 0;
-  const reminderDue = isReminderDue(preferences.reminderTime, preferences.reminderDismissedDate) && !stats.completedToday;
+  const reminderDue = preferences.reminderEnabled && isReminderDue(preferences.reminderTime, preferences.reminderDismissedDate) && !stats.completedToday;
   const hasHistory = prayer.completions.length > 0;
 
   const calendarDate = getCalendarDateInTimeZone();
@@ -123,7 +123,9 @@ export default function SanctuaryPage() {
             <>
               <Link href="/rosary" className="button">{t('resumeAction')} <ArrowRight size={17} /></Link>
               {prayer.activeMysteryType !== dailyMystery && (
-                <button type="button" className="button button-secondary" onClick={() => prayer.initRosary(dailyMystery)}>{t('offerTodayMystery')}</button>
+                <button type="button" className="button button-secondary" onClick={() => {
+                 if (window.confirm(t('replaceSessionConfirm'))) prayer.initRosary(dailyMystery);
+               }}>{t('offerTodayMystery')}</button>
               )}
             </>
           ) : (

@@ -99,12 +99,36 @@ describe('daily liturgy client', () => {
     expect(result.date).toBe('2026-09-02');
   });
 
+  it.each([
+    ['refrain', (value: ReturnType<typeof apiLiturgy>) => ({...value, groups: [{...value.groups[0], items: [{...value.groups[0].items[0], refrain: 42}]}]})],
+    ['prayers', (value: ReturnType<typeof apiLiturgy>) => ({...value, prayers: {collect: 42}})],
+    ['fetchedAt', (value: ReturnType<typeof apiLiturgy>) => ({...value, source: {...value.source, fetchedAt: 'not-a-date'}})],
+  ])('rejects a response with invalid %s', async (_field, mutate) => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: true, status: 200, json: async () => mutate(apiLiturgy('2026-09-02'))}));
+
+    await expect(getDailyLiturgy()).rejects.toThrow('LITURGY_RESPONSE_INVALID');
+  });
+
   it('rejects a response for another date', async () => {
     vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
     vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: true, status: 200, json: async () => apiLiturgy('2026-09-01')}));
 
     await expect(getDailyLiturgy()).rejects.toThrow('LITURGY_RESPONSE_INVALID');
+  });
+
+  it('rejects an API request that exceeds the timeout', async () => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    vi.stubGlobal('fetch', vi.fn((_url: string, options: {signal?: AbortSignal}) => new Promise((_, reject) => {
+      options.signal?.addEventListener('abort', () => reject(new Error('aborted')));
+    })));
+    const request = getDailyLiturgy();
+    const rejection = expect(request).rejects.toThrow('LITURGY_API_TIMEOUT');
+    await vi.advanceTimersByTimeAsync(12_000);
+    await rejection;
   });
 
   it('rejects an API response when no same-day cache exists', async () => {

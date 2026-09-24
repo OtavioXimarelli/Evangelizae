@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {ArrowLeft, BookOpen, CircleDot, Home, Menu, Settings, Sunrise, X, Cross} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {BrandMark} from '@/components/brand/BrandMark';
@@ -8,6 +8,7 @@ import {Link, usePathname} from '@/i18n/routing';
 import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
+import {usePrayerStore} from '@/store/usePrayerStore';
 import {PwaInstallPrompt} from '@/components/pwa/PwaInstallPrompt';
 import {BetaNotice} from '@/components/common/BetaNotice';
 import {ExitPrayerControl} from '@/components/prayer/ExitPrayerControl';
@@ -21,8 +22,11 @@ export function SiteShell({children}: {children: React.ReactNode}) {
   const t = useTranslations('Navigation');
   const mounted = useIsMounted();
   const theme = usePreferencesStore((state) => state.theme);
+  const hasActiveSession = usePrayerStore((state) => Boolean(state.sessionStartedAt) && !state.isCompleted);
   const {season} = useDayContext();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLElement>(null);
   const isFocus = pathname.startsWith('/rosary');
   const isOnboarding = pathname.startsWith('/comecar');
   const isOffline = pathname.startsWith('/offline');
@@ -33,8 +37,14 @@ export function SiteShell({children}: {children: React.ReactNode}) {
 
   useEffect(() => {
     if (!mounted) return;
-    const dark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.classList.toggle('dark', dark);
+    const query = window.matchMedia('(prefers-color-scheme: dark)');
+    const sync = () => {
+      const dark = theme === 'dark' || (theme === 'system' && query.matches);
+      document.documentElement.classList.toggle('dark', dark);
+    };
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
   }, [mounted, theme]);
 
   useEffect(() => {
@@ -49,19 +59,36 @@ export function SiteShell({children}: {children: React.ReactNode}) {
     };
   }, [isFocus]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const menu = mobileMenuRef.current;
+    menu?.querySelector<HTMLElement>('a, button')?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [menuOpen]);
+
   if (isFocus) {
     return (
       <div className="focus-shell">
+        <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
         <header className="focus-header">
           <BrandMark />
-          <ExitPrayerControl />
+          <ExitPrayerControl hasActiveSession={hasActiveSession} />
         </header>
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
       </div>
     );
   }
 
-  const isActive = (href: string) => (href === '/inicio' ? pathname === '/inicio' : pathname.startsWith(href));
+  const isActive = (href: string) => {
+    const navPath = href.split('?')[0];
+    return navPath === '/inicio' ? pathname === '/inicio' : pathname.startsWith(navPath);
+  };
 
   const nav = isProductShell
     ? [
@@ -111,13 +138,13 @@ export function SiteShell({children}: {children: React.ReactNode}) {
               </nav>
             )}
             <div className="header-actions">
-              <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={t('menu')}>
+              <button ref={menuButtonRef} className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? t('closeMenu') : t('menu')}>
                 {menuOpen ? <X /> : <Menu />}
               </button>
             </div>
           </div>
           {menuOpen && (
-            <nav className="mobile-menu" aria-label={t('drawerLabel')}>
+            <nav ref={mobileMenuRef} id="mobile-navigation" className="mobile-menu" aria-label={t('drawerLabel')}>
               {publicNav.map(({href, label, icon: Icon}) => (
                 <Link key={href} href={href} aria-current={isActive(href) ? 'page' : undefined} onClick={() => { setProductOrigin(isProductShell); setMenuOpen(false); }}>
                   <Icon size={17} aria-hidden="true" />
@@ -137,7 +164,7 @@ export function SiteShell({children}: {children: React.ReactNode}) {
           )}
         </header>
       )}
-      <main id="main-content" className={isOnboarding ? 'onboarding-main' : 'site-main'}>{children}</main>
+      <main id="main-content" tabIndex={-1} className={isOnboarding ? 'onboarding-main' : 'site-main'}>{children}</main>
       {isProductShell && !isOffline && <BetaNotice />}
       {!isOnboarding && !isProductShell && (
         <footer className="site-footer">

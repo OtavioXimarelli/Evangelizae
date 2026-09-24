@@ -1,8 +1,8 @@
 # Evangelizae Development Checkpoint
 
 **Date:** 2026-09-23
-**Status:** Two UX passes complete (committed). External daily-liturgy API integration and E2E regression fixes are implemented and verified; changes remain uncommitted.
-**Branch:** `dev` — 11 commits ahead of `a7c41d9`, **nothing pushed**.
+**Status:** Two UX passes complete (committed). External daily-liturgy API integration, E2E regression fixes, and beta UX hardening are implemented and verified; changes remain uncommitted.
+**Branch:** `dev` at `d8369b9` pushed to `origin/dev`; current UX hardening is uncommitted.
 
 ---
 
@@ -79,6 +79,13 @@ The daily-liturgy client now calls the external API for dates outside the tempor
 bridge, validates the São Paulo date and response shape, caches only same-day data, and marks
 fallback data as `CACHED`.
 
+## Beta UX hardening (UNCOMMITTED)
+
+- Rosary sessions now confirm before replacing an active non-today session, focus the active prayer/completion heading, expose progress as a `progressbar`, ignore repeated or modified arrow keys, and apply the reader-size preference.
+- The in-app reminder is opt-in, settings and onboarding explain its scope, and reflections are named in privacy/export/deletion copy.
+- Settings export/delete now report outcomes, the public-home link bypasses onboarding redirects, and the mobile menu has focus/Escape/`aria-controls` behavior.
+- Liturgy responses validate every rendered field and timestamp, use a 12-second request timeout, display São Paulo update time, and preserve same-day cached fallback behavior.
+
 ---
 
 ## Verification status
@@ -87,7 +94,7 @@ fallback data as `CACHED`.
 |---|---|
 | `pnpm run lint` | 0 errors, 1 **pre-existing** warning (`scripts/prepare-standalone.mjs` unused `resolve`) |
 | `pnpm run typecheck` | clean |
-| `pnpm run test` | **8 files / 36 tests pass** |
+| `pnpm run test` | **8 files / 41 tests pass** |
 | `pnpm run check` | passes (includes production build) |
 | `pnpm run test:e2e` | **54 passed, 11 skipped, 0 failed** |
 
@@ -106,7 +113,7 @@ Manual verification already performed (live browser):
    at 1280px; the sheet covers the right portion of "Este é o horário que você reservou para
    rezar." Not fixed: it is a dismissible floating toast, so overlap is inherent to that
    pattern and a fix is a product/design decision, not a clear bug fix.
-2. **Two lint warnings** (above) — pre-existing, untouched.
+2. **One lint warning** (above) — pre-existing, untouched.
 3. **`/about` is not linked from Ajustes on desktop footer parity** — it is linked in the
    Settings aside, which is reachable from the tab bar. Verified working.
 
@@ -120,7 +127,7 @@ Manual verification already performed (live browser):
 2. **Pastoral/editorial review** of the new copy `Rezar os mistérios de hoje` before release
    (AGENTS.md content-integrity gate; I judged it a neutral navigational label, but the
    rule is yours to apply).
-3. **Push or open a PR?** Nothing has been pushed; 11 commits are local-only on `dev`.
+3. **Push or open a PR?** Current UX hardening remains uncommitted; `d8369b9` is already pushed to `origin/dev`.
 4. **Install-sheet overlap** — fix, relocate, or accept?
 
 ---

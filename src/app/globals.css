@@ -883,6 +883,25 @@ blockquote {
   font-weight: 750;
 }
 
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: auto;
+  min-height: auto;
+  accent-color: var(--oxblood);
+}
+
+.field-hint {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.84rem;
+}
+
 .field input,
 .field select,
 .field textarea {
@@ -1055,6 +1074,7 @@ blockquote {
 }
 
 .reading-group {
+  scroll-margin-top: 7rem;
   padding-block: 2rem 3rem;
   border-bottom: 1px solid var(--rule);
 }

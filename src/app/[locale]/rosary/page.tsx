@@ -10,6 +10,7 @@ import {SacredOrnament} from '@/components/brand/SacredOrnament';
 import {MysteryGate} from '@/components/rosary/MysteryGate';
 import {buildRosarySequence, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
 import {usePrayerStore} from '@/store/usePrayerStore';
+import {usePreferencesStore} from '@/store/usePreferencesStore';
 
 const mysteryTranslation = {gozosos: 'joyful', luminosos: 'luminous', dolorosos: 'sorrowful', gloriosos: 'glorious'} as const;
 
@@ -18,6 +19,7 @@ export default function RosaryPage() {
   const locale = useLocale();
   const mounted = useIsMounted();
   const prayer = usePrayerStore();
+  const readerScale = usePreferencesStore((state) => state.readerScale);
   const today = useDayContext();
   const [showLatin, setShowLatin] = useState(false);
   const [showIntentions, setShowIntentions] = useState(false);
@@ -25,6 +27,8 @@ export default function RosaryPage() {
   const [gateAfterCompletion, setGateAfterCompletion] = useState(false);
   const intentionsRef = useRef<HTMLDivElement>(null);
   const intentionsTriggerRef = useRef<HTMLButtonElement>(null);
+  const prayerHeadingRef = useRef<HTMLHeadingElement>(null);
+  const completionHeadingRef = useRef<HTMLHeadingElement>(null);
   const steps = useMemo(() => buildRosarySequence(prayer.activeMysteryType), [prayer.activeMysteryType]);
   const currentStep = steps[Math.min(prayer.currentStepIndex, steps.length - 1)];
 
@@ -46,23 +50,26 @@ export default function RosaryPage() {
     if (!mounted || prayer.isCompleted || !prayer.sessionStartedAt) return;
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
-      if (event.key === 'ArrowRight') next();
-      if (event.key === 'ArrowLeft' && prayer.currentStepIndex > 0) prayer.previousStep();
+      if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (target?.closest('button, a, input, textarea, select, [contenteditable="true"], [role="dialog"]')) return;
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        next();
+      }
+      if (event.key === 'ArrowLeft' && prayer.currentStepIndex > 0) {
+        event.preventDefault();
+        prayer.previousStep();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [mounted, prayer, next]);
 
   useEffect(() => {
-    if (!prayer.sessionStartedAt || prayer.isCompleted) return;
-    const onBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-    window.addEventListener('beforeunload', onBeforeUnload);
-    return () => window.removeEventListener('beforeunload', onBeforeUnload);
-  }, [prayer.sessionStartedAt, prayer.isCompleted]);
+    if (!mounted) return;
+    if (prayer.isCompleted) completionHeadingRef.current?.focus();
+    else if (prayer.sessionStartedAt) prayerHeadingRef.current?.focus();
+  }, [mounted, prayer.isCompleted, prayer.sessionStartedAt]);
 
   useEffect(() => {
     if (!showIntentions || !intentionsRef.current) return;
@@ -105,7 +112,7 @@ export default function RosaryPage() {
         <SacredOrnament className="completion-ornament" />
         <div className="hero-copy">
           <span className="eyebrow">{t('completedEyebrow')}</span>
-          <h1 className="page-title">{t('completedTitle')}</h1>
+           <h1 ref={completionHeadingRef} tabIndex={-1} className="page-title">{t('completedTitle')}</h1>
           <p className="lede">{t('completedBody')}</p>
           <div className="completion-reflection">
             <label htmlFor="reflection-input" className="completion-reflection-label">
@@ -148,9 +155,9 @@ export default function RosaryPage() {
   const progressPercent = Math.round(((prayer.currentStepIndex + 1) / steps.length) * 100);
 
   return (
-    <div className="prayer-layout">
+    <div className={`prayer-layout prayer-reader-${readerScale}`}>
       <article className="prayer-main">
-        <div className="prayer-progress" aria-label={t('progress', {current: prayer.currentStepIndex + 1, total: steps.length})}><span style={{width: `${progressPercent}%`}} /></div>
+        <div className="prayer-progress" role="progressbar" aria-label={t('progress', {current: prayer.currentStepIndex + 1, total: steps.length})} aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={prayer.currentStepIndex + 1}><span style={{width: `${progressPercent}%`}} /></div>
         <div className="prayer-toolbar">
           <span className="prayer-toolbar-context">
             {isDailyMystery && <span className="daily-mystery-chip">{t('todayBadge')}</span>}
@@ -185,13 +192,14 @@ export default function RosaryPage() {
         {showIntentions && (
           <section ref={intentionsRef} id="intentions-panel" className="intentions-panel" aria-label={t('intentionsTitle')}>
             <p className="intentions-hint">{t('intentionsHint')}</p>
-            <form onSubmit={addIntention} className="field intentions-form"><input aria-label={t('intentionPlaceholder')} maxLength={140} value={newIntention} onChange={(event) => setNewIntention(event.target.value)} placeholder={t('intentionPlaceholder')} /><button type="submit" className="button button-small" disabled={!newIntention.trim() || prayer.intentions.length >= 5}>{t('addIntention')}</button></form>
-            {prayer.intentions.map((intention, index) => <div className="quiet-row" key={`${intention}-${index}`}><span>{intention}</span><button type="button" className="button button-quiet" onClick={() => prayer.removeIntention(index)} aria-label={t('removeIntention')}>×</button></div>)}
+             <form onSubmit={addIntention} className="field intentions-form"><input aria-label={t('intentionPlaceholder')} maxLength={140} value={newIntention} onChange={(event) => setNewIntention(event.target.value)} placeholder={t('intentionPlaceholder')} /><button type="submit" className="button button-small" disabled={!newIntention.trim() || prayer.intentions.length >= 5}>{t('addIntention')}</button></form>
+             {prayer.intentions.length >= 5 && <p className="intentions-hint">{t('intentionLimit')}</p>}
+             {prayer.intentions.map((intention, index) => <div className="quiet-row" key={`${intention}-${index}`}><span>{intention}</span><button type="button" className="button button-quiet" onClick={() => prayer.removeIntention(index)} aria-label={t('removeIntention', {index: index + 1})}>×</button></div>)}
           </section>
         )}
 
         <section className="prayer-step" aria-live="polite" aria-atomic="true">
-          <h1>{displayTitle}</h1>
+          <h1 ref={prayerHeadingRef} tabIndex={-1}>{displayTitle}</h1>
           {fruit && <p className="prayer-fruit"><strong>{t('fruit')}</strong> · {fruit}</p>}
           <div className="prayer-text">{body}</div>
           {showLatin && currentStep.latinText && <div className="latin-text">{currentStep.latinText}</div>}

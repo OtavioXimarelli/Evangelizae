@@ -12,12 +12,13 @@ export interface PreferencesState {
   firstName: string;
   prayerWindow: PrayerWindow;
   reminderTime: string;
+  reminderEnabled: boolean;
   theme: ThemePreference;
   readerScale: ReaderScale;
   onboardedAt: string | null;
   reminderDismissedDate: string | null;
   betaNoticeDismissed: boolean;
-  setProfile: (profile: Partial<Pick<PreferencesState, 'firstName' | 'prayerWindow' | 'reminderTime' | 'theme' | 'readerScale'>>) => void;
+  setProfile: (profile: Partial<Pick<PreferencesState, 'firstName' | 'prayerWindow' | 'reminderTime' | 'reminderEnabled' | 'theme' | 'readerScale'>>) => void;
   completeOnboarding: () => void;
   dismissReminderToday: () => void;
   dismissBetaNotice: () => void;
@@ -28,6 +29,7 @@ export const initialPreferences = {
   firstName: '',
   prayerWindow: 'morning' as PrayerWindow,
   reminderTime: '07:00',
+  reminderEnabled: false,
   theme: 'system' as ThemePreference,
   readerScale: 'large' as ReaderScale,
   onboardedAt: null as string | null,
@@ -60,9 +62,10 @@ export const usePreferencesStore = create<PreferencesState>()(
     }),
     {
       name: 'evangelizae-preferences',
-      version: 2,
+      version: 3,
       migrate: (persisted, version) => ({
         ...(persisted as Record<string, unknown>),
+        reminderEnabled: version >= 3 ? Boolean((persisted as Record<string, unknown>).reminderEnabled) : false,
         betaNoticeDismissed: version >= 2 ? Boolean((persisted as Record<string, unknown>).betaNoticeDismissed) : false,
       }),
     },

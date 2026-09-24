@@ -17,6 +17,10 @@ const freshnessKeys = {
   EMBEDDED: 'embedded',
 } as const;
 
+function formatSourceTime(date: string): string {
+  return new Intl.DateTimeFormat('pt-BR', {timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit'}).format(new Date(date));
+}
+
 function formatLiturgyDate(date: string): string {
   return new Intl.DateTimeFormat('pt-BR', {day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(`${date}T12:00:00`));
 }
@@ -60,8 +64,9 @@ export default function LiturgyPage() {
             <p className="liturgy-source">{t('source', {
               provider: liturgy.source.provider,
               date: formatLiturgyDate(liturgy.date),
-              time: new Intl.DateTimeFormat('pt-BR', {hour: '2-digit', minute: '2-digit'}).format(new Date(liturgy.source.fetchedAt)),
-              freshness: t(`freshness.${freshnessKeys[liturgy.source.freshness]}`),
+               time: formatSourceTime(liturgy.source.fetchedAt),
+               timeZone: 'São Paulo',
+               freshness: t(`freshness.${freshnessKeys[liturgy.source.freshness]}`),
             })}</p>
           </article>
         </div>

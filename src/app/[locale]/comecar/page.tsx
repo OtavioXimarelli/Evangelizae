@@ -1,6 +1,6 @@
 'use client';
 
-import {FormEvent, useState} from 'react';
+import {FormEvent, useEffect, useRef, useState} from 'react';
 import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/routing';
 import {BrandMark} from '@/components/brand/BrandMark';
@@ -22,6 +22,11 @@ export default function OnboardingPage() {
   const today = useDayContext();
   const [step, setStep] = useState(1);
   const [redoing, setRedoing] = useState(false);
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (mounted && !preferences.onboardedAt) stepHeadingRef.current?.focus();
+  }, [mounted, preferences.onboardedAt, step]);
 
   const finish = (event?: FormEvent) => {
     event?.preventDefault();
@@ -42,7 +47,7 @@ export default function OnboardingPage() {
           <SacredOrnament className="sacred-ornament" />
           <div>
             <span className="eyebrow">{tDay(`greetings.${today.daypart}`)}.</span>
-            <h2>{t('title')}</h2>
+            <p className="onboarding-identity-title">{t('title')}</p>
             <p>{t('privacy')}</p>
           </div>
         </aside>
@@ -68,7 +73,7 @@ export default function OnboardingPage() {
         <SacredOrnament className="sacred-ornament" />
         <div>
           <span className="eyebrow">{tDay(`greetings.${today.daypart}`)}.</span>
-          <h2>{t('title')}</h2>
+          <p className="onboarding-identity-title">{t('title')}</p>
           <p>{t('privacy')}</p>
         </div>
       </aside>
@@ -80,7 +85,7 @@ export default function OnboardingPage() {
               <span key={index} className={`step-progress-dot${index + 1 <= step ? ' is-active' : ''}`} />
             ))}
           </div>
-          <h1 className="section-title">{t(`step${step}Title`)}</h1>
+          <h1 ref={stepHeadingRef} tabIndex={-1} className="section-title">{t(`step${step}Title`)}</h1>
         </header>
         <form className="form-stack" onSubmit={finish}>
           {step === 1 && (
@@ -99,7 +104,7 @@ export default function OnboardingPage() {
                   ))}
                 </div>
               </fieldset>
-              <div className="field"><label htmlFor="reminder-time">{t('timeLabel')}</label><input id="reminder-time" type="time" value={preferences.reminderTime} onChange={(event) => preferences.setProfile({reminderTime: event.target.value})} /><p style={{color: 'var(--muted-ink)', fontSize: '.84rem', margin: 0}}>{t('timeHint')}</p></div>
+              <div className="field"><label className="checkbox-label" htmlFor="reminder-enabled"><input id="reminder-enabled" type="checkbox" checked={preferences.reminderEnabled} onChange={(event) => preferences.setProfile({reminderEnabled: event.target.checked})} />{t('reminderEnabled')}</label><label htmlFor="reminder-time">{t('timeLabel')}</label><input id="reminder-time" type="time" value={preferences.reminderTime} disabled={!preferences.reminderEnabled} onChange={(event) => preferences.setProfile({reminderTime: event.target.value})} /><p style={{color: 'var(--muted-ink)', fontSize: '.84rem', margin: 0}}>{t('timeHint')}</p></div>
             </>
           )}
           {step === 3 && (
