@@ -79,6 +79,13 @@ export function SiteShell({children}: {children: React.ReactNode}) {
     {href: '/about', label: t('about'), icon: Cross},
   ];
 
+  const utilityNav: Array<{href: string; label: string; external?: boolean}> = [
+    {href: '/privacy', label: t('privacy')},
+    {href: '/about', label: t('about')},
+    {href: BETA_FEEDBACK_URL, label: t('feedback'), external: true},
+    {href: 'https://github.com/OtavioXimarelli/Evangelizae', label: t('source'), external: true},
+  ];
+
   return (
     <div className="site-shell">
       <a href="#main-content" className="skip-link">
@@ -130,6 +137,13 @@ export function SiteShell({children}: {children: React.ReactNode}) {
                   <span>{t('begin')}</span>
                 </Link>
               )}
+              <div className="mobile-menu-utility">
+                {utilityNav.map(({href, label, external}) => external ? (
+                  <a key={href} href={href} target="_blank" rel="noreferrer">{label}</a>
+                ) : (
+                  <Link key={href} href={href} onClick={() => { setProductOrigin(false); setMenuOpen(false); }}>{label}</Link>
+                ))}
+              </div>
               <div className="mobile-menu-footer">
                 <ThemeToggle />
               </div>

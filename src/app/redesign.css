@@ -2159,6 +2159,14 @@ body {
   color: var(--season-accent);
 }
 
+.mobile-menu-utility {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
 .bottom-nav {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
