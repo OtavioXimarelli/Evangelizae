@@ -130,7 +130,6 @@ export async function getDailyLiturgy(options: {force?: boolean} = {}): Promise<
   if (typeof window === 'undefined') throw new Error('LITURGY_CLIENT_ONLY');
   const date = getDateKeyInTimeZone();
   const embedded = getEmbeddedDailyLiturgy(date);
-  if (embedded) return embedded;
   const cached = options.force ? null : readCache(date);
   if (cached) return asCached(cached);
   try {
@@ -138,6 +137,7 @@ export async function getDailyLiturgy(options: {force?: boolean} = {}): Promise<
   } catch (error) {
     const fallback = readCache(date);
     if (fallback) return asCached(fallback);
+    if (embedded) return embedded;
     throw error;
   }
 }

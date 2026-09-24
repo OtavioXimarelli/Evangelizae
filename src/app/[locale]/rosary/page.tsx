@@ -69,7 +69,7 @@ export default function RosaryPage() {
     if (!mounted) return;
     if (prayer.isCompleted) completionHeadingRef.current?.focus();
     else if (prayer.sessionStartedAt) prayerHeadingRef.current?.focus();
-  }, [mounted, prayer.isCompleted, prayer.sessionStartedAt]);
+  }, [mounted, prayer.isCompleted, prayer.sessionStartedAt, prayer.currentStepIndex]);
 
   useEffect(() => {
     if (!showIntentions || !intentionsRef.current) return;

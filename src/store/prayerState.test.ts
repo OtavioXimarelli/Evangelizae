@@ -8,20 +8,20 @@ function completion(localDate: string, suffix = '1'): PrayerCompletion {
 
 describe('private prayer statistics', () => {
   it('counts every complete Rosary but only one streak day per date', () => {
-    const stats = getPrayerStats([completion('2026-08-20'), completion('2026-08-20', '2')], new Date(2026, 7, 20, 18));
+    const stats = getPrayerStats([completion('2026-08-20'), completion('2026-08-20', '2')], new Date('2026-08-20T21:00:00Z'));
     expect(stats.totalRosariesPrayed).toBe(2);
     expect(stats.consecutiveDays).toBe(1);
     expect(stats.completedToday).toBe(true);
   });
 
   it('derives a consecutive run from unique calendar dates', () => {
-    const stats = getPrayerStats([completion('2026-08-18'), completion('2026-08-19'), completion('2026-08-20')], new Date(2026, 7, 20, 18));
+    const stats = getPrayerStats([completion('2026-08-18'), completion('2026-08-19'), completion('2026-08-20')], new Date('2026-08-20T21:00:00Z'));
     expect(stats.consecutiveDays).toBe(3);
   });
 
   it('keeps yesterday active but resets an older streak', () => {
-    expect(getPrayerStats([completion('2026-08-19')], new Date(2026, 7, 20, 8)).consecutiveDays).toBe(1);
-    expect(getPrayerStats([completion('2026-08-18')], new Date(2026, 7, 20, 8)).consecutiveDays).toBe(0);
+    expect(getPrayerStats([completion('2026-08-19')], new Date('2026-08-20T11:00:00Z')).consecutiveDays).toBe(1);
+    expect(getPrayerStats([completion('2026-08-18')], new Date('2026-08-20T11:00:00Z')).consecutiveDays).toBe(0);
   });
 });
 

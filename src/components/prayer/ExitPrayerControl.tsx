@@ -73,8 +73,8 @@ export function ExitPrayerControl({hasActiveSession}: {hasActiveSession: boolean
             aria-labelledby="exit-dialog-title"
             onClick={(event) => event.stopPropagation()}
           >
-            <h2 id="exit-dialog-title" className="beta-title">{t('exitTitle')}</h2>
-            <p className="beta-body">{t('exitBody')}</p>
+            <h2 id="exit-dialog-title" className="exit-dialog-title">{t('exitTitle')}</h2>
+            <p className="exit-dialog-body">{t('exitBody')}</p>
             <div className="exit-actions">
               <button type="button" ref={confirmRef} className="button" onClick={() => { setOpen(false); router.push('/sanctuary'); }}>{t('exitSave')}</button>
               <button type="button" className="button button-secondary" onClick={() => { discardSession(); router.push('/sanctuary'); }}>{t('exitDiscard')}</button>

@@ -25,7 +25,7 @@ describe('daily liturgy client', () => {
     vi.clearAllMocks();
   });
 
-  it('returns the embedded readings without making a network request', async () => {
+  it('returns the embedded readings when the API URL is unavailable', async () => {
     vi.setSystemTime(new Date('2026-08-26T15:00:00Z'));
     const fetchSpy = vi.fn();
     vi.stubGlobal('fetch', fetchSpy);
@@ -37,6 +37,19 @@ describe('daily liturgy client', () => {
     expect(result.source.provider).toContain('Vulgata');
     expect(result.source.provider).not.toContain('Bíblia Livre');
     expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('prefers API data over embedded content during the bridge', async () => {
+    vi.setSystemTime(new Date('2026-08-26T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    const fetchSpy = vi.fn().mockResolvedValue({ok: true, status: 200, json: async () => apiLiturgy('2026-08-26')});
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const result = await getDailyLiturgy();
+
+    expect(result.title).toBe('Liturgia de teste');
+    expect(result.source.freshness).toBe('LIVE');
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
   it.each([

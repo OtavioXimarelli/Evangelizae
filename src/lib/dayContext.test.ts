@@ -73,7 +73,7 @@ describe('season boundaries', () => {
 
 describe('getDayContext', () => {
   it('composes daypart, season and daily mystery from one date', () => {
-    const context = getDayContext(new Date(2026, 11, 27, 19, 30));
+    const context = getDayContext(new Date('2026-12-27T22:30:00Z'));
     expect(context.daypart).toBe('night');
     expect(context.season).toBe('christmas');
     expect(context.mystery).toBe('gloriosos');

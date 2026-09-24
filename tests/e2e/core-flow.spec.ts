@@ -22,7 +22,7 @@ test('direct visits render every core page instead of an empty hydration shell',
   await expect(page.getByRole('heading', {level: 1})).toBeVisible();
 });
 
-test('temporary liturgy uses the reviewed local entry and never calls the API', async ({page}) => {
+test('temporary liturgy attempts the API and falls back to the reviewed local entry', async ({page}) => {
   const apiRequests: string[] = [];
   page.on('request', (request) => {
     if (request.url().includes('/liturgy/today')) apiRequests.push(request.url());
@@ -33,7 +33,7 @@ test('temporary liturgy uses the reviewed local entry and never calls the API', 
   await expect(page.getByText('2Ts 3,6-10.16-18')).toBeVisible();
   await expect(page.getByText(/edição provisória local/i)).toBeVisible();
   await expect(page.getByText(/^Fonte:.*Pe. António Pereira de Figueiredo/i)).toBeVisible();
-  expect(apiRequests).toEqual([]);
+  expect(apiRequests).toHaveLength(1);
 });
 
 test('temporary liturgy fails closed after its declared end date', async ({page}) => {
@@ -103,9 +103,35 @@ test('new visitor can personalize the sanctuary and start a resumable Rosary', a
   await expect(page.locator('.prayer-step h1')).toBeFocused();
   await expect(page.getByLabel(/passo 1 de 73/i)).toBeVisible();
   await page.getByRole('button', {name: /próxima oração/i}).click();
+  await expect(page.locator('.prayer-step h1')).toBeFocused();
   await page.reload();
   await expect(page.getByLabel(/passo 2 de 73/i)).toBeVisible();
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
+});
+
+test('active prayer exit dialog is visible, focusable, and dismissible', async ({page}) => {
+  await page.goto('/pt/rosary');
+  await page.getByRole('button', {name: 'Rezar os mistérios de hoje'}).click();
+  const leave = page.getByRole('button', {name: 'Sair da oração'});
+
+  await leave.click();
+  const dialog = page.getByRole('dialog', {name: 'Encerrar esta oração?'});
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('button', {name: 'Salvar e sair'})).toBeFocused();
+
+  await dialog.getByRole('button', {name: 'Continuar rezando'}).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(leave).toBeFocused();
+
+  await leave.click();
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(leave).toBeFocused();
+
+  await leave.click();
+  await dialog.getByRole('button', {name: 'Descartar esta sessão'}).click();
+  await expect(page).toHaveURL(/\/pt\/sanctuary$/);
 });
 
 test('mobile product pages use the tab bar without a hamburger', async ({page, isMobile}) => {

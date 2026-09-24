@@ -6,7 +6,7 @@ import {Link} from '@/i18n/routing';
 import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {WeekDots, type WeekDayMark} from '@/components/common/WeekDots';
-import {getCalendarDateInTimeZone, getLocalDateKey} from '@/lib/date';
+import {getCalendarDateInTimeZone, getDateKeyFromLocalDate} from '@/lib/date';
 import {buildRosarySequence, type MysteryType} from '@/services/rosaryEngine';
 import {getPrayerStats, usePrayerStore} from '@/store/usePrayerStore';
 import {isReminderDue, usePreferencesStore} from '@/store/usePreferencesStore';
@@ -53,7 +53,7 @@ export default function SanctuaryPage() {
   const weekMarks: WeekDayMark[] = Array.from({length: 7}, (_, index) => {
     const date = new Date(calendarDate);
     date.setDate(date.getDate() - (6 - index));
-    const key = getLocalDateKey(date);
+    const key = getDateKeyFromLocalDate(date);
     return {
       key,
       prayed: completionDates.has(key),
