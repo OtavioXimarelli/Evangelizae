@@ -4,10 +4,11 @@ import {routing} from './i18n/routing';
 
 const handleI18nRouting = createMiddleware(routing);
 
-function redirect(request: NextRequest, pathname: string) {
+function redirect(request: NextRequest, pathname: string, hash = '') {
   const url = request.nextUrl.clone();
   url.pathname = pathname;
   url.search = '';
+  url.hash = hash;
   return NextResponse.redirect(url, 307);
 }
 
@@ -21,7 +22,7 @@ export default function proxy(request: NextRequest) {
   const legacyDestination = pathname.match(/^\/pt\/(profile|ai|intentions)$/)?.[1];
   if (legacyDestination === 'profile') return redirect(request, '/pt/settings');
   if (legacyDestination === 'ai' || legacyDestination === 'intentions') {
-    return redirect(request, '/pt/about');
+    return redirect(request, '/pt/about', '#roadmap');
   }
 
   const onboarded = request.cookies.get('evangelizae_onboarded')?.value === '1';

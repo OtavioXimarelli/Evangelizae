@@ -6,7 +6,7 @@
   --paper: #f4efe6;
   --paper-raised: #fbf8f2;
   --ink: #24231f;
-  --muted-ink: #655d55;
+  --muted-ink: #59524a;
   --oxblood: #7a2e35;
   --oxblood-deep: #5b2027;
   --brass: #765521;
@@ -19,6 +19,16 @@
   --season-accent: var(--brass);
   --paper-deep: color-mix(in srgb, var(--rule) 22%, var(--paper));
   --ease-sacred: cubic-bezier(0.22, 1, 0.36, 1);
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.35rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.35rem;
 }
 
 .dark {
@@ -45,7 +55,7 @@
 }
 
 [data-season='christmas'] {
-  --season-accent: #9a7420;
+  --season-accent: #7a5c12;
 }
 
 .dark[data-season='christmas'] {
@@ -119,6 +129,44 @@ a {
 :focus-visible {
   outline: 3px solid color-mix(in srgb, var(--oxblood) 72%, white);
   outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--oxblood);
+  color: #fffaf2;
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 var(--radius-sm) 0;
+  transition: top 0.2s;
+}
+
+/* Dark theme flips --oxblood/-deep to light blush tones (text colors on the
+   dark surface); neither passes 4.5:1 behind ivory text, so the skip link
+   uses the dark raised surface with ink text instead. */
+.dark .skip-link {
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 ::selection {
@@ -262,6 +310,13 @@ blockquote {
   text-underline-offset: 0.22em;
 }
 
+/* --oxblood 4.2:1 in dark mode misses the 4.5:1 AA bar; the light variant
+   (#e39aa4) clears it on dark raised surfaces. */
+.dark .text-link {
+  color: #e39aa4;
+  text-decoration-color: color-mix(in srgb, #e39aa4 45%, transparent);
+}
+
 .site-header,
 .focus-header {
   position: sticky;
@@ -399,10 +454,35 @@ blockquote {
   .desktop-nav .theme-toggle {
     display: none;
   }
+
+  /* Theme access on product pages: the header is hidden there, so a compact
+     toggle docks inside the tab bar's right end instead of floating free
+     (a free-floating button intercepts taps on adjacent content). */
+  .bottom-nav-theme {
+    position: fixed;
+    right: 0.25rem;
+    bottom: calc(4.05rem + env(safe-area-inset-bottom, 0px));
+    z-index: 40;
+  }
+
+  .bottom-nav-theme .theme-toggle {
+    width: 2.1rem;
+    height: 2.1rem;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+  }
 }
 
 .mobile-menu {
   display: none;
+}
+
+.mobile-menu-footer {
+  padding-top: var(--space-sm);
+  margin-top: var(--space-sm);
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: flex-start;
 }
 
 .bottom-nav {
@@ -803,6 +883,25 @@ blockquote {
   font-weight: 750;
 }
 
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: auto;
+  min-height: auto;
+  accent-color: var(--oxblood);
+}
+
+.field-hint {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.84rem;
+}
+
 .field input,
 .field select,
 .field textarea {
@@ -975,6 +1074,7 @@ blockquote {
 }
 
 .reading-group {
+  scroll-margin-top: 7rem;
   padding-block: 2rem 3rem;
   border-bottom: 1px solid var(--rule);
 }
@@ -1013,6 +1113,12 @@ blockquote {
 @media (max-width: 860px) {
   .site-main {
     padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Product pages navigate via the bottom tab bar; the header hamburger is
+     redundant mobile chrome, so the entire product header is hidden. */
+  .site-header.product-header {
+    display: none;
   }
 
   .desktop-nav {
@@ -1157,6 +1263,23 @@ blockquote {
 
   .brand-line {
     display: none;
+  }
+}
+
+main.site-main,
+main.onboarding-main {
+  animation: route-fade-in 200ms ease-out both;
+}
+
+@keyframes route-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main.site-main,
+  main.onboarding-main {
+    animation: none;
   }
 }
 

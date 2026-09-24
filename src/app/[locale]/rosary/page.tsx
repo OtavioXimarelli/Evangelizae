@@ -1,67 +1,34 @@
 'use client';
 
-import {FormEvent, useCallback, useEffect, useMemo, useState} from 'react';
+import {FormEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ArrowLeft, ArrowRight} from 'lucide-react';
 import {useLocale, useTranslations} from 'next-intl';
 import {Link} from '@/i18n/routing';
 import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {SacredOrnament} from '@/components/brand/SacredOrnament';
-import {buildRosarySequence, MysteryType, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
+import {MysteryGate} from '@/components/rosary/MysteryGate';
+import {buildRosarySequence, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
 import {usePrayerStore} from '@/store/usePrayerStore';
+import {usePreferencesStore} from '@/store/usePreferencesStore';
 
 const mysteryTranslation = {gozosos: 'joyful', luminosos: 'luminous', dolorosos: 'sorrowful', gloriosos: 'glorious'} as const;
-
-function MysteryGate({todayMystery}: {todayMystery: MysteryType}) {
-  const t = useTranslations('Rosary');
-  const locale = useLocale();
-  const prayer = usePrayerStore();
-
-  return (
-    <div className="reading-wrap section-pad mystery-gate">
-      <div className="mystery-gate-card">
-        <span className="eyebrow">{t('gateEyebrow')}</span>
-        <h1 className="page-title">{t('chooseMystery')}</h1>
-        <p className="lede">{t('gateSubtitle')}</p>
-        <div className="mystery-gate-grid">
-          {(Object.keys(ROSARY_MYSTERIES) as MysteryType[]).map((type) => {
-            const group = ROSARY_MYSTERIES[type];
-            const name = (locale === 'en' ? group.titleEn : group.titlePt).replace(/\s*\([^)]*\)\s*$/, '');
-            const theme = (locale === 'en' ? group.titleEn : group.titlePt).match(/\(([^)]+)\)/)?.[1];
-            const isToday = type === todayMystery;
-            return (
-              <button
-                key={type}
-                type="button"
-                className="mystery-gate-option"
-                data-today={isToday || undefined}
-                onClick={() => prayer.initRosary(type)}
-              >
-                {isToday && <span className="mystery-gate-badge">{t('todayBadge')}</span>}
-                <span className="mystery-gate-name">{name}</span>
-                <span className="mystery-gate-meta">
-                  {theme && <span>{theme}</span>}
-                  <span>{locale === 'en' ? group.daysEn : group.daysPt}</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function RosaryPage() {
   const t = useTranslations('Rosary');
   const locale = useLocale();
   const mounted = useIsMounted();
   const prayer = usePrayerStore();
+  const readerScale = usePreferencesStore((state) => state.readerScale);
   const today = useDayContext();
   const [showLatin, setShowLatin] = useState(false);
   const [showIntentions, setShowIntentions] = useState(false);
   const [newIntention, setNewIntention] = useState('');
   const [gateAfterCompletion, setGateAfterCompletion] = useState(false);
+  const intentionsRef = useRef<HTMLDivElement>(null);
+  const intentionsTriggerRef = useRef<HTMLButtonElement>(null);
+  const prayerHeadingRef = useRef<HTMLHeadingElement>(null);
+  const completionHeadingRef = useRef<HTMLHeadingElement>(null);
   const steps = useMemo(() => buildRosarySequence(prayer.activeMysteryType), [prayer.activeMysteryType]);
   const currentStep = steps[Math.min(prayer.currentStepIndex, steps.length - 1)];
 
@@ -83,13 +50,59 @@ export default function RosaryPage() {
     if (!mounted || prayer.isCompleted || !prayer.sessionStartedAt) return;
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
-      if (event.key === 'ArrowRight') next();
-      if (event.key === 'ArrowLeft' && prayer.currentStepIndex > 0) prayer.previousStep();
+      if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (target?.closest('button, a, input, textarea, select, [contenteditable="true"], [role="dialog"]')) return;
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        next();
+      }
+      if (event.key === 'ArrowLeft' && prayer.currentStepIndex > 0) {
+        event.preventDefault();
+        prayer.previousStep();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [mounted, prayer, next]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (prayer.isCompleted) completionHeadingRef.current?.focus();
+    else if (prayer.sessionStartedAt) prayerHeadingRef.current?.focus();
+  }, [mounted, prayer.isCompleted, prayer.sessionStartedAt, prayer.currentStepIndex]);
+
+  useEffect(() => {
+    if (!showIntentions || !intentionsRef.current) return;
+    const panel = intentionsRef.current;
+    const trigger = intentionsTriggerRef.current;
+    const getFocusable = () => Array.from(panel.querySelectorAll<HTMLElement>('input:not(:disabled), button:not(:disabled), [tabindex]:not([tabindex="-1"])'));
+    const focusables = getFocusable();
+    focusables[0]?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowIntentions(false);
+        trigger?.focus();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const current = getFocusable();
+      if (current.length === 0) return;
+      const first = current[0];
+      const last = current[current.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      trigger?.focus();
+    };
+  }, [showIntentions, prayer.intentions.length, newIntention]);
 
   if (!mounted) return <div className="reading-wrap section-pad" />;
 
@@ -99,9 +112,26 @@ export default function RosaryPage() {
         <SacredOrnament className="completion-ornament" />
         <div className="hero-copy">
           <span className="eyebrow">{t('completedEyebrow')}</span>
-          <h1 className="page-title">{t('completedTitle')}</h1>
+           <h1 ref={completionHeadingRef} tabIndex={-1} className="page-title">{t('completedTitle')}</h1>
           <p className="lede">{t('completedBody')}</p>
-          <div className="hero-actions"><Link href="/sanctuary" className="button">{t('returnSanctuary')}</Link><button className="button button-secondary" onClick={() => setGateAfterCompletion(true)}>{t('prayAgain')}</button></div>
+          <div className="completion-reflection">
+            <label htmlFor="reflection-input" className="completion-reflection-label">
+              {t('reflectionPrompt')}
+            </label>
+            <textarea
+              id="reflection-input"
+              className="completion-reflection-input"
+              rows={3}
+              maxLength={500}
+              value={prayer.reflection}
+              onChange={(e) => prayer.setReflection(e.target.value)}
+              placeholder={t('reflectionPlaceholder')}
+            />
+          </div>
+          <div className="hero-actions">
+            <Link href="/sanctuary" className="button">{t('returnSanctuary')}</Link>
+            <button className="button button-secondary" onClick={() => setGateAfterCompletion(true)}>{t('prayAgain')}</button>
+          </div>
         </div>
       </div>
     );
@@ -122,18 +152,19 @@ export default function RosaryPage() {
   const beadFill = currentStep.type === 'decade_hail_mary' ? (currentStep.beadInDecade ?? 0) : currentStep.type === 'decade_glory_fatima' ? 10 : 0;
   const inDecade = currentStep.type.startsWith('decade_');
   const isDailyMystery = prayer.activeMysteryType === today.mystery;
+  const progressPercent = Math.round(((prayer.currentStepIndex + 1) / steps.length) * 100);
 
   return (
-    <div className="prayer-layout">
+    <div className={`prayer-layout prayer-reader-${readerScale}`}>
       <article className="prayer-main">
-        <div className="prayer-progress" aria-label={t('progress', {current: prayer.currentStepIndex + 1, total: steps.length})}><span style={{width: `${((prayer.currentStepIndex + 1) / steps.length) * 100}%`}} /></div>
+        <div className="prayer-progress" role="progressbar" aria-label={t('progress', {current: prayer.currentStepIndex + 1, total: steps.length})} aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={prayer.currentStepIndex + 1}><span style={{width: `${progressPercent}%`}} /></div>
         <div className="prayer-toolbar">
           <span className="prayer-toolbar-context">
             {isDailyMystery && <span className="daily-mystery-chip">{t('todayBadge')}</span>}
             {t(mysteryTranslation[prayer.activeMysteryType])}
           </span>
           <span className="prayer-toolbar-actions">
-            <button className="button button-quiet" onClick={() => setShowIntentions(!showIntentions)} aria-expanded={showIntentions}>{t('intentionsTitle')}</button>
+            <button ref={intentionsTriggerRef} className="button button-quiet" onClick={() => setShowIntentions(!showIntentions)} aria-expanded={showIntentions} aria-controls="intentions-panel">{t('intentionsTitle')}</button>
             <button className="button button-quiet" onClick={() => setShowLatin(!showLatin)} disabled={!currentStep.latinText}>{showLatin ? t('hideLatin') : t('showLatin')}</button>
           </span>
         </div>
@@ -159,15 +190,16 @@ export default function RosaryPage() {
         </nav>
 
         {showIntentions && (
-          <section className="intentions-panel" aria-label={t('intentionsTitle')}>
+          <section ref={intentionsRef} id="intentions-panel" className="intentions-panel" aria-label={t('intentionsTitle')}>
             <p className="intentions-hint">{t('intentionsHint')}</p>
-            <form onSubmit={addIntention} className="field intentions-form"><input aria-label={t('intentionPlaceholder')} maxLength={500} value={newIntention} onChange={(event) => setNewIntention(event.target.value)} placeholder={t('intentionPlaceholder')} /><button className="button button-small" disabled={!newIntention.trim()}>{t('addIntention')}</button></form>
-            {prayer.intentions.map((intention, index) => <div className="quiet-row" key={`${intention}-${index}`}><span>{intention}</span><button className="button button-quiet" onClick={() => prayer.removeIntention(index)} aria-label={t('removeIntention')}>×</button></div>)}
+             <form onSubmit={addIntention} className="field intentions-form"><input aria-label={t('intentionPlaceholder')} maxLength={140} value={newIntention} onChange={(event) => setNewIntention(event.target.value)} placeholder={t('intentionPlaceholder')} /><button type="submit" className="button button-small" disabled={!newIntention.trim() || prayer.intentions.length >= 5}>{t('addIntention')}</button></form>
+             {prayer.intentions.length >= 5 && <p className="intentions-hint">{t('intentionLimit')}</p>}
+             {prayer.intentions.map((intention, index) => <div className="quiet-row" key={`${intention}-${index}`}><span>{intention}</span><button type="button" className="button button-quiet" onClick={() => prayer.removeIntention(index)} aria-label={t('removeIntention', {index: index + 1})}>×</button></div>)}
           </section>
         )}
 
-        <section className="prayer-step">
-          <h1>{displayTitle}</h1>
+        <section className="prayer-step" aria-live="polite" aria-atomic="true">
+          <h1 ref={prayerHeadingRef} tabIndex={-1}>{displayTitle}</h1>
           {fruit && <p className="prayer-fruit"><strong>{t('fruit')}</strong> · {fruit}</p>}
           <div className="prayer-text">{body}</div>
           {showLatin && currentStep.latinText && <div className="latin-text">{currentStep.latinText}</div>}

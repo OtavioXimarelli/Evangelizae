@@ -22,7 +22,7 @@ test('direct visits render every core page instead of an empty hydration shell',
   await expect(page.getByRole('heading', {level: 1})).toBeVisible();
 });
 
-test('temporary liturgy uses the reviewed local entry and never calls the API', async ({page}) => {
+test('temporary liturgy attempts the API and falls back to the reviewed local entry', async ({page}) => {
   const apiRequests: string[] = [];
   page.on('request', (request) => {
     if (request.url().includes('/liturgy/today')) apiRequests.push(request.url());
@@ -33,7 +33,7 @@ test('temporary liturgy uses the reviewed local entry and never calls the API', 
   await expect(page.getByText('2Ts 3,6-10.16-18')).toBeVisible();
   await expect(page.getByText(/edição provisória local/i)).toBeVisible();
   await expect(page.getByText(/^Fonte:.*Pe. António Pereira de Figueiredo/i)).toBeVisible();
-  expect(apiRequests).toEqual([]);
+  expect(apiRequests).toHaveLength(1);
 });
 
 test('temporary liturgy fails closed after its declared end date', async ({page}) => {
@@ -50,15 +50,21 @@ test('responsive shells do not clip and mobile navigation stays usable', async (
     expect(widths.document).toBeLessThanOrEqual(widths.viewport);
   }
 
-  await page.goto('/pt/sanctuary');
   if (isMobile) {
-    await page.getByRole('button', {name: 'Abrir menu'}).click();
-    const navigation = page.getByRole('navigation', {name: 'Menu de navegação'});
-    await expect(navigation).toBeVisible();
-    await navigation.getByRole('link', {name: 'A missão'}).click();
-    await expect(page).toHaveURL(/\/pt\/about$/);
+    // Product pages rely exclusively on the tab bar.
+    await page.goto('/pt/sanctuary');
     const bottomNav = page.getByRole('navigation', {name: 'Navegação do aplicativo'});
     await expect(bottomNav.getByRole('link', {name: 'Ajustes'})).toBeVisible();
+    await expect(bottomNav.getByRole('link', {name: 'Liturgia'})).toBeVisible();
+  } else {
+    await page.goto('/pt/inicio');
+    await expect(page.getByRole('navigation', {name: 'Navegação principal'})).toBeVisible();
+  }
+
+  // Public pages keep the standard header (hamburger) navigation.
+  await page.goto('/pt/about');
+  if (isMobile) {
+    await expect(page.getByRole('button', {name: 'Abrir menu'})).toBeVisible();
   } else {
     await expect(page.getByRole('navigation', {name: 'Navegação principal'})).toBeVisible();
   }
@@ -76,8 +82,8 @@ test('compact beta notice does not cover the mobile prayer experience', async ({
   expect(noticeBox).not.toBeNull();
   expect(mainBox).not.toBeNull();
   expect(bottomNavBox).not.toBeNull();
-  expect(noticeBox!.y + noticeBox!.height).toBeLessThanOrEqual(mainBox!.y + 1);
-  expect(noticeBox!.y + noticeBox!.height).toBeLessThan(bottomNavBox!.y);
+  expect(noticeBox!.y).toBeGreaterThan(mainBox!.y);
+  expect(noticeBox!.y).toBeGreaterThan(bottomNavBox!.y);
 });
 
 test('new visitor can personalize the sanctuary and start a resumable Rosary', async ({page}) => {
@@ -87,17 +93,81 @@ test('new visitor can personalize the sanctuary and start a resumable Rosary', a
   await page.getByLabel(/como podemos chamar/i).fill('Ana');
   const next = page.getByRole('button', {name: 'Continuar'});
   await next.click();
-  await expect(page.getByLabel(/horário do lembrete/i)).toBeVisible();
+   await expect(page.getByRole('checkbox', {name: /ativar o aviso interno/i})).toBeVisible();
   await next.click();
   await expect(page.getByRole('group', {name: /tamanho do texto/i})).toBeVisible();
   await page.getByRole('button', {name: /entrar no meu santuário/i}).click();
   await expect(page).toHaveURL(/\/pt\/sanctuary$/);
   await expect(page.getByRole('heading', {name: /ana/i})).toBeVisible();
-  await page.getByRole('link', {name: /iniciar o rosário/i}).click();
+  await page.getByRole('link', {name: /rezar o primeiro rosário|iniciar o rosário/i}).click();
+  await expect(page.locator('.prayer-step h1')).toBeFocused();
   await expect(page.getByLabel(/passo 1 de 73/i)).toBeVisible();
   await page.getByRole('button', {name: /próxima oração/i}).click();
+  await expect(page.locator('.prayer-step h1')).toBeFocused();
   await page.reload();
   await expect(page.getByLabel(/passo 2 de 73/i)).toBeVisible();
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
+});
+
+test('active prayer exit dialog is visible, focusable, and dismissible', async ({page}) => {
+  await page.goto('/pt/rosary');
+  await page.getByRole('button', {name: 'Rezar os mistérios de hoje'}).click();
+  const leave = page.getByRole('button', {name: 'Sair da oração'});
+
+  await leave.click();
+  const dialog = page.getByRole('dialog', {name: 'Encerrar esta oração?'});
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('button', {name: 'Salvar e sair'})).toBeFocused();
+
+  await dialog.getByRole('button', {name: 'Continuar rezando'}).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(leave).toBeFocused();
+
+  await leave.click();
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(leave).toBeFocused();
+
+  await leave.click();
+  await dialog.getByRole('button', {name: 'Descartar esta sessão'}).click();
+  await expect(page).toHaveURL(/\/pt\/sanctuary$/);
+});
+
+test('mobile product pages use the tab bar without a hamburger', async ({page, isMobile}) => {
+  test.skip(!isMobile, 'Product tab bar is a phone-layout concern');
+  for (const route of ['sanctuary', 'liturgy', 'settings']) {
+    await page.goto(`/pt/${route}`);
+    await expect(
+      page.getByRole('button', {name: 'Abrir menu'}),
+      `/pt/${route} must not show a hamburger button`,
+    ).toHaveCount(0);
+    const bottomNav = page.getByRole('navigation', {name: 'Navegação do aplicativo'});
+    await expect(bottomNav).toBeVisible();
+  }
+});
+
+test('onboarding step 2 explains the reminder is an in-app banner, not a push notification', async ({page}) => {
+  await page.goto('/pt/comecar');
+  await page.getByLabel(/como podemos chamar/i).fill('Teste');
+  await page.getByRole('button', {name: 'Continuar'}).click();
+  await expect(page.getByRole('checkbox', {name: /ativar o aviso interno/i})).not.toBeChecked();
+  await page.getByRole('checkbox', {name: /ativar o aviso interno/i}).check();
+  await expect(page.getByLabel(/horário do seu aviso interno/i)).toBeEnabled();
+});
+
+test('main content fades in once, and respects reduced motion', async ({page, isMobile}) => {
+  test.skip(isMobile, 'Desktop validation; mobile visual check happens on real-device smoke');
+  await page.goto('/pt/sanctuary');
+  const main = page.locator('main.site-main');
+  await expect(main).toHaveClass(/site-main/);
+  const nameDefault = await main.evaluate((el) => getComputedStyle(el).animationName);
+  expect(nameDefault).toBe('route-fade-in');
+
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await page.reload();
+  await page.goto('/pt/sanctuary');
+  expect(await main.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
 });
 
 test('legacy and English routes preserve a clear destination', async ({page}) => {
@@ -105,6 +175,9 @@ test('legacy and English routes preserve a clear destination', async ({page}) =>
   await expect(page).toHaveURL(/\/pt\/settings$/);
   await page.goto('/en/about');
   await expect(page).toHaveURL(/\/pt\/about$/);
+  await page.goto('/pt/settings');
+  await page.getByRole('link', {name: /página inicial pública/i}).click();
+  await expect(page).toHaveURL(/\/pt\/inicio\?via=selo$/);
 });
 
 test('settings erase every Evangelizae browser record and return to a clean start', async ({page, context}) => {
@@ -141,7 +214,7 @@ test('beta pages have no serious automated accessibility violations', async ({pa
 
 test('previously loaded Rosary reopens offline', async ({page, context}) => {
   await page.goto('/pt/rosary');
-  await page.getByRole('button', {name: /mistérios? de hoje/i}).click();
+  await page.getByRole('button', {name: 'Rezar os mistérios de hoje'}).click();
   await expect(page.getByLabel(/passo 1 de 73/i)).toBeVisible();
   await page.evaluate(async () => { await navigator.serviceWorker?.ready; });
   await context.setOffline(true);

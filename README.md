@@ -12,7 +12,7 @@ O núcleo atual é deliberadamente pequeno:
 - configuração local opcional, sem conta, em três passos;
 - santuário diário personalizado, com saudação pelo momento do dia e mistério do dia;
 - Rosário guiado completo com 73 passos, retomada e acesso offline;
-- liturgia diária em um pacote local provisório, com intervalo e fontes declarados;
+- liturgia diária fornecida pela API Java/Spring, com fonte, data e estado de atualização explícitos;
 - histórico semanal, lembrete interno e exportação/exclusão dos dados locais;
 - tema claro/escuro com alternância rápida no cabeçalho (padrão: preferência do sistema);
 - instalação como aplicativo (PWA) com suporte offline.
@@ -24,7 +24,7 @@ Quem já se preparou entra direto no santuário; a página pública permanece ac
 - Fluxo completo de onboarding local (nome, janela de oração, aparência) sem conta.
 - Santuário como página inicial do usuário: convite de oração, retomada do passo interrompido, faixa dos sete dias.
 - Rosário guiado com os quatro mistérios, conclusão iluminada e persistência entre sessões.
-- Liturgia do dia com fonte, horário e estado provisório declarados.
+- Liturgia do dia com fonte, data e estado de atualização declarados.
 - Ajustes de perfil, leitura e tema; exportação JSON e exclusão total dos dados.
 - Missão, privacidade e páginas institucionais em português.
 - Offline depois do primeiro carregamento, monitoramento técnico opcional e imagem Docker.
@@ -60,9 +60,9 @@ Fora de escopo até nova decisão: rankings, moedas, recompensas, feed infinito,
 
 O backend é mantido em outro repositório e implementado integralmente em Java/Spring. O espelho do contrato está em contracts/evangelizae-v1.openapi.yaml.
 
-### Ponte provisória da liturgia
+### Liturgia
 
-Enquanto a API própria é concluída, esta branch inclui localmente as leituras de **25 de agosto a 1º de setembro de 2026**. A seleção diária segue o calendário litúrgico da Igreja no Brasil. O texto bíblico usa a tradução católica da Vulgata do Pe. António Pereira de Figueiredo, em domínio público, com ortografia atualizada sem alterar o conteúdo. Uma edição histórica dessa tradução tem aprovação eclesiástica registrada pela Biblioteca Nacional. Ela é uma ponte católica legítima, mas não é apresentada como a tradução litúrgica oficial atual da CNBB. Não há consulta remota, repetição de outro dia nem orações do Missal sem licença de redistribuição. Em 2 de setembro, se a API ainda não tiver substituído a ponte, a página passa ao estado indisponível e encaminha para a CNBB.
+A página `/pt/liturgy` consulta a API Java/Spring em `NEXT_PUBLIC_API_BASE_URL` usando `America/Sao_Paulo` e `pt-BR`. A resposta é validada antes da exibição; a cópia local só pode representar a mesma data e é marcada como cache. A ponte local de 25/08 a 01/09/2026 permanece como fallback temporário até a API ser comprovada por sete dias consecutivos.
 
 As fontes, a licença, os limites editoriais e o procedimento de remoção estão em [`LITURGY_CONTENT_SOURCES.md`](LITURGY_CONTENT_SOURCES.md).
 
@@ -77,7 +77,7 @@ use Node.js 20.9–26 e pnpm 11.22.0 (via Corepack ou instalação direta).
     cp .env.example .env.local
     pnpm dev
 
-Acesse http://localhost:3000. O contrato da futura API permanece documentado, mas a ponte provisória desta branch não faz chamadas externas para carregar a liturgia.
+Acesse http://localhost:3000. Configure `NEXT_PUBLIC_API_BASE_URL` para a API Java/Spring usada pela liturgia diária.
 
 ## Verificação
 
@@ -91,7 +91,7 @@ O build de produção usa webpack porque a integração estável de precache do 
 
 ## Docker
 
-    docker build --build-arg NEXT_PUBLIC_API_BASE_URL=https://api.example.org/api/v1 -t evangelizae-web .
+    docker build --build-arg NEXT_PUBLIC_API_BASE_URL=https://api.example.org/api/v1 --build-arg NEXT_PUBLIC_APP_URL=https://evangelizae.com -t evangelizae-web .
     docker run --rm -p 3000:3000 evangelizae-web
 
 O container roda sem privilégios e disponibiliza GET /api/health.

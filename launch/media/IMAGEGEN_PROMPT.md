@@ -1,0 +1,7 @@
+# Prompt do fundo da campanha
+
+Modo: ImageGen integrado (`ads-marketing`).
+
+> Create a reusable, text-free campaign background for Evangelizae social launch assets in a portrait 4:5 composition. Express a “quiet chapel”: a full-bleed deep chapel-green field with tactile matte paper or lime-plaster texture; a soft warm-ivory vertical opening of light that subtly suggests an open sacred doorway without depicting a literal church; one extremely subtle antique-gold curved line near the lower third, like a prayer path; and a faint oxblood glow as a restrained accent. Use premium editorial art direction, minimal sacred atmosphere, refined Catholic publishing, calm and contemporary, almost abstract. Keep generous dark negative space across the upper-left and center-left for typography and visual interest along the right edge and lower third. Use contemplative dawn light and a palette of deep chapel green `#142F29`, warm ivory `#F4EFE6`, antique gold `#C5A15A`, and restrained oxblood `#7A2E35`. Background only: no logo, icon, lettering, cross, rosary beads, people, device mockup, or watermark. Avoid generic church interiors, gothic architecture, stained glass, dramatic rays, clouds, glossy gradients, photorealistic religious objects, luxury branding, ornate decoration, high contrast, and visual noise.
+
+O arquivo gerado foi salvo como `campaign-background.png`. Textos, ícone e captura do aplicativo foram compostos depois pelo script `../render-media.sh`, usando somente ativos reais do projeto.

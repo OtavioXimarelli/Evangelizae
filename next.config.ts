@@ -15,6 +15,11 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Turbopack misinferred the workspace root (stray pnpm-workspace.yaml/package.json
+  // in $HOME) and hung compiling while scanning the whole home directory.
+  turbopack: {
+    root: __dirname,
+  },
   allowedDevOrigins: ['127.0.0.1'],
   async headers() {
     return [

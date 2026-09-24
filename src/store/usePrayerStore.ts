@@ -2,7 +2,7 @@
 
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
-import {calendarDayDifference, getLocalDateKey, getResolvedTimeZone} from '@/lib/date';
+import {calendarDayDifference, getCalendarDateInTimeZone, getLocalDateKey, getResolvedTimeZone} from '@/lib/date';
 import {getDailyMysteryType, MysteryType} from '@/services/rosaryEngine';
 
 export interface PrayerCompletion {
@@ -11,6 +11,8 @@ export interface PrayerCompletion {
   completedAt: string;
   timeZone: string;
   mysteryType: MysteryType;
+  intentions?: string[];
+  reflection?: string;
 }
 
 export interface PrayerStats {
@@ -42,7 +44,7 @@ export interface PrayerState {
 }
 
 const initialPrayerState = {
-  activeMysteryType: getDailyMysteryType(),
+        activeMysteryType: getDailyMysteryType(getCalendarDateInTimeZone()),
   currentStepIndex: 0,
   furthestStepIndex: 0,
   sessionStartedAt: null,
@@ -84,11 +86,12 @@ export const usePrayerStore = create<PrayerState>()(
     (set, get) => ({
       ...initialPrayerState,
       initRosary: (type) => set({
-        activeMysteryType: type ?? getDailyMysteryType(),
+        activeMysteryType: type ?? getDailyMysteryType(getCalendarDateInTimeZone()),
         currentStepIndex: 0,
         furthestStepIndex: 0,
         sessionStartedAt: new Date().toISOString(),
         isCompleted: false,
+        intentions: [],
         reflection: '',
       }),
       advanceStep: (totalSteps) => {
@@ -106,13 +109,19 @@ export const usePrayerStore = create<PrayerState>()(
         currentStepIndex: Math.max(0, Math.min(index, state.furthestStepIndex)),
       })),
       addIntention: (intention) => {
-        const value = intention.trim();
-        if (value) set((state) => ({intentions: [...state.intentions, value]}));
+        const value = intention.trim().slice(0, 140);
+        if (value && get().intentions.length < 5) set((state) => ({intentions: [...state.intentions, value]}));
       },
       removeIntention: (index) => set((state) => ({
         intentions: state.intentions.filter((_, itemIndex) => itemIndex !== index),
       })),
-      setReflection: (reflection) => set({reflection}),
+      setReflection: (reflection) => set((state) => {
+        if (!state.isCompleted || state.completions.length === 0) return {reflection};
+        const completions = [...state.completions];
+        const last = completions[completions.length - 1];
+        completions[completions.length - 1] = {...last, reflection};
+        return {reflection, completions};
+      }),
       completeRosary: () => {
         const state = get();
         if (state.isCompleted) return;
@@ -123,11 +132,12 @@ export const usePrayerStore = create<PrayerState>()(
           completedAt: completedAt.toISOString(),
           timeZone: getResolvedTimeZone(),
           mysteryType: state.activeMysteryType,
+          intentions: state.intentions.length > 0 ? [...state.intentions] : undefined,
         };
         set({isCompleted: true, completions: [...state.completions, completion]});
       },
       discardSession: () => set({
-        activeMysteryType: getDailyMysteryType(),
+  activeMysteryType: getDailyMysteryType(getCalendarDateInTimeZone()),
         currentStepIndex: 0,
         furthestStepIndex: 0,
         sessionStartedAt: null,

@@ -6,7 +6,7 @@ O núcleo do frontend está pronto para um beta público: onboarding local, sant
 
 - [ ] Definir `NEXT_PUBLIC_APP_URL` com a URL HTTPS final, sem barra no fim.
 - [ ] Conferir pastoral e editorialmente as oito entradas locais, de 25/08 a 01/09/2026, no fuso `America/Sao_Paulo`.
-- [ ] Publicar a API ou adicionar um novo intervalo local revisado antes de 02/09/2026; depois do corte, o produto falha de forma declarada.
+- [ ] Confirmar a API de liturgia em produção, com `GET /api/v1/liturgy/today`, fonte licenciada, data correta e CORS antes de divulgar a liturgia.
 - [ ] Submeter orações, frutos dos mistérios e referências bíblicas a uma revisão pastoral e editorial humana.
 - [x] Documentar a tradução e a licença dos trechos bíblicos, além da origem e das condições de uso da liturgia, em `LITURGY_CONTENT_SOURCES.md`.
 - [ ] Validar `GET /api/health` no container publicado.
@@ -31,6 +31,6 @@ O núcleo do frontend está pronto para um beta público: onboarding local, sant
 
 ## Critério de go/no-go
 
-Abrir o beta somente quando o build de produção, os testes unitários e os testes E2E estiverem verdes, a entrada local do dia estiver correta no domínio final e os caminhos de feedback e exclusão de dados estiverem funcionando. A API e o CORS voltam a ser gates obrigatórios no momento da remoção da ponte provisória.
+Abrir o beta somente quando o build de produção, os testes unitários e os testes E2E estiverem verdes, a resposta da liturgia do dia estiver correta no domínio final e os caminhos de feedback e exclusão de dados estiverem funcionando. A API e o CORS permanecem gates obrigatórios.
 
 Contas, sincronização, intenções comunitárias, IA teológica, paróquias e planos espirituais continuam deliberadamente fora deste beta.
