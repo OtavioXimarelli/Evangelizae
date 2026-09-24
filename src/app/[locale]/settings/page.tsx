@@ -10,6 +10,7 @@ import {BETA_FEEDBACK_URL} from '@/lib/links';
 
 export default function SettingsPage() {
   const t = useTranslations('Settings');
+  const tNav = useTranslations('Navigation');
   const tCommon = useTranslations('Common');
   const mounted = useIsMounted();
   const router = useRouter();
@@ -76,7 +77,7 @@ export default function SettingsPage() {
           <div className="field"><label htmlFor="settings-theme">{t('themeLabel')}</label><select id="settings-theme" value={preferences.theme} onChange={(event) => preferences.setProfile({theme: event.target.value as typeof preferences.theme})}><option value="system">{t('themeSystem')}</option><option value="light">{t('themeLight')}</option><option value="dark">{t('themeDark')}</option></select></div>
           <button className="button" type="submit">{tCommon('save')}</button>{message && <p className="status-message" data-tone="success">{message}</p>}
         </form></section>
-        <aside className="paper-panel settings-aside"><span className="settings-aside-mark" aria-hidden="true">✣</span><h2 style={{fontFamily: 'var(--font-serif)', fontSize: '1.5rem'}}>{t('dataTitle')}</h2><div className="form-stack"><button className="button button-secondary" onClick={exportData}>{t('export')}</button><button className="button button-secondary" onClick={() => void clearData()}>{t('clear')}</button><a href={BETA_FEEDBACK_URL} className="text-link" target="_blank" rel="noreferrer">{t('feedback')}</a><Link href="/privacy" className="text-link">{t('privacyLink')}</Link><Link href="/inicio" className="text-link">{t('publicHome')}</Link></div></aside>
+        <aside className="paper-panel settings-aside"><span className="settings-aside-mark" aria-hidden="true">✣</span><h2 style={{fontFamily: 'var(--font-serif)', fontSize: '1.5rem'}}>{t('dataTitle')}</h2><div className="form-stack"><button className="button button-secondary" onClick={exportData}>{t('export')}</button><button className="button button-secondary" onClick={() => void clearData()}>{t('clear')}</button><a href={BETA_FEEDBACK_URL} className="text-link" target="_blank" rel="noreferrer">{t('feedback')}</a><Link href="/privacy" className="text-link">{t('privacyLink')}</Link><Link href="/inicio" className="text-link">{t('publicHome')}</Link><Link href="/about" className="text-link">{tNav('about')}</Link><a href="https://github.com/OtavioXimarelli/Evangelizae" className="text-link" target="_blank" rel="noreferrer">{tNav('source')}</a></div></aside>
       </div>
     </div>
   );
