@@ -1,5 +1,8 @@
 # Pacote social do beta
 
+> Os PNGs citados abaixo não são versionados. Gere-os antes de publicar com
+> `./launch/render-media.sh`. Ver `README.md` neste diretório.
+
 ## Carrossel principal
 
 Publicar nesta ordem:

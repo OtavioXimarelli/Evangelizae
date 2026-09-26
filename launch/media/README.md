@@ -1,6 +1,23 @@
 # Mídia de lançamento
 
+## Geração
+
+Os PNGs de tamanho final **não são versionados**. São saídas geradas de forma determinística por `../render-media.sh`, a partir deste diretório e de `../screenshots/public/`. Para recriá-los:
+
+```bash
+./launch/render-media.sh
+```
+
+O script exige ImageMagick, as fontes do projeto e as capturas reais em `../screenshots/public/`. Nunca substituir a interface real por mockups gerados por IA.
+
+### Entradas versionadas (não podem ser regeneradas pelo script)
+
+- `campaign-background.png` — fundo editorial sem texto. **É uma entrada, não uma saída.** Foi criado com ImageGen a partir de `IMAGEGEN_PROMPT.md` e o script apenas o compõe. Sem ele, `render-media.sh` aborta na validação de entrada.
+- `../screenshots/public/*.png` — capturas reais de produção. Entradas do script: início mobile e desktop, página completa do início, Rosário, missão e privacidade.
+
 ## Arquivos finais
+
+Saídas esperadas do script, todas em `launch/media/`:
 
 - `evangelizae-beta-feed-1080x1350.png` — Instagram/Facebook feed, 4:5.
 - `evangelizae-beta-story-1080x1920.png` — Stories e status, 9:16.
@@ -11,9 +28,6 @@
 - `evangelizae-carousel-03-privacidade-1080x1350.png` — privacidade local-first.
 - `evangelizae-carousel-04-missao-1080x1350.png` — missão e identidade.
 - `evangelizae-carousel-05-beta-1080x1350.png` — convite final para o beta.
-- `campaign-background.png` — fundo editorial sem texto, reutilizável.
-
-As capturas reais de produção ficam em `../screenshots/public/`: início mobile e desktop, página completa do início, Rosário, missão e privacidade.
 
 O feed usa 4:5 e o Story usa 9:16 para respeitar os formatos de tela. A documentação criativa da Meta recomenda reservar áreas de segurança em Stories; os ativos mantêm elementos essenciais longe das bordas e da faixa inferior de interface: <https://assets.ctfassets.net/bx4f6dhogdf5/7J9WenrxnnuLZltLc5pwkj/b13ff0bc6027d5783dc24a6c2a0f6216/KPM_META_Guidelines_Final_3.24.25.pdf>.
 

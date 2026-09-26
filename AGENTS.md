@@ -28,7 +28,7 @@ When project documents disagree, use this order:
 4. `contracts/evangelizae-v1.openapi.yaml` for the frontend/backend contract.
 5. The current code and tests for actual behavior.
 6. `EVANGELIZAE_MISSION_AND_GOALS_*.md` for long-term mission and vision.
-7. `EVANGELIZAE_TECHNICAL_SKELETON_*.md`, roadmap, and redesign documents as historical or aspirational context only.
+7. `docs/archive/EVANGELIZAE_TECHNICAL_SKELETON_*.md`, roadmap, and redesign documents as historical or aspirational context only.
 
 Do not treat a roadmap item or historical blueprint as authorization to expand the beta.
 

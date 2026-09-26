@@ -2,7 +2,7 @@
 
 > Companion to `BETA_LAUNCH_CHECKLIST.md` and `contracts/evangelizae-v1.openapi.yaml`.
 > Source-of-truth order: `AGENTS.md` > `README.md` > this checklist > OpenAPI > code > mission/technical skeleton docs.
-> Stack: Java 25 / Spring Boot 4 / MongoDB 7+ / Atlas Vector Search / Spring AI — see `EVANGELIZAE_TECHNICAL_SKELETON_PT.md:7`.
+> Stack: Java 25 / Spring Boot 4 / MongoDB 7+ / Atlas Vector Search / Spring AI — see `docs/archive/EVANGELIZAE_TECHNICAL_SKELETON_PT.md:7`.
 
 ---
 
@@ -12,15 +12,15 @@ Each cycle is a **ship gate**. Do not start Cycle N+1 until N is green in produc
 
 ---
 
-## Cycle 1 — Accounts & Sync (Next Cycle, `FRONTEND_FULL_REDESIGN_ROADMAP.md:17`)
+## Cycle 1 — Accounts & Sync (Next Cycle, `docs/archive/FRONTEND_FULL_REDESIGN_ROADMAP.md:17`)
 
 This unlocks `/auth`, `/users/me`, `/prayer/*`, `/spiritual-plans`. No community/AI yet.
 
 ### 1. Architecture & Contract
-- [ ] Spring repo scaffold per `TECHNICAL_SKELETON_PT.md:76` (`com.evangelizae.backend`, `compose.yaml:175`) with `application.yml` + `application-dev.yml` + `application-prod.yml`
+- [ ] Spring repo scaffold per `docs/archive/TECHNICAL_SKELETON_PT.md:76` (`com.evangelizae.backend`, `compose.yaml:175`) with `application.yml` + `application-dev.yml` + `application-prod.yml`
 - [ ] OpenAPI bumped to `1.0.0-cycle1` and published; `contracts/evangelizae-v1.openapi.yaml` is mirror (backend canonical)
 - [ ] CORS restricted to `APP_CORS_ALLOWED_ORIGINS` exact (no `*`), reflects `NEXT_PUBLIC_APP_URL` without trailing slash
-- [ ] Unified `ApiError` (`TECHNICAL_SKELETON_PT.md:160`) via `@ControllerAdvice` for all controllers: `{timestamp, status, error, code, message, path}`
+- [ ] Unified `ApiError` (`docs/archive/TECHNICAL_SKELETON_PT.md:160`) via `@ControllerAdvice` for all controllers: `{timestamp, status, error, code, message, path}`
 - [ ] `GET /api/health` returns 200 in Docker (`README.md:97`) — add `/api/v1/health` alias for frontend
 
 ### 2. Auth & Users
@@ -123,7 +123,7 @@ Depends on Cycle 1 auth.
 
 ## Cycle 5 — Catholic AI RAG + Notifications + Mobile-Ready
 
-### AI (`TECHNICAL_SKELETON_PT.md:148`, `MISSION_PT.md:34`)
+### AI (`docs/archive/TECHNICAL_SKELETON_PT.md:148`, `MISSION_PT.md:34`)
 - [ ] Corpus: Bible, CIC, Code of Canon Law, Vatican docs, CNBB, Saints/Doctors — each chunk `{source, citation, url, text}` with `embedding: number[1536]`.
 - [ ] Atlas Vector Search index `vectorIndex: {numDimensions: 1536, similarity: cosine}`, Spring AI `text-embedding-3-small` + `gpt-4o-mini`.
 - [ ] `POST /api/v1/ai/ask` `{question: 5..500, conversationId?}` → `{answer, citations: [{source, excerpt, url}], confidence: 0..1, refused: bool}`. If `confidence <0.75` or no chunk → refuse with canonical pt-BR: *“Não encontrei uma resposta direta nas fontes oficiais do Magistério católico indexadas para esta dúvida específica. Recomendo consultar um sacerdote de sua paróquia ou o Catecismo da Igreja Católica para uma orientação espiritual e doutrinal segura.”*
