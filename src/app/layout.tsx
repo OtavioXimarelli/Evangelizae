@@ -1,17 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./redesign.css";
 import { ServiceWorkerRegistrar } from "@/components/pwa/ServiceWorkerRegistrar";
 
-const sourceSans = Source_Sans_3({
+const sourceSans = localFont({
+  src: [
+    {path: "./fonts/source-sans-3-latin-ext.woff2", weight: "400 700", style: "normal"},
+    {path: "./fonts/source-sans-3-latin.woff2", weight: "400 700", style: "normal"},
+  ],
   variable: "--font-sans",
-  subsets: ["latin"],
+  display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
+const sourceSerif = localFont({
+  src: [
+    {path: "./fonts/source-serif-4-latin-ext.woff2", weight: "400 700", style: "normal"},
+    {path: "./fonts/source-serif-4-latin.woff2", weight: "400 700", style: "normal"},
+  ],
   variable: "--font-serif",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

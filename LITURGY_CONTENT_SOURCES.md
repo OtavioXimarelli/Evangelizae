@@ -26,7 +26,17 @@ Todas as Escrituras em português incluídas na ponte são da **Bíblia Sagrada 
 
 A ortografia, a acentuação, os espaços e a pontuação foram atualizados mecanicamente para leitura em português contemporâneo. Vocabulário, sentido e conteúdo dos versículos não foram adaptados. Nos lecionários que começam ou terminam em meia unidade de versículo (`a`/`b`), foi selecionado somente o segmento indicado pela referência. Os Salmos seguem a dupla numeração litúrgica e hebraica exibida na interface.
 
-Esta é uma tradução bíblica católica histórica e identificada, escolhida por sua procedência e por estar em domínio público. Ela **não é** apresentada como a tradução litúrgica oficial atual da CNBB. Nenhum texto bíblico da edição da CNBB foi copiado porque não foi localizada uma autorização de redistribuição compatível com este repositório aberto. As orações próprias do Missal também foram deixadas vazias pela mesma cautela de direitos e fidelidade textual.
+Esta é uma tradução bíblica católica histórica e identificada, escolhida por sua procedência e por estar em domínio público. Ela **não é** apresentada como a tradução litúrgica oficial atual da CNBB.
+
+## Textos liturgicos da API
+
+A ponte local acima é apenas um recurso temporário e já expirou em 2026-09-01. A fonte real do produto é a API Java/Spring, que ingere o texto diretamente do endpoint público da CNBB / Edições CNBB — Igreja em Oração (`https://api-liturgia.edicoescnbb.com.br/contents/in/date/{date}`), com Vatican News — Palavra do Dia como validação best-effort.
+
+**Decisão do responsável pelo projeto (2026-09-28): os textos litúrgicos ingeridos por este pipeline são públicos e livres para o Evangelizae redistribuir. Não é necessária licença formal, pedido de permissão nem negociação de atribuição.**
+
+O escopo cobre o texto litúrgico diário servido por esse endpoint. Não autoriza copiar a edição comercial da CNBB como um todo, o logotipo da CNBB ou a marca Edições CNBB. `source.provider` continua nomeando o provedor real e a interface o exibe. Não se declara endosso institucional da CNBB ou das Edições CNBB.
+
+Consequências para a ponte local: as orações próprias do Missal seguem vazias no conteúdo embutido porque a ponte não as coletou — não por cautela de direitos. A proibição de copiar texto bíblico da edição CNBB vale apenas para o arquivo local de fallback, que está sendo removido.
 
 ## Revisão e retirada
 

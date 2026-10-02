@@ -1,6 +1,32 @@
 # Evangelizae agent guide
 
-This file is the canonical operating guide for coding agents working in this repository.
+This file is the canonical operating guide for coding agents working in this repository. The backend and scraper repositories have their own `AGENTS.md` files; the three are companions, not duplicates.
+
+## Repository independence
+
+This repository is **one of three independent deployable units**:
+
+| Repository | Purpose | Deploy target |
+|---|---|---|
+| `EvangelizaeBackend` | Serve liturgy, validate imports, store documents | Coolify Docker resource |
+| `liturgy-scraper` | Fetch CNBB HTML, parse, POST to backend | Coolify Scheduled Job |
+| `Evangelizae` (this repo) | Render UI, cache responses, PWA | Coolify Docker resource |
+
+**Each repository:**
+- Has its own lifecycle, CI, and deployment
+- Can be deployed independently without touching the others
+- Has its own test suite that must pass before deploy
+- Owns its own Dockerfile and environment variables
+
+**The contract binds them:** `openapi/evangelizae-v1.openapi.yml` in the backend repo is the canonical API contract. This repo has a mirror copy in `contracts/`. The scraper implements the import side. Changing the contract requires coordinated updates across repos, but day-to-day development is independent.
+
+**Agents working on this repo must:**
+- Never assume the backend or scraper code is in this repository
+- Never modify backend or scraper code from this repo
+- Treat the OpenAPI spec as the boundary — if it doesn't change, the other repos don't need to
+- Run only this repo's test suite (`pnpm check`) to validate changes
+- Deploy only this repo's Docker image to Coolify
+- Build with `NEXT_PUBLIC_API_BASE_URL` pointing at the backend's public domain (baked into the bundle at build time)
 
 ## Mission and product north star
 
@@ -26,9 +52,10 @@ When project documents disagree, use this order:
 2. `README.md` for the implemented product and current beta scope.
 3. `BETA_LAUNCH_CHECKLIST.md` for release gates.
 4. `contracts/evangelizae-v1.openapi.yaml` for the frontend/backend contract.
-5. The current code and tests for actual behavior.
-6. `EVANGELIZAE_MISSION_AND_GOALS_*.md` for long-term mission and vision.
-7. `docs/archive/EVANGELIZAE_TECHNICAL_SKELETON_*.md`, roadmap, and redesign documents as historical or aspirational context only.
+5. Backend's `docs/CROSS_REPO_COORDINATION.md` for rules governing changes that span multiple repos.
+6. The current code and tests for actual behavior.
+7. `EVANGELIZAE_MISSION_AND_GOALS_*.md` for long-term mission and vision.
+8. `docs/archive/EVANGELIZAE_TECHNICAL_SKELETON_*.md`, roadmap, and redesign documents as historical or aspirational context only.
 
 Do not treat a roadmap item or historical blueprint as authorization to expand the beta.
 
@@ -156,7 +183,13 @@ For relevant changes, also verify:
 - liturgy date, source, freshness, and failure behavior;
 - manifest, icons, installability, and social metadata.
 
-Do not call the public beta “ready” solely because local tests pass. Follow `BETA_LAUNCH_CHECKLIST.md`; production API/CORS, liturgy correctness, pastoral review, licensing, DNS/TLS, feedback, real-device PWA smoke tests, and published health checks remain launch gates.
+Do not call the public beta “ready” solely because local tests pass. Follow `BETA_LAUNCH_CHECKLIST.md`; production API/CORS, liturgy correctness, pastoral review, DNS/TLS, feedback, real-device PWA smoke tests, and published health checks remain launch gates.
+
+## Liturgical text sourcing — decided
+
+**Decision (project owner, 2026-09-28): the liturgical texts ingested by this pipeline are public and free for Evangelizae to redistribute. No formal license, permission request, or attribution negotiation is required.** CNBB / Edições CNBB — Igreja em Oração is the primary source for both the liturgical calendar and the reading text; Vatican News — Palavra do Dia is best-effort validation that never blocks ingestion.
+
+This closes the `licensing` gate in the launch checklist. Do not re-open or re-litigate it. The full rationale, the scope limits (no copying of the CNBB trade edition, logo, or brand), and the rule against claiming institutional endorsement are in the backend `AGENTS.md` and in `LITURGY_CONTENT_SOURCES.md`. Still required: show `source.provider` and `source.fetchedAt` in the UI, and pass the pastoral review of prayer text, mystery fruit, and biblical reference before production.
 
 ## Definition of done
 

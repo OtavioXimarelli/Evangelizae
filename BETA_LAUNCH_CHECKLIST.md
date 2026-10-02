@@ -5,10 +5,11 @@ O núcleo do frontend está pronto para um beta público: onboarding local, sant
 ## Bloqueadores antes de abrir o acesso
 
 - [ ] Definir `NEXT_PUBLIC_APP_URL` com a URL HTTPS final, sem barra no fim.
-- [ ] Conferir pastoral e editorialmente as oito entradas locais, de 25/08 a 01/09/2026, no fuso `America/Sao_Paulo`.
-- [ ] Confirmar a API de liturgia em produção, com `GET /api/v1/liturgy/today`, fonte licenciada, data correta e CORS antes de divulgar a liturgia.
+- [ ] Conferir pastoral e editorialmente o corpus vivo do Rosário: orações, frutos dos mistérios e referências bíblicas de `src/services/rosaryEngine.ts`. *(A revisão anterior das oito entradas locais de 25/08 a 01/09/2026 está obsoleta: a ponte local expirou em 01/09/2026 e esse conteúdo não é mais exibido.)*
+- [ ] Confirmar a API de liturgia em produção, com `GET /api/v1/liturgy/today`, fonte declarada, data correta e CORS antes de divulgar a liturgia.
 - [ ] Submeter orações, frutos dos mistérios e referências bíblicas a uma revisão pastoral e editorial humana.
 - [x] Documentar a tradução e a licença dos trechos bíblicos, além da origem e das condições de uso da liturgia, em `LITURGY_CONTENT_SOURCES.md`.
+- [x] **Fonte de texto litúrgico definida** (responsável pelo projeto, 2026-09-28): os textos litúrgicos ingeridos são públicos e livres para redistribuição; não é necessária licença formal nem pedido de permissão. CNBB / Edições CNBB — Igreja em Oração é a fonte primária; Vatican News — Palavra do Dia é a validação best-effort. Registrado em `AGENTS.md` e `LITURGY_CONTENT_SOURCES.md`.
 - [ ] Validar `GET /api/health` no container publicado.
 - [ ] Configurar `SENTRY_ENVIRONMENT=production`; definir os DSNs somente se o monitoramento privativo for desejado.
 - [ ] Confirmar DNS, certificado TLS e redirecionamento do domínio canônico.

@@ -96,6 +96,10 @@ O build de produção usa webpack porque a integração estável de precache do 
 
 O container roda sem privilégios e disponibiliza GET /api/health.
 
+### Coolify
+
+Configure a aplicação com o build pack **Dockerfile**, Base Directory `/`, Dockerfile `Dockerfile` e porta interna `3000`. O build usa o `Dockerfile` versionado e evita a etapa Nix/Nixpacks que pode falhar ao baixar o pacote Nixpkgs. Mantenha `NEXT_PUBLIC_API_BASE_URL` e `NEXT_PUBLIC_APP_URL` disponíveis como variáveis de build.
+
 ## Dados e privacidade
 
 Nome opcional, horário, preferências, intenções, sessão e histórico ficam no navegador. Nenhum deles entra em telemetria. O usuário pode exportar uma cópia JSON ou apagar tudo em **Ajustes**.
