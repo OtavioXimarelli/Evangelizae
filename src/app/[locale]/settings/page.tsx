@@ -45,6 +45,7 @@ export default function SettingsPage() {
         reminderEnabled: preferences.reminderEnabled,
         theme: preferences.theme,
         readerSize: preferences.readerScale,
+        rosaryGuideSeen: preferences.rosaryGuideSeen,
       },
       completions: prayer.completions,
     }, null, 2);

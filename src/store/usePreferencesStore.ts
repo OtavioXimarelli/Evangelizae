@@ -1,8 +1,9 @@
 'use client';
 
 import {create} from 'zustand';
-import {persist} from 'zustand/middleware';
+import {createJSONStorage, persist} from 'zustand/middleware';
 import {getDatePartsInTimeZone, getLocalDateKey} from '@/lib/date';
+import {createReconciledPreferenceStorage} from '@/store/preferenceStorage';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type ReaderScale = 'normal' | 'large' | 'xl';
@@ -18,10 +19,12 @@ export interface PreferencesState {
   onboardedAt: string | null;
   reminderDismissedDate: string | null;
   betaNoticeDismissed: boolean;
+  rosaryGuideSeen: boolean;
   setProfile: (profile: Partial<Pick<PreferencesState, 'firstName' | 'prayerWindow' | 'reminderTime' | 'reminderEnabled' | 'theme' | 'readerScale'>>) => void;
   completeOnboarding: () => void;
   dismissReminderToday: () => void;
   dismissBetaNotice: () => void;
+  dismissRosaryGuide: () => void;
   resetPreferences: () => void;
 }
 
@@ -35,6 +38,7 @@ export const initialPreferences = {
   onboardedAt: null as string | null,
   reminderDismissedDate: null as string | null,
   betaNoticeDismissed: false as boolean,
+  rosaryGuideSeen: false as boolean,
 };
 
 export function isReminderDue(reminderTime: string, dismissedDate: string | null, now: Date = new Date()) {
@@ -43,6 +47,12 @@ export function isReminderDue(reminderTime: string, dismissedDate: string | null
   const [hours, minutes] = reminderTime.split(':').map(Number);
   return hour * 60 + minute >= hours * 60 + minutes;
 }
+
+const preferenceStorage = createReconciledPreferenceStorage({
+  getItem: (name) => localStorage.getItem(name),
+  setItem: (name, value) => localStorage.setItem(name, value),
+  removeItem: (name) => localStorage.removeItem(name),
+});
 
 export const usePreferencesStore = create<PreferencesState>()(
   persist(
@@ -55,18 +65,22 @@ export const usePreferencesStore = create<PreferencesState>()(
       },
       dismissReminderToday: () => set({reminderDismissedDate: getLocalDateKey()}),
       dismissBetaNotice: () => set({betaNoticeDismissed: true}),
+      dismissRosaryGuide: () => set({rosaryGuideSeen: true}),
       resetPreferences: () => {
         document.cookie = 'evangelizae_onboarded=; Path=/; Max-Age=0; SameSite=Lax';
+        preferenceStorage.replaceNextWrite();
         set({...initialPreferences});
       },
     }),
     {
       name: 'evangelizae-preferences',
-      version: 3,
+      storage: createJSONStorage(() => preferenceStorage),
+      version: 4,
       migrate: (persisted, version) => ({
         ...(persisted as Record<string, unknown>),
         reminderEnabled: version >= 3 ? Boolean((persisted as Record<string, unknown>).reminderEnabled) : false,
         betaNoticeDismissed: version >= 2 ? Boolean((persisted as Record<string, unknown>).betaNoticeDismissed) : false,
+        rosaryGuideSeen: version >= 4 ? Boolean((persisted as Record<string, unknown>).rosaryGuideSeen) : false,
       }),
     },
   ),

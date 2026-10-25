@@ -1671,7 +1671,7 @@ body {
   text-wrap: pretty;
 }
 
-.reading-body.drop-cap::first-letter {
+.reading-paragraph.drop-cap::first-letter {
   float: left;
   margin: 0.08em 0.12em 0 0;
   color: var(--brass);
@@ -1985,7 +1985,7 @@ body {
   .reading-group:first-child { padding-top: 0; }
   .reading-group h2 { font-size: clamp(2rem, 10vw, 2.7rem); }
   .reading-body { font-size: var(--reader-size, 1.13rem); }
-  .reading-body.drop-cap::first-letter { font-size: 3.65em; }
+  .reading-paragraph.drop-cap::first-letter { font-size: 3.65em; }
   .liturgy-source { font-size: 0.72rem; }
   .liturgy-empty .hero-actions { width: 100%; }
   .liturgy-empty .button { width: 100%; }
@@ -2373,5 +2373,426 @@ html[data-focus-mode] body::after {
   .how-row {
     grid-template-columns: 3rem minmax(0, 1fr);
     gap: 1rem;
+  }
+}
+
+/* Rosary guide: first-time prompt, trigger pill, and modal */
+
+.rosary-guide-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.55rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 55%, var(--rule));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brass) 11%, transparent);
+  color: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.rosary-guide-pill:hover {
+  border-color: var(--brass);
+  background: color-mix(in srgb, var(--brass) 20%, transparent);
+}
+
+.prayer-invitation .rosary-guide-pill,
+.focus-shell .rosary-guide-pill {
+  border-color: rgb(231 212 167 / 42%);
+  background: rgb(231 212 167 / 10%);
+  color: #f6e7c1;
+}
+
+.prayer-invitation .rosary-guide-pill:hover,
+.focus-shell .rosary-guide-pill:hover {
+  border-color: #e3c782;
+  background: rgb(231 212 167 / 18%);
+}
+
+.rosary-guide-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rosary-guide-prompt {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding: 1.15rem 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 52%, var(--rule));
+  border-left: 4px solid var(--brass);
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  background: color-mix(in srgb, var(--brass) 8%, var(--paper-raised));
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+}
+
+.focus-shell .rosary-guide-prompt {
+  margin-top: 0.75rem;
+  border-color: rgb(231 212 167 / 32%);
+  border-left-color: #d7b169;
+  background: color-mix(in srgb, #d7b169 10%, var(--paper-raised));
+  color: #fff8eb;
+}
+
+.rosary-guide-prompt-copy {
+  flex: 1 1 20rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.rosary-guide-prompt-title {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rosary-guide-prompt-body {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.rosary-guide-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.dark .rosary-guide-prompt .button-quiet {
+  color: #f0a8b2;
+}
+
+.focus-shell .rosary-guide-prompt .button-quiet {
+  color: #f6e7c1;
+}
+
+.rosary-guide-modal {
+  position: relative;
+  width: min(44rem, 100%);
+  max-height: calc(100dvh - 2.5rem);
+  padding: clamp(1.6rem, 4.5vw, 2.75rem);
+  border-top: 4px solid var(--oxblood);
+  color: var(--ink);
+  text-align: left;
+}
+
+.rosary-guide-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.rosary-guide-header-copy {
+  display: grid;
+  gap: 0.45rem;
+  padding-right: 2rem;
+}
+
+.rosary-guide-title {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.65rem, 3.2vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.rosary-guide-subtitle {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.rosary-guide-close {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+}
+
+.rosary-guide-body {
+  display: grid;
+  gap: 1.45rem;
+  padding-block: 1.4rem;
+}
+
+.rosary-guide-section h3 {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.rosary-guide-section p {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.96rem;
+  line-height: 1.68;
+}
+
+.rosary-guide-quote {
+  margin: 0;
+  padding: 1.1rem 1.3rem;
+  border-left: 3px solid var(--brass);
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: color-mix(in srgb, var(--brass) 8%, var(--paper));
+}
+
+.rosary-guide-quote p {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.rosary-guide-quote cite {
+  display: block;
+  margin-top: 0.55rem;
+  color: var(--muted-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.rosary-guide-steps {
+  list-style: none;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.rosary-guide-steps li {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.75rem 0.75rem 0.2rem 0.75rem;
+  background: var(--paper);
+}
+
+.rosary-guide-step-num {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--brass) 55%, var(--rule));
+  color: var(--oxblood);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.rosary-guide-steps strong {
+  display: block;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.rosary-guide-steps p {
+  margin: 0.25rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.rosary-guide-welcome {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 45%, var(--rule));
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--brass) 9%, var(--paper));
+}
+
+.rosary-guide-welcome-mark {
+  color: var(--brass);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.rosary-guide-welcome h3 {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.08rem;
+}
+
+.rosary-guide-welcome p {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.88rem;
+  line-height: 1.58;
+}
+
+.rosary-guide-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* Editorial lectionary formatting */
+
+.reading-item-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.45rem 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.reading-item-header h2 {
+  margin: 0.45rem 0 0;
+}
+
+.reading-item-header .reading-reference {
+  margin: 0;
+  padding: 0.22rem 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 45%, var(--rule));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brass) 9%, var(--paper));
+  color: var(--oxblood);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.reading-group-gospel {
+  padding-inline: clamp(0.85rem, 2.5vw, 1.65rem);
+  border-left: 3px double var(--oxblood);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--brass) 6%, transparent), transparent 75%);
+}
+
+.reading-paragraph {
+  margin: 0;
+  text-align: left;
+}
+
+.reading-paragraph + .reading-paragraph {
+  margin-top: 1.15em;
+  text-indent: 1.35em;
+}
+
+.liturgy-quote {
+  color: var(--ink);
+  font-style: italic;
+}
+
+.psalm-refrain-box {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  margin: 0 0 1.5rem;
+  padding: 0.95rem 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 48%, var(--rule));
+  border-left: 4px solid var(--oxblood);
+  border-radius: 0.25rem 0.85rem 0.85rem 0.25rem;
+  background: color-mix(in srgb, var(--brass) 8%, var(--paper));
+}
+
+.psalm-refrain-text {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: calc(var(--reader-size, 1.25rem) * 0.96);
+  font-weight: 650;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.reading-body-psalm {
+  display: grid;
+  gap: 0.95rem;
+  padding-left: clamp(0.5rem, 2vw, 1.25rem);
+  border-left: 1px solid color-mix(in srgb, var(--brass) 45%, var(--rule));
+}
+
+.psalm-stanza {
+  position: relative;
+  margin: 0;
+  padding-left: 1.35rem;
+  line-height: 1.78;
+}
+
+.psalm-verse-mark {
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  color: var(--brass);
+  font-size: 0.72em;
+  opacity: 0.85;
+}
+
+.liturgy-rubric {
+  color: var(--oxblood);
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 700;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.liturgy-acclamation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1.25rem;
+  margin-top: 1.5rem;
+  padding-top: 0.95rem;
+  border-top: 1px dashed color-mix(in srgb, var(--rule) 85%, var(--brass));
+  color: var(--muted-ink);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.96rem;
+}
+
+.liturgy-acclamation strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (max-width: 620px) {
+  .rosary-guide-prompt {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rosary-guide-prompt-actions .button {
+    flex: 1;
+  }
+
+  .rosary-guide-footer .button {
+    width: 100%;
+  }
+
+  .reading-paragraph + .reading-paragraph {
+    text-indent: 0;
   }
 }

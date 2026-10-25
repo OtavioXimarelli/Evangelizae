@@ -1,11 +1,13 @@
 'use client';
 
+import {useRef} from 'react';
 import {ArrowRight, BookOpen, Clock3} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/routing';
 import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {WeekDots, type WeekDayMark} from '@/components/common/WeekDots';
+import {RosaryGuidePrompt, RosaryGuideTrigger} from '@/components/rosary/RosaryGuideModal';
 import {getCalendarDateInTimeZone, getDateKeyFromLocalDate} from '@/lib/date';
 import {buildRosarySequence, type MysteryType} from '@/services/rosaryEngine';
 import {getPrayerStats, usePrayerStore} from '@/store/usePrayerStore';
@@ -26,6 +28,7 @@ export default function SanctuaryPage() {
   const prayer = usePrayerStore();
   const preferences = usePreferencesStore();
   const today = useDayContext();
+  const guideFocusRef = useRef<HTMLButtonElement>(null);
 
   if (!mounted) {
     return (
@@ -95,6 +98,8 @@ export default function SanctuaryPage() {
         <p className="week-summary">{weekSummary}</p>
       </section>
 
+      <RosaryGuidePrompt returnFocusRef={guideFocusRef} />
+
       <section className="paper-panel primary-prayer prayer-invitation marginal-flourish">
         <span className="prayer-card-mark" aria-hidden="true">✢</span>
         <div className="hero-copy">
@@ -133,6 +138,7 @@ export default function SanctuaryPage() {
               {hasHistory ? t('beginAction') : t('emptyAction')} <ArrowRight size={17} />
             </Link>
           )}
+          <RosaryGuideTrigger variant="pill" focusRef={guideFocusRef} />
         </div>
       </section>
 

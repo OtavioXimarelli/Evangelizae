@@ -21,6 +21,9 @@ vi.mock('@/i18n/routing', () => ({
 vi.mock('lucide-react', () => ({
   ArrowLeft: () => null,
   ArrowRight: () => null,
+  BookOpen: () => null,
+  HelpCircle: () => null,
+  X: () => null,
 }));
 
 vi.mock('@/hooks/useDayContext', () => ({
@@ -41,5 +44,13 @@ describe('MysteryGate primary CTA', () => {
     expect(cta).toHaveClass('button', 'mystery-gate-cta');
     await userEvent.click(cta);
     expect(initRosary).toHaveBeenCalledWith('gloriosos');
+  });
+
+  it('renders the Rosary guide trigger and opens the modal when clicked', async () => {
+    render(<MysteryGate todayMystery="gloriosos" />);
+    const trigger = screen.getByRole('button', {name: 'guideTrigger'});
+    await userEvent.click(trigger);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('guideTitle')).toBeInTheDocument();
   });
 });

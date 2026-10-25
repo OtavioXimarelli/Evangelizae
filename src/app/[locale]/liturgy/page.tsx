@@ -4,7 +4,8 @@ import {useEffect, useState} from 'react';
 import {RefreshCw} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {useDayContext} from '@/hooks/useDayContext';
-import {DailyLiturgyDto, getDailyLiturgy, LiturgyGroupDto} from '@/services/liturgyService';
+import {formatLiturgyParagraphs, tokenizeLiturgyQuotes} from '@/lib/liturgyFormat';
+import {DailyLiturgyDto, getDailyLiturgy, LiturgyGroupDto, ReadingKind} from '@/services/liturgyService';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
 
 const groupIds: Record<LiturgyGroupDto['kind'], string> = {
@@ -23,6 +24,21 @@ function formatSourceTime(date: string): string {
 
 function formatLiturgyDate(date: string): string {
   return new Intl.DateTimeFormat('pt-BR', {day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(`${date}T12:00:00`));
+}
+
+function renderFormattedParagraph(paragraph: string) {
+  const segments = tokenizeLiturgyQuotes(paragraph);
+  return segments.map((segment, segIndex) =>
+    segment.type === 'quote' ? (
+      <span key={segIndex} className="liturgy-quote">{segment.value}</span>
+    ) : (
+      <span key={segIndex}>{segment.value}</span>
+    ),
+  );
+}
+
+function hasDropCap(kind: ReadingKind): boolean {
+  return kind === 'FIRST_READING' || kind === 'SECOND_READING' || kind === 'GOSPEL';
 }
 
 export default function LiturgyPage() {
@@ -59,8 +75,78 @@ export default function LiturgyPage() {
         <div className={`liturgy-layout reader-${readerScale}`}>
           <nav className="contents-nav" aria-label={t('contents')}><strong>{t('contents')}</strong>{liturgy.groups.map((group, index) => <a key={`${group.kind}-${index}`} href={`#${groupIds[group.kind]}-${index}`}>{t(group.kind)}</a>)}</nav>
           <article className="reading-document">
-            {liturgy.groups.map((group, groupIndex) => <section className="reading-group" id={`${groupIds[group.kind]}-${groupIndex}`} key={`${group.kind}-${groupIndex}`}><span className="eyebrow">{t(group.kind)}</span>{group.items.map((item, index) => <div className="reading-item" key={`${item.reference}-${index}`}><h2>{item.title}</h2>{item.reference && <p className="reading-reference">{item.reference}</p>}{item.refrain && <p className="reading-body"><strong>{item.refrain}</strong></p>}<div className={`reading-body${groupIndex === 0 && index === 0 ? ' drop-cap' : ''}`}>{item.text}</div></div>)}</section>)}
-            {Object.entries(liturgy.prayers).map(([key, text]) => text && <section className="reading-group" key={key}><span className="eyebrow">{t(key as 'collect' | 'offerings' | 'communion')}</span><div className="reading-body">{text}</div></section>)}
+            {liturgy.groups.map((group, groupIndex) => (
+              <section
+                className={`reading-group reading-group-${group.kind.toLowerCase().replace('_', '-')}`}
+                id={`${groupIds[group.kind]}-${groupIndex}`}
+                key={`${group.kind}-${groupIndex}`}
+              >
+                <span className="eyebrow">{t(group.kind)}</span>
+                {group.items.map((item, index) => {
+                  const paragraphs = formatLiturgyParagraphs(item.text, group.kind);
+                  const isPsalm = group.kind === 'PSALM';
+                  const isGospel = group.kind === 'GOSPEL';
+                  const isScriptureReading = group.kind === 'FIRST_READING' || group.kind === 'SECOND_READING';
+                  return (
+                    <div className="reading-item" key={`${item.reference}-${index}`}>
+                      <div className="reading-item-header">
+                        <h2>{item.title}</h2>
+                        {item.reference && <p className="reading-reference">{item.reference}</p>}
+                      </div>
+                      {item.refrain && (
+                        <div className="psalm-refrain-box" role="note" aria-label={t('refrainLabel')}>
+                          <span className="liturgy-rubric" aria-hidden="true">R.</span>
+                          <p className="psalm-refrain-text">{item.refrain}</p>
+                        </div>
+                      )}
+                      <div className={`reading-body${isPsalm ? ' reading-body-psalm' : ''}`}>
+                        {paragraphs.map((paragraph, pIndex) => (
+                          <p
+                            key={pIndex}
+                            className={
+                              isPsalm
+                                ? 'psalm-stanza'
+                                : pIndex === 0 && index === 0 && hasDropCap(group.kind)
+                                  ? 'reading-paragraph drop-cap'
+                                  : 'reading-paragraph'
+                            }
+                          >
+                            {isPsalm && <span className="psalm-verse-mark" aria-hidden="true">✦</span>}
+                            {renderFormattedParagraph(paragraph)}
+                          </p>
+                        ))}
+                      </div>
+                      {(isScriptureReading || isGospel) && (
+                        <footer className="liturgy-acclamation">
+                          <span>
+                            <abbr className="liturgy-rubric" title="Versículo">V.</abbr>{' '}
+                            {isGospel ? t('wordOfSalvation') : t('wordOfTheLord')}
+                          </span>
+                          <span>
+                            <abbr className="liturgy-rubric" title="Resposta">R.</abbr>{' '}
+                            <strong>{isGospel ? t('gloryToYouLord') : t('thanksBeToGod')}</strong>
+                          </span>
+                        </footer>
+                      )}
+                    </div>
+                  );
+                })}
+              </section>
+            ))}
+            {Object.entries(liturgy.prayers).map(([key, text]) =>
+              text ? (
+                <section className="reading-group reading-group-prayer" key={key}>
+                  <span className="eyebrow">{t(key as 'collect' | 'offerings' | 'communion')}</span>
+                  <div className="reading-body">
+                    {formatLiturgyParagraphs(text, 'PRAYER').map((paragraph, pIndex) => (
+                      <p key={pIndex} className="reading-paragraph">
+                        {renderFormattedParagraph(paragraph)}
+                      </p>
+                    ))}
+                  </div>
+                </section>
+              ) : null,
+            )}
             <p className="liturgy-source">{t('source', {
               provider: liturgy.source.provider,
               date: formatLiturgyDate(liturgy.date),
