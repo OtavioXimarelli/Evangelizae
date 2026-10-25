@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import {RefreshCw} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {useDayContext} from '@/hooks/useDayContext';
-import {extractPsalmRefrain, formatLiturgyParagraphs, tokenizeLiturgyQuotes, tokenizeLiturgyVerseMarkers} from '@/lib/liturgyFormat';
+import {formatLiturgyParagraphs, formatResponsorialPsalm, tokenizeLiturgyQuotes, tokenizeLiturgyVerseMarkers} from '@/lib/liturgyFormat';
 import {DailyLiturgyDto, getDailyLiturgy, LiturgyGroupDto, ReadingKind} from '@/services/liturgyService';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
 
@@ -92,9 +92,8 @@ export default function LiturgyPage() {
                   const isPsalm = group.kind === 'PSALM';
                   const isGospel = group.kind === 'GOSPEL';
                   const isScriptureReading = group.kind === 'FIRST_READING' || group.kind === 'SECOND_READING';
-                  const psalmResponse = isPsalm ? extractPsalmRefrain(item.text, item.refrain) : null;
-                  const readingText = psalmResponse?.text ?? item.text;
-                  const paragraphs = formatLiturgyParagraphs(readingText, group.kind);
+                  const psalm = isPsalm ? formatResponsorialPsalm(item.text, item.reference ?? '', item.refrain) : null;
+                  const paragraphs = psalm?.stanzas ?? formatLiturgyParagraphs(item.text, group.kind);
                   const reference = isPsalm ? item.reference?.replace(/\s*\(R\.[^)]*\)/i, '') : item.reference;
                   const showItemTitle = !isPsalm || item.title.trim().toLocaleLowerCase('pt-BR') !== t(group.kind).toLocaleLowerCase('pt-BR');
                   return (
@@ -103,10 +102,10 @@ export default function LiturgyPage() {
                         {showItemTitle && <h2>{item.title}</h2>}
                         {reference && <p className="reading-reference">{reference}</p>}
                       </div>
-                      {psalmResponse?.refrain && (
+                      {psalm?.refrain && (
                         <p className="psalm-refrain" role="note" aria-label={t('refrainLabel')}>
                           <span className="liturgy-rubric" aria-hidden="true">R.</span>
-                          {' '}<span>{psalmResponse.refrain}</span>
+                          {' '}<span>{psalm.refrain}</span>
                         </p>
                       )}
                       <div className={`reading-body${isPsalm ? ' reading-body-psalm' : ''}`}>
@@ -121,6 +120,8 @@ export default function LiturgyPage() {
                                   : 'reading-paragraph'
                             }
                           >
+                            {isPsalm && <span className="psalm-stanza-number" aria-hidden="true">{pIndex + 1}.</span>}
+                            {isPsalm && ' '}
                             {renderFormattedParagraph(paragraph, item.reference, isPsalm)}
                           </p>
                         ))}

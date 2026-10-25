@@ -144,14 +144,52 @@ export function tokenizeLiturgyVerseMarkers(text: string, reference?: string): T
   return segments.length > 0 ? segments : [{type: 'plain', value: text}];
 }
 
-export function extractPsalmRefrain(text: string, explicitRefrain?: string): {refrain: string | null; text: string} {
-  const match = text.match(/^\s*R\.\s*(.+?)(?=\s+\d{1,3}[a-z]{0,3}\s|$)/i);
-  const refrain = explicitRefrain?.trim() || match?.[1]?.trim() || null;
-  if (!refrain) return {refrain: null, text};
+export interface ResponsorialPsalm {
+  refrain: string | null;
+  stanzas: string[];
+}
 
-  const escapedRefrain = refrain.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const responsePattern = new RegExp(`(R\\.)\\s*${escapedRefrain}`, 'gi');
-  return {refrain, text: text.replace(responsePattern, '$1')};
+export function formatResponsorialPsalm(text: string, reference: string, explicitRefrain?: string): ResponsorialPsalm {
+  const firstResponse = text.match(/^\s*R\.\s*([\s\S]*?)(?=\s+\d{1,3}[a-z]{0,3}\s|$)/i);
+  const refrain = explicitRefrain?.trim() || firstResponse?.[1]?.trim() || null;
+  const verseStart = firstResponse ? firstResponse[0].length : 0;
+  const textAfterOpeningResponse = firstResponse ? text.slice(verseStart) : text;
+  const rawStanzas = firstResponse
+    ? textAfterOpeningResponse.split(/\bR\.\s*/i)
+    : [textAfterOpeningResponse];
+  const escapedRefrain = refrain?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  let stanzas = rawStanzas
+    .map((stanza) => {
+      const withoutRepeatedResponse = escapedRefrain
+        ? stanza.replace(new RegExp(`^\\s*${escapedRefrain}\\s*`, 'i'), '')
+        : stanza;
+      const withoutVerseLabels = tokenizeLiturgyVerseMarkers(withoutRepeatedResponse, reference)
+        .filter((segment) => segment.type !== 'verse')
+        .map((segment) => segment.value)
+        .join('');
+      return withoutVerseLabels
+        .replace(/\s*\*\s*/g, ' / ')
+        .replace(/\s+([,.;!?])/g, '$1')
+        .replace(/\s+/g, ' ')
+        .replace(/^\s*\/|\/\s*$/g, '')
+        .trim();
+    })
+    .filter(Boolean);
+
+  if (stanzas.length <= 1 && !/\bR\./i.test(textAfterOpeningResponse)) {
+    const withoutVerseLabels = tokenizeLiturgyVerseMarkers(textAfterOpeningResponse, reference)
+      .filter((segment) => segment.type !== 'verse')
+      .map((segment) => segment.value)
+      .join('');
+    stanzas = formatLiturgyParagraphs(withoutVerseLabels, 'PSALM').map((stanza) =>
+      stanza.replace(/\s*\*\s*/g, ' / ').replace(/\s+/g, ' ').trim(),
+    );
+  }
+
+  return {
+    refrain,
+    stanzas: stanzas.map((stanza) => `${stanza.replace(/\s*–\s*R\.$/i, '').trim()} – R.`),
+  };
 }
 
 /**
