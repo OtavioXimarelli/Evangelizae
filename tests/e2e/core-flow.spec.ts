@@ -37,6 +37,32 @@ test('temporary liturgy attempts the API and falls back to the reviewed local en
   expect(apiRequests).toHaveLength(1);
 });
 
+test('liturgy renders source verse labels small and keeps the Psalm response concise', async ({page}) => {
+  await page.clock.setFixedTime(new Date('2026-10-25T15:00:00Z'));
+  await page.route('https://api.evangelizae.com/api/v1/liturgy/today**', (route) => route.fulfill({
+    json: {
+      date: '2026-10-25',
+      title: 'Domingo do Tempo Comum',
+      color: 'GREEN',
+      prayers: {},
+      groups: [
+        {kind: 'FIRST_READING', items: [{title: 'Leitura', reference: 'Ex 22,20-21', text: 'Assim diz o Senhor: 20 Não oprimas o estrangeiro. 21 Não façais mal à viúva.'}]},
+        {kind: 'PSALM', items: [{title: 'Salmo responsorial', reference: 'Sl 17(18),2-3a.3bc-4 (R. 2)', text: 'R. A resposta do salmo. 2 Eu vos amo. 3a Minha rocha. R. A resposta do salmo. 3bc Em vós espero.'}]},
+      ],
+      source: {provider: 'CNBB', fetchedAt: '2026-10-25T12:00:00-03:00', freshness: 'LIVE'},
+    },
+  }));
+  await page.goto('/pt/liturgy');
+
+  const verseNumber = page.locator('.reading-verse-number').first();
+  await expect(verseNumber).toHaveText('20');
+  await expect(verseNumber).toHaveJSProperty('tagName', 'SUP');
+  await expect(page.locator('.psalm-refrain')).toHaveText('R. A resposta do salmo.');
+  await expect(page.locator('.psalm-refrain-box, .psalm-verse-mark')).toHaveCount(0);
+  await expect(page.getByText('A resposta do salmo.', {exact: true})).toHaveCount(1);
+  await expect(page.locator('.psalm-response-marker')).toHaveCount(2);
+});
+
 test('temporary liturgy fails closed after its declared end date', async ({page}) => {
   await page.clock.setFixedTime(new Date('2026-09-02T15:00:00Z'));
   await page.goto('/pt/liturgy');
@@ -237,10 +263,15 @@ test('settings erase every Evangelizae browser record and return to a clean star
 
 test('beta pages have no serious automated accessibility violations', async ({page, isMobile}) => {
   test.skip(isMobile, 'One semantic pass is enough; responsive behavior is covered separately');
+  test.setTimeout(60_000);
   await page.emulateMedia({reducedMotion: 'reduce'});
   for (const route of ['inicio', 'comecar', 'sanctuary', 'rosary', 'liturgy', 'settings', 'about', 'privacy', 'offline', 'rota-inexistente']) {
     await page.goto(`/pt/${route}`);
     await expect(page.getByRole('heading', {level: 1})).toBeVisible();
+    await page.waitForFunction(() => {
+      if (!document.querySelector('.site-shell')) return true;
+      return document.documentElement.classList.contains('dark') === window.matchMedia('(prefers-color-scheme: dark)').matches;
+    });
     const results = await new AxeBuilder({page}).analyze();
     expect(
       results.violations.filter((violation) => violation.impact === 'critical' || violation.impact === 'serious'),

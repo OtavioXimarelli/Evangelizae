@@ -2685,6 +2685,12 @@ html[data-focus-mode] body::after {
   letter-spacing: 0.04em;
 }
 
+.dark .reading-document .reading-reference,
+.dark .reading-document .liturgy-rubric,
+.dark .reading-document .psalm-response-marker {
+  color: #f0a8b2;
+}
+
 .reading-group-gospel {
   padding-inline: clamp(0.85rem, 2.5vw, 1.65rem);
   border-left: 3px double var(--oxblood);
@@ -2706,50 +2712,47 @@ html[data-focus-mode] body::after {
   font-style: italic;
 }
 
-.psalm-refrain-box {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.75rem;
-  align-items: baseline;
-  margin: 0 0 1.5rem;
-  padding: 0.95rem 1.2rem;
-  border: 1px solid color-mix(in srgb, var(--brass) 48%, var(--rule));
-  border-left: 4px solid var(--oxblood);
-  border-radius: 0.25rem 0.85rem 0.85rem 0.25rem;
-  background: color-mix(in srgb, var(--brass) 8%, var(--paper));
-}
-
-.psalm-refrain-text {
-  margin: 0;
+.psalm-refrain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+  padding: 0 0 0.65rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--rule) 75%, var(--brass));
+  color: var(--muted-ink);
   font-family: var(--font-serif), Georgia, serif;
-  font-size: calc(var(--reader-size, 1.25rem) * 0.96);
-  font-weight: 650;
+  font-size: calc(var(--reader-size, 1.25rem) * 0.88);
   font-style: italic;
   line-height: 1.55;
-  color: var(--ink);
+}
+
+.psalm-refrain .liturgy-rubric,
+.psalm-response-marker {
+  color: var(--oxblood);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.72em;
+  font-style: normal;
+  font-weight: 800;
 }
 
 .reading-body-psalm {
   display: grid;
-  gap: 0.95rem;
-  padding-left: clamp(0.5rem, 2vw, 1.25rem);
-  border-left: 1px solid color-mix(in srgb, var(--brass) 45%, var(--rule));
+  gap: 0.75rem;
 }
 
 .psalm-stanza {
-  position: relative;
   margin: 0;
-  padding-left: 1.35rem;
   line-height: 1.78;
 }
 
-.psalm-verse-mark {
-  position: absolute;
-  left: 0;
-  top: 0.15em;
-  color: var(--brass);
-  font-size: 0.72em;
-  opacity: 0.85;
+.reading-verse-number {
+  margin-right: 0.18em;
+  color: var(--muted-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.65em;
+  font-weight: 700;
+  line-height: 0;
+  vertical-align: super;
 }
 
 .liturgy-rubric {
