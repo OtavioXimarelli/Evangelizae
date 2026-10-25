@@ -2745,6 +2745,12 @@ html[data-focus-mode] body::after {
   line-height: 1.78;
 }
 
+.psalm-stanza-number {
+  color: var(--muted-ink);
+  font-size: 0.82em;
+  font-weight: 700;
+}
+
 .reading-verse-number {
   margin-right: 0.18em;
   color: var(--muted-ink);

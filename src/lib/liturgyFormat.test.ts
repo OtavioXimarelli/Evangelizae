@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {extractPsalmRefrain, formatLiturgyParagraphs, tokenizeLiturgyQuotes, tokenizeLiturgyVerseMarkers} from './liturgyFormat';
+import {formatLiturgyParagraphs, formatResponsorialPsalm, tokenizeLiturgyQuotes, tokenizeLiturgyVerseMarkers} from './liturgyFormat';
 
 describe('formatLiturgyParagraphs', () => {
   it('preserves explicit double-newline paragraph breaks', () => {
@@ -59,13 +59,16 @@ describe('liturgy verse and psalm response formatting', () => {
     ]);
   });
 
-  it('formats lettered psalm verse markers and extracts repeated response text once', () => {
-    const text = 'R. Refrão do salmo. 2 Eu vos amo. 3a Minha rocha. R. Refrão do salmo. 3bc Em vós espero.';
-    const response = extractPsalmRefrain(text);
-    expect(response).toEqual({
-      refrain: 'Refrão do salmo.',
-      text: 'R. 2 Eu vos amo. 3a Minha rocha. R. 3bc Em vós espero.',
+  it('formats a responsorial psalm as numbered stanzas with one refrain and response cues', () => {
+    const text = 'R. Eu vos amo, ó Senhor, sois minha força e salvação. 2 Eu vos amo, ó Senhor! Sois minha força, * 3a minha rocha, meu refúgio e salvador! R. 3bc Ó meu Deus, sois o rochedo que me abriga * sois meu escudo e proteção: em vós espero! R.';
+    const psalm = formatResponsorialPsalm(text, 'Sl 17(18),2-3a.3bc-4 (R. 2)');
+
+    expect(psalm).toEqual({
+      refrain: 'Eu vos amo, ó Senhor, sois minha força e salvação.',
+      stanzas: [
+        'Eu vos amo, ó Senhor! Sois minha força, / minha rocha, meu refúgio e salvador! – R.',
+        'Ó meu Deus, sois o rochedo que me abriga / sois meu escudo e proteção: em vós espero! – R.',
+      ],
     });
-    expect(tokenizeLiturgyVerseMarkers(response.text, 'Sl 17(18),2-3a.3bc-4')).toContainEqual({type: 'verse', value: '3a'});
   });
 });
