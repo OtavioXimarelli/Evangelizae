@@ -12,4 +12,10 @@ describe('beta notice dismissal preference', () => {
     usePreferencesStore.getState().dismissBetaNotice();
     expect(usePreferencesStore.getState().betaNoticeDismissed).toBe(true);
   });
+
+  it('tracks rosary guide first-time dismissal preference', () => {
+    expect(usePreferencesStore.getState().rosaryGuideSeen).toBe(false);
+    usePreferencesStore.getState().dismissRosaryGuide();
+    expect(usePreferencesStore.getState().rosaryGuideSeen).toBe(true);
+  });
 });

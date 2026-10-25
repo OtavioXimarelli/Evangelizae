@@ -8,6 +8,7 @@ import {useIsMounted} from '@/hooks/useIsMounted';
 import {useDayContext} from '@/hooks/useDayContext';
 import {SacredOrnament} from '@/components/brand/SacredOrnament';
 import {MysteryGate} from '@/components/rosary/MysteryGate';
+import {RosaryGuidePrompt, RosaryGuideTrigger} from '@/components/rosary/RosaryGuideModal';
 import {buildRosarySequence, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
 import {usePrayerStore} from '@/store/usePrayerStore';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
@@ -164,10 +165,13 @@ export default function RosaryPage() {
             {t(mysteryTranslation[prayer.activeMysteryType])}
           </span>
           <span className="prayer-toolbar-actions">
+            <RosaryGuideTrigger />
             <button ref={intentionsTriggerRef} className="button button-quiet" onClick={() => setShowIntentions(!showIntentions)} aria-expanded={showIntentions} aria-controls="intentions-panel">{t('intentionsTitle')}</button>
             <button className="button button-quiet" onClick={() => setShowLatin(!showLatin)} disabled={!currentStep.latinText}>{showLatin ? t('hideLatin') : t('showLatin')}</button>
           </span>
         </div>
+
+        {prayer.currentStepIndex === 0 && <RosaryGuidePrompt />}
 
         <nav className="decade-strip" aria-label={t('stepsLabel')}>
           {decades.map(({mystery, first, last}) => {
