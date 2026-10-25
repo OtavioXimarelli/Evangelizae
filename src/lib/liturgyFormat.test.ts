@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {formatLiturgyParagraphs, tokenizeLiturgyQuotes} from './liturgyFormat';
+import {extractPsalmRefrain, formatLiturgyParagraphs, tokenizeLiturgyQuotes, tokenizeLiturgyVerseMarkers} from './liturgyFormat';
 
 describe('formatLiturgyParagraphs', () => {
   it('preserves explicit double-newline paragraph breaks', () => {
@@ -40,5 +40,32 @@ describe('tokenizeLiturgyQuotes', () => {
       {type: 'quote', value: '“Eis aí vem o esposo, saí a recebê-lo”'},
       {type: 'plain', value: '.'},
     ]);
+  });
+});
+
+describe('liturgy verse and psalm response formatting', () => {
+  it('recognizes only verse numbers included in the reading reference', () => {
+    const segments = tokenizeLiturgyVerseMarkers(
+      'Assim diz o Senhor: 20 Não oprimas o estrangeiro. 21 Não façais mal à viúva.',
+      'Ex 22,20-21',
+    );
+
+    expect(segments).toEqual([
+      {type: 'plain', value: 'Assim diz o Senhor: '},
+      {type: 'verse', value: '20'},
+      {type: 'plain', value: ' Não oprimas o estrangeiro. '},
+      {type: 'verse', value: '21'},
+      {type: 'plain', value: ' Não façais mal à viúva.'},
+    ]);
+  });
+
+  it('formats lettered psalm verse markers and extracts repeated response text once', () => {
+    const text = 'R. Refrão do salmo. 2 Eu vos amo. 3a Minha rocha. R. Refrão do salmo. 3bc Em vós espero.';
+    const response = extractPsalmRefrain(text);
+    expect(response).toEqual({
+      refrain: 'Refrão do salmo.',
+      text: 'R. 2 Eu vos amo. 3a Minha rocha. R. 3bc Em vós espero.',
+    });
+    expect(tokenizeLiturgyVerseMarkers(response.text, 'Sl 17(18),2-3a.3bc-4')).toContainEqual({type: 'verse', value: '3a'});
   });
 });

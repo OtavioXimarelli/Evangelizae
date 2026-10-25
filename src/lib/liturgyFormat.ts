@@ -91,8 +91,67 @@ export function formatLiturgyParagraphs(text: string, kind: ReadingKind | 'PRAYE
 }
 
 export interface TextSegment {
-  type: 'plain' | 'quote';
+  type: 'plain' | 'quote' | 'verse';
   value: string;
+}
+
+function getReferenceVerseNumbers(reference: string): Set<string> {
+  const verseRange = reference.split(',').slice(1).join(',').replace(/\([^)]*\)/g, '');
+  const numbers = new Set<string>();
+
+  for (const match of verseRange.matchAll(/(\d{1,3}[a-z]{0,3})(?:-(\d{1,3}[a-z]{0,3}))?/gi)) {
+    const first = match[1].toLowerCase();
+    const last = match[2]?.toLowerCase();
+    numbers.add(first);
+    if (!last || last === first) continue;
+
+    const firstNumber = Number.parseInt(first, 10);
+    const lastNumber = Number.parseInt(last, 10);
+    if (lastNumber - firstNumber <= 30) {
+      for (let verse = firstNumber + 1; verse < lastNumber; verse += 1) numbers.add(String(verse));
+    }
+    numbers.add(last);
+  }
+
+  return numbers;
+}
+
+/** Identifies only verse labels present in the item's cited biblical reference. */
+export function tokenizeLiturgyVerseMarkers(text: string, reference?: string): TextSegment[] {
+  if (!reference) return [{type: 'plain', value: text}];
+  const verseNumbers = getReferenceVerseNumbers(reference);
+  if (verseNumbers.size === 0) return [{type: 'plain', value: text}];
+
+  const candidatePattern = /\d{1,3}[a-z]{0,3}/gi;
+  const segments: TextSegment[] = [];
+  let cursor = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = candidatePattern.exec(text)) !== null) {
+    const label = match[0].toLowerCase();
+    const before = text[match.index - 1];
+    const after = text[match.index + match[0].length];
+    const hasBoundaryBefore = match.index === 0 || /[\s:;.!?*]/.test(before ?? '');
+    const hasBoundaryAfter = after !== undefined && /\s/.test(after);
+    if (!verseNumbers.has(label) || !hasBoundaryBefore || !hasBoundaryAfter) continue;
+
+    if (match.index > cursor) segments.push({type: 'plain', value: text.slice(cursor, match.index)});
+    segments.push({type: 'verse', value: match[0]});
+    cursor = candidatePattern.lastIndex;
+  }
+
+  if (cursor < text.length) segments.push({type: 'plain', value: text.slice(cursor)});
+  return segments.length > 0 ? segments : [{type: 'plain', value: text}];
+}
+
+export function extractPsalmRefrain(text: string, explicitRefrain?: string): {refrain: string | null; text: string} {
+  const match = text.match(/^\s*R\.\s*(.+?)(?=\s+\d{1,3}[a-z]{0,3}\s|$)/i);
+  const refrain = explicitRefrain?.trim() || match?.[1]?.trim() || null;
+  if (!refrain) return {refrain: null, text};
+
+  const escapedRefrain = refrain.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const responsePattern = new RegExp(`(R\\.)\\s*${escapedRefrain}`, 'gi');
+  return {refrain, text: text.replace(responsePattern, '$1')};
 }
 
 /**

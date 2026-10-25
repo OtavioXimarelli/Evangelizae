@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import {RefreshCw} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {useDayContext} from '@/hooks/useDayContext';
-import {formatLiturgyParagraphs, tokenizeLiturgyQuotes} from '@/lib/liturgyFormat';
+import {extractPsalmRefrain, formatLiturgyParagraphs, tokenizeLiturgyQuotes, tokenizeLiturgyVerseMarkers} from '@/lib/liturgyFormat';
 import {DailyLiturgyDto, getDailyLiturgy, LiturgyGroupDto, ReadingKind} from '@/services/liturgyService';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
 
@@ -26,15 +26,21 @@ function formatLiturgyDate(date: string): string {
   return new Intl.DateTimeFormat('pt-BR', {day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(`${date}T12:00:00`));
 }
 
-function renderFormattedParagraph(paragraph: string) {
+function renderFormattedParagraph(paragraph: string, reference?: string, isPsalm = false) {
   const segments = tokenizeLiturgyQuotes(paragraph);
-  return segments.map((segment, segIndex) =>
-    segment.type === 'quote' ? (
-      <span key={segIndex} className="liturgy-quote">{segment.value}</span>
-    ) : (
-      <span key={segIndex}>{segment.value}</span>
-    ),
-  );
+  return segments.flatMap((segment, segIndex) => {
+    if (segment.type === 'quote') return <span key={segIndex} className="liturgy-quote">{segment.value}</span>;
+    return tokenizeLiturgyVerseMarkers(segment.value, reference).map((textSegment, textIndex) => {
+      const key = `${segIndex}-${textIndex}`;
+      if (textSegment.type === 'verse') return <sup key={key} className="reading-verse-number">{textSegment.value}</sup>;
+      if (!isPsalm) return <span key={key}>{textSegment.value}</span>;
+      return textSegment.value.split(/(R\.)/gi).map((part, partIndex) =>
+        /^R\.$/i.test(part)
+          ? <span key={`${key}-${partIndex}`} className="psalm-response-marker" aria-label="Refrão">{part}</span>
+          : <span key={`${key}-${partIndex}`}>{part}</span>,
+      );
+    });
+  });
 }
 
 function hasDropCap(kind: ReadingKind): boolean {
@@ -83,21 +89,25 @@ export default function LiturgyPage() {
               >
                 <span className="eyebrow">{t(group.kind)}</span>
                 {group.items.map((item, index) => {
-                  const paragraphs = formatLiturgyParagraphs(item.text, group.kind);
                   const isPsalm = group.kind === 'PSALM';
                   const isGospel = group.kind === 'GOSPEL';
                   const isScriptureReading = group.kind === 'FIRST_READING' || group.kind === 'SECOND_READING';
+                  const psalmResponse = isPsalm ? extractPsalmRefrain(item.text, item.refrain) : null;
+                  const readingText = psalmResponse?.text ?? item.text;
+                  const paragraphs = formatLiturgyParagraphs(readingText, group.kind);
+                  const reference = isPsalm ? item.reference?.replace(/\s*\(R\.[^)]*\)/i, '') : item.reference;
+                  const showItemTitle = !isPsalm || item.title.trim().toLocaleLowerCase('pt-BR') !== t(group.kind).toLocaleLowerCase('pt-BR');
                   return (
                     <div className="reading-item" key={`${item.reference}-${index}`}>
                       <div className="reading-item-header">
-                        <h2>{item.title}</h2>
-                        {item.reference && <p className="reading-reference">{item.reference}</p>}
+                        {showItemTitle && <h2>{item.title}</h2>}
+                        {reference && <p className="reading-reference">{reference}</p>}
                       </div>
-                      {item.refrain && (
-                        <div className="psalm-refrain-box" role="note" aria-label={t('refrainLabel')}>
+                      {psalmResponse?.refrain && (
+                        <p className="psalm-refrain" role="note" aria-label={t('refrainLabel')}>
                           <span className="liturgy-rubric" aria-hidden="true">R.</span>
-                          <p className="psalm-refrain-text">{item.refrain}</p>
-                        </div>
+                          {' '}<span>{psalmResponse.refrain}</span>
+                        </p>
                       )}
                       <div className={`reading-body${isPsalm ? ' reading-body-psalm' : ''}`}>
                         {paragraphs.map((paragraph, pIndex) => (
@@ -111,8 +121,7 @@ export default function LiturgyPage() {
                                   : 'reading-paragraph'
                             }
                           >
-                            {isPsalm && <span className="psalm-verse-mark" aria-hidden="true">✦</span>}
-                            {renderFormattedParagraph(paragraph)}
+                            {renderFormattedParagraph(paragraph, item.reference, isPsalm)}
                           </p>
                         ))}
                       </div>
