@@ -1,5 +1,6 @@
 'use client';
 
+import {useRef} from 'react';
 import {useLocale, useTranslations} from 'next-intl';
 import {RosaryGuidePrompt, RosaryGuideTrigger} from '@/components/rosary/RosaryGuideModal';
 import {MysteryType, ROSARY_MYSTERIES} from '@/services/rosaryEngine';
@@ -9,6 +10,7 @@ export function MysteryGate({todayMystery}: {todayMystery: MysteryType}) {
   const t = useTranslations('Rosary');
   const locale = useLocale();
   const prayer = usePrayerStore();
+  const guideFocusRef = useRef<HTMLButtonElement>(null);
 
   return (
     <div className="reading-wrap section-pad mystery-gate">
@@ -16,8 +18,8 @@ export function MysteryGate({todayMystery}: {todayMystery: MysteryType}) {
         <span className="eyebrow">{t('gateEyebrow')}</span>
         <h1 className="page-title">{t('chooseMystery')}</h1>
         <p className="lede">{t('gateSubtitle')}</p>
-        <RosaryGuideTrigger variant="pill" />
-        <RosaryGuidePrompt />
+        <RosaryGuideTrigger variant="pill" focusRef={guideFocusRef} />
+        <RosaryGuidePrompt returnFocusRef={guideFocusRef} />
         <button type="button" className="button mystery-gate-cta" onClick={() => prayer.initRosary(todayMystery)}>
           {t('prayTodayAction')}
         </button>

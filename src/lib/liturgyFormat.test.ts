@@ -17,6 +17,7 @@ describe('formatLiturgyParagraphs', () => {
     expect(stanzas).toHaveLength(2);
     expect(stanzas[0]).toContain('Dizei entre as gentes');
     expect(stanzas[1]).toContain('Alegrem-se os céus');
+    expect(stanzas.join(' ')).toBe(psalm);
   });
 
   it('segments long single-block Gospel readings into balanced paragraphs without altering text', () => {
@@ -25,6 +26,8 @@ describe('formatLiturgyParagraphs', () => {
     const paragraphs = formatLiturgyParagraphs(gospel, 'GOSPEL');
     expect(paragraphs.length).toBeGreaterThan(1);
     expect(paragraphs.join(' ')).toBe(gospel);
+    const paragraphLengths = paragraphs.map((paragraph) => paragraph.length);
+    expect(Math.max(...paragraphLengths) - Math.min(...paragraphLengths)).toBeLessThan(120);
   });
 });
 

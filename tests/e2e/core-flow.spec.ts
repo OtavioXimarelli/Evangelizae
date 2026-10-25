@@ -24,6 +24,7 @@ test('direct visits render every core page instead of an empty hydration shell',
 
 test('temporary liturgy attempts the API and falls back to the reviewed local entry', async ({page}) => {
   const apiRequests: string[] = [];
+  await page.route('https://api.evangelizae.com/api/v1/liturgy/today**', (route) => route.abort());
   page.on('request', (request) => {
     if (request.url().includes('/liturgy/today')) apiRequests.push(request.url());
   });
@@ -134,6 +135,41 @@ test('active prayer exit dialog is visible, focusable, and dismissible', async (
   await expect(page).toHaveURL(/\/pt\/sanctuary$/);
 });
 
+test('first-time Rosary guide returns keyboard focus to the persistent trigger', async ({page}) => {
+  await page.goto('/pt/rosary');
+  const trigger = page.getByRole('button', {name: 'O que é o Rosário?'});
+  await page.getByRole('button', {name: 'Conhecer o Rosário'}).click();
+
+  const dialog = page.getByRole('dialog', {name: /o que é o santo rosário/i});
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button', {name: 'Fechar'}).click();
+  await expect(trigger).toBeFocused();
+});
+
+test('completed Rosary keeps the guide trigger available', async ({page}) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('evangelizae-prayer-session', JSON.stringify({
+      state: {
+        activeMysteryType: 'gloriosos',
+        currentStepIndex: 72,
+        furthestStepIndex: 72,
+        sessionStartedAt: '2026-10-25T12:00:00.000Z',
+        isCompleted: true,
+        intentions: [],
+        reflection: '',
+        completions: [],
+      },
+      version: 2,
+    }));
+  });
+  await page.goto('/pt/rosary');
+  await expect(page.getByRole('heading', {name: 'Permaneça um instante em silêncio.'})).toBeVisible();
+  const trigger = page.getByRole('button', {name: 'O que é o Rosário?'});
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  await expect(page.getByRole('dialog', {name: /o que é o santo rosário/i})).toBeVisible();
+});
+
 test('mobile product pages use the tab bar without a hamburger', async ({page, isMobile}) => {
   test.skip(!isMobile, 'Product tab bar is a phone-layout concern');
   for (const route of ['sanctuary', 'liturgy', 'settings']) {
@@ -201,6 +237,7 @@ test('settings erase every Evangelizae browser record and return to a clean star
 
 test('beta pages have no serious automated accessibility violations', async ({page, isMobile}) => {
   test.skip(isMobile, 'One semantic pass is enough; responsive behavior is covered separately');
+  await page.emulateMedia({reducedMotion: 'reduce'});
   for (const route of ['inicio', 'comecar', 'sanctuary', 'rosary', 'liturgy', 'settings', 'about', 'privacy', 'offline', 'rota-inexistente']) {
     await page.goto(`/pt/${route}`);
     await expect(page.getByRole('heading', {level: 1})).toBeVisible();

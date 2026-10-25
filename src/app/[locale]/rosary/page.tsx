@@ -28,6 +28,7 @@ export default function RosaryPage() {
   const [gateAfterCompletion, setGateAfterCompletion] = useState(false);
   const intentionsRef = useRef<HTMLDivElement>(null);
   const intentionsTriggerRef = useRef<HTMLButtonElement>(null);
+  const guideFocusRef = useRef<HTMLButtonElement>(null);
   const prayerHeadingRef = useRef<HTMLHeadingElement>(null);
   const completionHeadingRef = useRef<HTMLHeadingElement>(null);
   const steps = useMemo(() => buildRosarySequence(prayer.activeMysteryType), [prayer.activeMysteryType]);
@@ -132,6 +133,7 @@ export default function RosaryPage() {
           <div className="hero-actions">
             <Link href="/sanctuary" className="button">{t('returnSanctuary')}</Link>
             <button className="button button-secondary" onClick={() => setGateAfterCompletion(true)}>{t('prayAgain')}</button>
+            <RosaryGuideTrigger variant="pill" focusRef={guideFocusRef} />
           </div>
         </div>
       </div>
@@ -165,13 +167,13 @@ export default function RosaryPage() {
             {t(mysteryTranslation[prayer.activeMysteryType])}
           </span>
           <span className="prayer-toolbar-actions">
-            <RosaryGuideTrigger />
+            <RosaryGuideTrigger focusRef={guideFocusRef} />
             <button ref={intentionsTriggerRef} className="button button-quiet" onClick={() => setShowIntentions(!showIntentions)} aria-expanded={showIntentions} aria-controls="intentions-panel">{t('intentionsTitle')}</button>
             <button className="button button-quiet" onClick={() => setShowLatin(!showLatin)} disabled={!currentStep.latinText}>{showLatin ? t('hideLatin') : t('showLatin')}</button>
           </span>
         </div>
 
-        {prayer.currentStepIndex === 0 && <RosaryGuidePrompt />}
+        {prayer.currentStepIndex === 0 && <RosaryGuidePrompt returnFocusRef={guideFocusRef} />}
 
         <nav className="decade-strip" aria-label={t('stepsLabel')}>
           {decades.map(({mystery, first, last}) => {

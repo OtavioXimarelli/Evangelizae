@@ -159,14 +159,17 @@ export function RosaryGuideDialog({
 export function RosaryGuideTrigger({
   variant = 'quiet',
   className = '',
+  focusRef,
 }: {
   variant?: 'quiet' | 'secondary' | 'pill';
   className?: string;
+  focusRef?: React.RefObject<HTMLButtonElement | null>;
 }) {
   const t = useTranslations('Rosary');
   const dismissRosaryGuide = usePreferencesStore((state) => state.dismissRosaryGuide);
   const [open, setOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const localTriggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = focusRef ?? localTriggerRef;
 
   const handleOpen = () => {
     dismissRosaryGuide();
@@ -191,12 +194,18 @@ export function RosaryGuideTrigger({
   );
 }
 
-export function RosaryGuidePrompt() {
+export function RosaryGuidePrompt({
+  returnFocusRef,
+}: {
+  returnFocusRef?: React.RefObject<HTMLElement | null>;
+} = {}) {
   const t = useTranslations('Rosary');
   const mounted = useIsMounted();
   const rosaryGuideSeen = usePreferencesStore((state) => state.rosaryGuideSeen);
   const dismissRosaryGuide = usePreferencesStore((state) => state.dismissRosaryGuide);
   const [open, setOpen] = useState(false);
+  const acceptRef = useRef<HTMLButtonElement>(null);
+  const dialogReturnFocusRef = useRef<HTMLElement | null>(null);
 
   if (!mounted || (rosaryGuideSeen && !open)) return null;
 
@@ -211,9 +220,11 @@ export function RosaryGuidePrompt() {
           </div>
           <div className="rosary-guide-prompt-actions">
             <button
+              ref={acceptRef}
               type="button"
               className="button button-small"
               onClick={() => {
+                dialogReturnFocusRef.current = returnFocusRef?.current ?? acceptRef.current;
                 dismissRosaryGuide();
                 setOpen(true);
               }}
@@ -231,7 +242,7 @@ export function RosaryGuidePrompt() {
           </div>
         </aside>
       )}
-      <RosaryGuideDialog open={open} onClose={() => setOpen(false)} />
+      <RosaryGuideDialog open={open} onClose={() => setOpen(false)} returnFocusRef={dialogReturnFocusRef} />
     </>
   );
 }

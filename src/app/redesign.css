@@ -1671,7 +1671,7 @@ body {
   text-wrap: pretty;
 }
 
-.reading-body.drop-cap::first-letter {
+.reading-paragraph.drop-cap::first-letter {
   float: left;
   margin: 0.08em 0.12em 0 0;
   color: var(--brass);
@@ -1985,7 +1985,7 @@ body {
   .reading-group:first-child { padding-top: 0; }
   .reading-group h2 { font-size: clamp(2rem, 10vw, 2.7rem); }
   .reading-body { font-size: var(--reader-size, 1.13rem); }
-  .reading-body.drop-cap::first-letter { font-size: 3.65em; }
+  .reading-paragraph.drop-cap::first-letter { font-size: 3.65em; }
   .liturgy-source { font-size: 0.72rem; }
   .liturgy-empty .hero-actions { width: 100%; }
   .liturgy-empty .button { width: 100%; }
@@ -2469,6 +2469,14 @@ html[data-focus-mode] body::after {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.55rem;
+}
+
+.dark .rosary-guide-prompt .button-quiet {
+  color: #f0a8b2;
+}
+
+.focus-shell .rosary-guide-prompt .button-quiet {
+  color: #f6e7c1;
 }
 
 .rosary-guide-modal {

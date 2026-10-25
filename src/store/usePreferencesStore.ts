@@ -1,8 +1,9 @@
 'use client';
 
 import {create} from 'zustand';
-import {persist} from 'zustand/middleware';
+import {createJSONStorage, persist} from 'zustand/middleware';
 import {getDatePartsInTimeZone, getLocalDateKey} from '@/lib/date';
+import {createReconciledPreferenceStorage} from '@/store/preferenceStorage';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type ReaderScale = 'normal' | 'large' | 'xl';
@@ -47,6 +48,12 @@ export function isReminderDue(reminderTime: string, dismissedDate: string | null
   return hour * 60 + minute >= hours * 60 + minutes;
 }
 
+const preferenceStorage = createReconciledPreferenceStorage({
+  getItem: (name) => localStorage.getItem(name),
+  setItem: (name, value) => localStorage.setItem(name, value),
+  removeItem: (name) => localStorage.removeItem(name),
+});
+
 export const usePreferencesStore = create<PreferencesState>()(
   persist(
     (set) => ({
@@ -61,11 +68,13 @@ export const usePreferencesStore = create<PreferencesState>()(
       dismissRosaryGuide: () => set({rosaryGuideSeen: true}),
       resetPreferences: () => {
         document.cookie = 'evangelizae_onboarded=; Path=/; Max-Age=0; SameSite=Lax';
+        preferenceStorage.replaceNextWrite();
         set({...initialPreferences});
       },
     }),
     {
       name: 'evangelizae-preferences',
+      storage: createJSONStorage(() => preferenceStorage),
       version: 4,
       migrate: (persisted, version) => ({
         ...(persisted as Record<string, unknown>),
