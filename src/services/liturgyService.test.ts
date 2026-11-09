@@ -112,10 +112,32 @@ describe('daily liturgy client', () => {
     expect(result.date).toBe('2026-09-02');
   });
 
+  it('accepts a well-formed reflection and preserves it in the same-day cache', async () => {
+    vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');
+    const payload = {
+      ...apiLiturgy('2026-09-02'),
+      reflection: {text: 'Vigiai, pois não sabeis o dia nem a hora.', attribution: 'Papa Bento XVI, Angelus de 6 de novembro de 2011', reference: 'Mt 25,1-13'},
+    };
+    const fetchSpy = vi.fn().mockResolvedValue({ok: true, status: 200, json: async () => payload});
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const first = await getDailyLiturgy();
+    const second = await getDailyLiturgy();
+
+    expect(first.reflection?.attribution).toContain('Bento XVI');
+    expect(second.reflection?.text).toBe('Vigiai, pois não sabeis o dia nem a hora.');
+    expect(second.source.freshness).toBe('CACHED');
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
   it.each([
     ['refrain', (value: ReturnType<typeof apiLiturgy>) => ({...value, groups: [{...value.groups[0], items: [{...value.groups[0].items[0], refrain: 42}]}]})],
     ['prayers', (value: ReturnType<typeof apiLiturgy>) => ({...value, prayers: {collect: 42}})],
     ['fetchedAt', (value: ReturnType<typeof apiLiturgy>) => ({...value, source: {...value.source, fetchedAt: 'not-a-date'}})],
+    ['reflection text', (value: ReturnType<typeof apiLiturgy>) => ({...value, reflection: {text: '   ', attribution: 'Autor'}})],
+    ['reflection attribution', (value: ReturnType<typeof apiLiturgy>) => ({...value, reflection: {text: 'Texto', attribution: ''}})],
+    ['reflection reference', (value: ReturnType<typeof apiLiturgy>) => ({...value, reflection: {text: 'Texto', attribution: 'Autor', reference: 42}})],
   ])('rejects a response with invalid %s', async (_field, mutate) => {
     vi.setSystemTime(new Date('2026-09-02T15:00:00Z'));
     vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.org/api/v1');

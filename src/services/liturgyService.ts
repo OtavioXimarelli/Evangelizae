@@ -1,8 +1,15 @@
 import {getDateKeyInTimeZone} from '@/lib/date';
 import {getEmbeddedDailyLiturgy} from '@/data/embeddedDailyLiturgy';
+import {getApiBaseUrl} from '@/services/apiBase';
 
 export type LiturgicalColor = 'GREEN' | 'WHITE' | 'RED' | 'PURPLE' | 'ROSE';
 export type ReadingKind = 'FIRST_READING' | 'PSALM' | 'SECOND_READING' | 'GOSPEL' | 'EXTRA';
+
+export interface LiturgyReflectionDto {
+  text: string;
+  attribution: string;
+  reference?: string;
+}
 
 export interface LiturgyReadingDto {
   title: string;
@@ -26,6 +33,7 @@ export interface DailyLiturgyDto {
     communion?: string;
   };
   groups: LiturgyGroupDto[];
+  reflection?: LiturgyReflectionDto;
   source: {
     provider: string;
     fetchedAt: string;
@@ -33,7 +41,7 @@ export interface DailyLiturgyDto {
   };
 }
 
-const CACHE_PREFIX = 'evangelizae-liturgy-v2-';
+const CACHE_PREFIX = 'evangelizae-liturgy-v3-';
 const LITURGY_PATH = '/liturgy/today';
 const TIME_ZONE = 'America/Sao_Paulo';
 const LOCALE = 'pt-BR';
@@ -59,6 +67,12 @@ function isLiturgyGroup(value: unknown): value is LiturgyGroupDto {
   return isRecord(value) && isReadingKind(value.kind) && Array.isArray(value.items) && value.items.length > 0 && value.items.every(isLiturgyReading);
 }
 
+function isLiturgyReflection(value: unknown): value is LiturgyReflectionDto {
+  if (!isRecord(value) || typeof value.text !== 'string' || !value.text.trim()) return false;
+  if (typeof value.attribution !== 'string' || !value.attribution.trim()) return false;
+  return value.reference === undefined || typeof value.reference === 'string';
+}
+
 function isDailyLiturgy(value: unknown, expectedDate: string): value is DailyLiturgyDto {
   if (!isRecord(value) || value.date !== expectedDate || typeof value.title !== 'string' || !value.title.trim() || !isLiturgicalColor(value.color)) return false;
   if (!isRecord(value.prayers) || !Array.isArray(value.groups) || value.groups.length === 0 || !value.groups.every(isLiturgyGroup)) return false;
@@ -66,13 +80,8 @@ function isDailyLiturgy(value: unknown, expectedDate: string): value is DailyLit
   if (Object.keys(value.prayers).some((key) => !prayerKeys.has(key)) || !Object.values(value.prayers).every((prayer) => prayer === undefined || typeof prayer === 'string')) return false;
   if (!isRecord(value.source) || typeof value.source.provider !== 'string' || !value.source.provider.trim() || typeof value.source.fetchedAt !== 'string') return false;
   if (Number.isNaN(Date.parse(value.source.fetchedAt))) return false;
+  if (value.reflection !== undefined && !isLiturgyReflection(value.reflection)) return false;
   return value.source.freshness === 'LIVE' || value.source.freshness === 'CACHED';
-}
-
-function getApiBaseUrl(): string {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.trim();
-  if (!baseUrl) throw new Error('LITURGY_API_URL_MISSING');
-  return baseUrl.replace(/\/+$/, '');
 }
 
 function getCacheKey(date: string): string {
@@ -98,7 +107,7 @@ function writeCache(liturgy: DailyLiturgyDto): void {
 }
 
 async function fetchDailyLiturgy(date: string): Promise<DailyLiturgyDto> {
-  const url = new URL(`${getApiBaseUrl()}${LITURGY_PATH}`);
+  const url = new URL(`${getApiBaseUrl('LITURGY_API_URL_MISSING')}${LITURGY_PATH}`);
   url.searchParams.set('timezone', TIME_ZONE);
   url.searchParams.set('locale', LOCALE);
   const controller = new AbortController();

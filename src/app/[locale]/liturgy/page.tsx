@@ -79,7 +79,7 @@ export default function LiturgyPage() {
         {liturgy.source.freshness === 'CACHED' && <p className="status-message liturgy-edition-note">{t('cachedNotice')}</p>}
         {liturgy.source.freshness === 'EMBEDDED' && <p className="status-message liturgy-edition-note">{t('embeddedNotice')}</p>}
         <div className={`liturgy-layout reader-${readerScale}`}>
-          <nav className="contents-nav" aria-label={t('contents')}><strong>{t('contents')}</strong>{liturgy.groups.map((group, index) => <a key={`${group.kind}-${index}`} href={`#${groupIds[group.kind]}-${index}`}>{t(group.kind)}</a>)}</nav>
+          <nav className="contents-nav" aria-label={t('contents')}><strong>{t('contents')}</strong>{liturgy.groups.map((group, index) => <a key={`${group.kind}-${index}`} href={`#${groupIds[group.kind]}-${index}`}>{t(group.kind)}</a>)}{liturgy.reflection && <a href="#reflexao">{t('reflection')}</a>}</nav>
           <article className="reading-document">
             {liturgy.groups.map((group, groupIndex) => (
               <section
@@ -143,6 +143,22 @@ export default function LiturgyPage() {
                 })}
               </section>
             ))}
+            {liturgy.reflection && (
+              <section className="reading-group reading-group-reflection" id="reflexao">
+                <span className="eyebrow">{t('reflection')}</span>
+                <div className="reading-body">
+                  {formatLiturgyParagraphs(liturgy.reflection.text, 'EXTRA').map((paragraph, pIndex) => (
+                    <p key={pIndex} className="reading-paragraph">
+                      {renderFormattedParagraph(paragraph)}
+                    </p>
+                  ))}
+                </div>
+                <p className="liturgy-source reflection-attribution">
+                  {liturgy.reflection.attribution}
+                  {liturgy.reflection.reference ? ` · ${liturgy.reflection.reference}` : ''}
+                </p>
+              </section>
+            )}
             {Object.entries(liturgy.prayers).map(([key, text]) =>
               text ? (
                 <section className="reading-group reading-group-prayer" key={key}>

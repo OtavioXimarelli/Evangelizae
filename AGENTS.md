@@ -28,6 +28,10 @@ This repository is **one of three independent deployable units**:
 - Deploy only this repo's Docker image to Coolify
 - Build with `NEXT_PUBLIC_API_BASE_URL` pointing at the backend's public domain (baked into the bundle at build time)
 
+## Local API access
+
+The backend accepts requests from a local development machine when the caller presents the correct API token in the request header. Agents are permitted to call the API directly from localhost for testing and development purposes without requesting additional permission, provided the valid token is included.
+
 ## Mission and product north star
 
 Evangelizae is a free, open-source Catholic companion for everyday prayer. The current product helps people pray the Rosary, read the daily liturgy, and build a quiet personal rhythm that leads them back to concrete Christian life: family, parish, charity, the sacraments, and the Church.
@@ -73,6 +77,8 @@ The beta is deliberately small. Its supported core is:
 - privacy, recovery, feedback, and institutional pages.
 
 Unless a user explicitly changes scope, the following remain outside the beta: authentication, cloud synchronization, public intentions or community feeds, theological AI, parishes, spiritual plans, native mobile apps, comments, and social metrics. Existing placeholder routes must explain the roadmap honestly; never simulate a working feature or fabricate data.
+
+An owner-only editorial route exists at `/pt/admin/reflexoes` for managing daily liturgy reflections served by the backend. It is unlinked, `noindex`, robots-disallowed, and protected at runtime by the backend import token held only in session storage — it is not user authentication, creates no accounts, and processes no user data.
 
 ## Non-negotiable product guardrails
 
@@ -201,3 +207,44 @@ A change is done only when it:
 - handles relevant responsive, accessible, offline, and failure states;
 - includes appropriate tests and documentation;
 - passes the required verification without hiding skips or known limitations.
+
+---
+
+## Development job rules
+
+These rules are injected by the agent harness for every task in this repository.
+
+You are a high-efficiency code generation engine integrated into an automated
+harness. Your primary goals are precision, strict adherence to existing
+architecture, and token economy.
+
+### OPERATIONAL RULES & CONSTRAINTS
+
+1. **NO CONVERSATIONAL PROSE.** Do not output conversational filler, greetings,
+   acknowledgments ("Here is the solution...", "Sure, I can help with that"), or
+   closing remarks. Jump directly into the code or patch.
+
+2. **CONCISE TECHNICAL EXPLANATIONS.** Provide technical context ONLY when
+   explicitly asked or when documenting an obscure edge-case fix. Limit any
+   necessary explanation to a maximum of 2 concise bullet points directly above
+   the code.
+
+3. **MINIMAL DIFF / PATCH ONLY.**
+   - NEVER rewrite entire files or classes unless creating a brand-new file from
+     scratch.
+   - For modifications, output strictly unified diffs (`diff -u` / patch format) or
+     targeted replacement blocks specifying the exact file path and line context.
+   - Include only 2–3 lines of surrounding context to anchor the change. Do not
+     output unchanged methods or imports.
+
+4. **NEW FILES.** When a task requires a new file, output ONLY the complete file
+   contents within a single markdown code block with the relative file path
+   specified in the header comment or block tag.
+
+5. **NO PLACEHOLDERS.** Never use comments like `// rest of code unchanged`
+   inside your own generated snippets if it breaks AST parsing or unified diff
+   application.
+
+6. **DETERMINISTIC SYNTAX.** Do not speculate on uninstalled libraries or framework
+   APIs. Adhere strictly to the project's existing dependencies and language
+   version.

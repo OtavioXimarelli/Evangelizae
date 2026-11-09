@@ -1704,6 +1704,90 @@ body {
   line-height: 1.65;
 }
 
+.reading-group-reflection .reflection-attribution {
+  margin-top: 1.6rem;
+  border-top-style: dashed;
+}
+
+.admin-reflections .admin-gate {
+  max-width: 34rem;
+}
+
+.admin-reflections .admin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.2rem, 3vw, 2.4rem);
+  align-items: start;
+}
+
+.admin-reflections .admin-datebar {
+  display: flex;
+  align-items: end;
+  gap: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+
+.admin-reflections .admin-datebar .field {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-reflections .admin-week {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.4rem;
+}
+
+.admin-reflections .admin-day {
+  min-width: 2.4rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.45rem;
+  background: transparent;
+  color: var(--muted-ink);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.admin-reflections .admin-day[data-filled] {
+  border-color: var(--oxblood);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.admin-reflections .admin-day[data-active] {
+  background: var(--oxblood);
+  border-color: var(--oxblood);
+  color: #fff8eb;
+}
+
+.admin-reflections .admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.admin-reflections .admin-preview {
+  position: sticky;
+  top: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .admin-reflections .admin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-reflections .admin-preview {
+    position: static;
+  }
+
+  .admin-reflections .admin-datebar {
+    flex-wrap: wrap;
+  }
+}
+
 .dark .contents-nav,
 .dark .reading-document {
   box-shadow:
