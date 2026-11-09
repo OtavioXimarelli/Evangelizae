@@ -1,5 +1,5 @@
 import {defaultCache} from '@serwist/next/worker';
-import {Serwist, type PrecacheEntry, type SerwistGlobalConfig} from 'serwist';
+import {NetworkOnly, Serwist, type PrecacheEntry, type SerwistGlobalConfig} from 'serwist';
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -16,7 +16,17 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: defaultCache,
+  // Internal/editorial endpoints are authenticated and must never be cached or
+  // mediated by the SW (avoids noisy no-response errors when CORS/network fail).
+  runtimeCaching: [
+    {
+      matcher({url}) {
+        return url.pathname.startsWith('/internal/');
+      },
+      handler: new NetworkOnly(),
+    },
+    ...defaultCache,
+  ],
   fallbacks: {
     entries: [{
       url: '/pt/offline',
