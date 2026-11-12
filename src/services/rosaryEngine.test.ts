@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {buildRosarySequence, getDailyMysteryType, ROSARY_PRAYERS} from './rosaryEngine';
+import {buildDevotionSequence, buildRosarySequence, getDailyMysteryType, ROSARY_PRAYERS} from './rosaryEngine';
 
 describe('rosary engine', () => {
   it('builds the complete 73-step Rosary for every mystery group', () => {
@@ -9,6 +9,12 @@ describe('rosary engine', () => {
       expect(steps.every((step) => step.totalSteps === 73)).toBe(true);
       expect(steps.filter((step) => step.type === 'decade_hail_mary')).toHaveLength(50);
       expect(steps.at(-1)?.type).toBe('salve_regina');
+    }
+  });
+
+  it('keeps the Rosary identical through the devotion abstraction', () => {
+    for (const mystery of ['gozosos', 'luminosos', 'dolorosos', 'gloriosos'] as const) {
+      expect(buildDevotionSequence('rosario', {mysteryType: mystery})).toEqual(buildRosarySequence(mystery));
     }
   });
 

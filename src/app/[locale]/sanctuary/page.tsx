@@ -9,7 +9,8 @@ import {useDayContext} from '@/hooks/useDayContext';
 import {WeekDots, type WeekDayMark} from '@/components/common/WeekDots';
 import {RosaryGuidePrompt, RosaryGuideTrigger} from '@/components/rosary/RosaryGuideModal';
 import {getCalendarDateInTimeZone, getDateKeyFromLocalDate} from '@/lib/date';
-import {buildRosarySequence, type MysteryType} from '@/services/rosaryEngine';
+import {buildDevotionSequence, type MysteryType} from '@/services/rosaryEngine';
+import {getRosaryProgress} from '@/services/rosaryProgress';
 import {getPrayerStats, usePrayerStore} from '@/store/usePrayerStore';
 import {isReminderDue, usePreferencesStore} from '@/store/usePreferencesStore';
 
@@ -44,6 +45,20 @@ export default function SanctuaryPage() {
   const dailyMystery = today.mystery;
   const stats = getPrayerStats(prayer.completions);
   const activeSession = Boolean(prayer.sessionStartedAt) && !prayer.isCompleted && prayer.furthestStepIndex > 0;
+  const resumeSteps = buildDevotionSequence(prayer.activeDevotion as import('@/services/rosaryEngine').DevotionType, {mysteryType: prayer.activeMysteryType});
+  const resumeProgress = getRosaryProgress(resumeSteps[Math.min(prayer.currentStepIndex, resumeSteps.length - 1)]);
+  const resumeDetail = [
+    resumeProgress.phase === 'decades'
+      ? tRosary('decadeLabel', {number: resumeProgress.decadeNumber ?? 0})
+      : resumeProgress.phase === 'opening'
+        ? tRosary('phaseOpening')
+        : tRosary('phaseClosing'),
+    resumeProgress.beadInDecade
+      ? tRosary('hailMaryOf', {current: resumeProgress.beadInDecade, total: 10})
+      : resumeProgress.openingHailMary
+        ? tRosary('openingHailMaryOf', {current: resumeProgress.openingHailMary})
+        : '',
+  ].filter(Boolean).join(' · ');
   const reminderDue = preferences.reminderEnabled && isReminderDue(preferences.reminderTime, preferences.reminderDismissedDate) && !stats.completedToday;
   const hasHistory = prayer.completions.length > 0;
 
@@ -107,7 +122,10 @@ export default function SanctuaryPage() {
             <>
               <span className="eyebrow">{t('resumeEyebrow')}</span>
               <h2 className="section-title">{t('resumeTitle')}</h2>
-              <p className="step-ribbon">{t('stepProgress', {current: prayer.currentStepIndex + 1, total: buildRosarySequence(prayer.activeMysteryType).length})}</p>
+              <p className="step-ribbon">
+                {t('stepProgress', {current: resumeProgress.stepNumber, total: resumeProgress.totalSteps})}
+                {resumeDetail && ` · ${resumeDetail}`}
+              </p>
             </>
           ) : hasHistory ? (
             <>

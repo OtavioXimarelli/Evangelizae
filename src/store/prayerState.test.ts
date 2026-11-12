@@ -1,10 +1,28 @@
 import {describe, expect, it} from 'vitest';
-import {getPrayerStats, PrayerCompletion} from './usePrayerStore';
+import {getPrayerStats, PrayerCompletion, usePrayerStore} from './usePrayerStore';
 import {isReminderDue, initialPreferences, usePreferencesStore} from './usePreferencesStore';
 
 function completion(localDate: string, suffix = '1'): PrayerCompletion {
-  return {id: `${localDate}-${suffix}`, localDate, completedAt: `${localDate}T12:00:00.000Z`, timeZone: 'America/Sao_Paulo', mysteryType: 'gloriosos'};
+  return {id: `${localDate}-${suffix}`, localDate, completedAt: `${localDate}T12:00:00.000Z`, timeZone: 'America/Sao_Paulo', devotion: 'rosario', mysteryType: 'gloriosos'};
 }
+
+describe('devotion state', () => {
+  it('defaults to the Rosary', () => {
+    expect(usePrayerStore.getState().activeDevotion).toBe('rosario');
+  });
+
+  it('keeps back-compat when initRosary receives a MysteryType', () => {
+    usePrayerStore.getState().initRosary('gloriosos');
+    const state = usePrayerStore.getState();
+    expect(state.activeDevotion).toBe('rosario');
+    expect(state.activeMysteryType).toBe('gloriosos');
+  });
+
+  it('switches devotion when given a DevotionType', () => {
+    usePrayerStore.getState().initRosary('sao_jose');
+    expect(usePrayerStore.getState().activeDevotion).toBe('sao_jose');
+  });
+});
 
 describe('private prayer statistics', () => {
   it('counts every complete Rosary but only one streak day per date', () => {

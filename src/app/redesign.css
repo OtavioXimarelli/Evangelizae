@@ -125,6 +125,11 @@ body {
   transform: translateY(5px);
 }
 
+/* Compact toolbar labels collapse to icons on phones; aria-label keeps the name */
+.toolbar-label {
+  display: inline;
+}
+
 .button-secondary,
 .button-quiet {
   box-shadow: none;
@@ -1136,116 +1141,306 @@ body {
   --rule: rgb(231 212 167 / 24%);
 }
 
-/* Mystery gate: the calm choice before the room */
+/* Mystery gate: the calm choice before the room.
+   Same discipline as the prayer room — one scroll region, a fixed CTA bar —
+   but the gate has no rail or beads: it is a short, quiet reading. */
 
 .mystery-gate {
-  display: grid;
-  place-items: center;
-  min-height: calc(100dvh - 4.5rem);
-}
-
-.mystery-gate-card {
-  width: min(46rem, 100%);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.9rem;
-}
-
-.mystery-gate-card .page-title {
-  font-size: clamp(2.6rem, 6vw, 3.6rem);
-}
-
-.mystery-gate-card .lede {
-  max-width: 34rem;
-  margin: 0;
-}
-
-.mystery-gate-cta {
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.mystery-gate-grid {
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  margin-top: 1.4rem;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem;
 }
 
-.mystery-gate-option {
-  position: relative;
+.gate-head {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0 0.35rem;
+}
+
+.gate-intro {
+  display: grid;
   gap: 0.55rem;
-  padding: 1.35rem 1.4rem;
-  border: 1px solid rgb(231 212 167 / 24%);
-  border-radius: 1.15rem 1.15rem 0.3rem 1.15rem;
-  background: color-mix(in srgb, var(--paper-raised) 72%, transparent);
-  color: #fff8eb;
-  text-align: left;
-  cursor: pointer;
-  transition: transform 200ms var(--ease-sacred), border-color 200ms ease, background-color 200ms ease;
+  padding: 0.3rem 0 1.15rem;
 }
 
-.mystery-gate-option:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--brass) 65%, transparent);
-  background: var(--paper-raised);
+.gate-intro .page-title {
+  margin: 0;
+  max-width: 22ch;
+  font-size: clamp(2rem, 7.6vw, 2.6rem);
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
 }
 
-.mystery-gate-option:focus-visible {
-  outline: 2px solid var(--brass);
-  outline-offset: 3px;
+.gate-intro .lede {
+  max-width: 34rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
 }
 
-.mystery-gate-option[data-today] {
-  border-color: color-mix(in srgb, var(--brass) 70%, transparent);
-  background: color-mix(in srgb, var(--brass) 12%, var(--paper-raised));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brass) 40%, transparent), var(--shadow-soft);
-}
+/* Devotion switcher: the Rosary plus the (not-yet-available) chaplets */
 
-.mystery-gate-badge {
-  position: absolute;
-  top: -0.7rem;
-  right: 1.1rem;
-  padding: 0.22rem 0.7rem;
+.gate-devotions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0 0 1.1rem;
+  padding: 0.3rem;
+  border: 1px solid var(--rule);
   border-radius: 999px;
-  background: var(--brass);
-  color: #241a10;
-  font-size: 0.62rem;
+  background: rgb(231 212 167 / 4%);
+}
+
+.gate-devotion-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.6rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-ink);
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.15;
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.gate-devotion-chip:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--brass) 60%, transparent);
+  color: var(--ink);
+}
+
+.gate-devotion-chip.is-active {
+  border-color: var(--brass);
+  background: color-mix(in srgb, var(--brass) 14%, transparent);
+  color: var(--ink);
+}
+
+.gate-devotion-chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.gate-devotion-soon {
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: rgb(231 212 167 / 12%);
+  color: var(--muted-ink);
+  font-size: 0.6rem;
   font-weight: 800;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.mystery-gate-name {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
-  font-weight: 650;
-  line-height: 1.12;
+.gate-coming-soon {
+  display: grid;
+  place-items: center;
+  min-height: 6rem;
+  padding: 1.2rem 1rem;
+  border: 1px dashed var(--rule);
+  border-radius: 0.95rem;
+  color: var(--muted-ink);
+  text-align: center;
 }
 
-.mystery-gate-meta {
+.gate-coming-soon p {
+  margin: 0;
+  max-width: 26rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.gate-devotion-description {
   display: grid;
-  gap: 0.18rem;
+  gap: 0.6rem;
+  padding: 1.1rem 1.05rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.95rem 0.95rem 0.25rem 0.95rem;
+  background: rgb(231 212 167 / 4%);
+}
+
+.gate-devotion-description p {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* Today's mysteries: the illuminated card, the reason the person came */
+
+.gate-today {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 1.15rem;
+  padding: 1.15rem 1.05rem 1.1rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--brass) 42%, transparent);
+  border-radius: 1.15rem 1.15rem 0.3rem 1.15rem;
+  background:
+    radial-gradient(120% 130% at 92% -30%, color-mix(in srgb, var(--brass) 22%, transparent), transparent 62%),
+    color-mix(in srgb, var(--brass) 8%, var(--paper-raised));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--brass) 16%, transparent),
+    var(--shadow-soft);
+}
+
+.gate-today::after {
+  position: absolute;
+  z-index: -1;
+  top: -1.2rem;
+  right: 0.2rem;
+  color: color-mix(in srgb, var(--brass) 16%, transparent);
+  content: '✢';
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 5.5rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.gate-today-badge {
+  justify-self: start;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--brass);
+  color: #241a10;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.gate-today-name {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.5rem, 6vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.gate-today-theme {
+  margin: 0;
+  color: #e3c782;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+.gate-today-days {
+  margin: 0.1rem 0 0;
   color: var(--muted-ink);
   font-size: 0.76rem;
   letter-spacing: 0.05em;
 }
 
-@media (max-width: 620px) {
-  .mystery-gate-grid {
-    grid-template-columns: 1fr;
-  }
+/* The other three sets stay visible: choosing should not hide anything */
 
-  .mystery-gate-card {
-    text-align: left;
-    align-items: flex-start;
-  }
+.gate-others {
+  padding-bottom: 0.4rem;
+}
+
+.gate-others-title {
+  margin: 0 0 0.65rem;
+  color: var(--muted-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gate-options {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mystery-gate-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3.4rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.95rem 0.95rem 0.25rem 0.95rem;
+  background: rgb(231 212 167 / 4%);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.mystery-gate-option:hover {
+  border-color: color-mix(in srgb, var(--brass) 60%, transparent);
+  background: rgb(231 212 167 / 8%);
+}
+
+.mystery-gate-option:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.gate-option-mark {
+  display: grid;
+  flex: none;
+  width: 1.85rem;
+  height: 1.85rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--brass) 42%, transparent);
+  border-radius: 999px;
+  color: var(--brass);
+  font-size: 0.72rem;
+}
+
+.gate-option-copy {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.gate-option-name {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.gate-option-meta {
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+}
+
+.gate-option-arrow {
+  flex: none;
+  margin-left: auto;
+  color: var(--brass);
+  font-size: 1.3rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.prayer-actions.gate-actions {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.mystery-gate-cta {
+  justify-content: space-between;
+  gap: 0.9rem;
 }
 
 .focus-header {
@@ -1266,71 +1461,285 @@ body {
 .focus-header .text-link { color: #e3c782; }
 .focus-header .brand-line { color: #bfc4bd; }
 
-.prayer-layout {
-  width: min(56rem, calc(100% - 2rem));
-  margin-inline: auto;
-  padding-block: 2rem 3rem;
+/* ===== Prayer room =====
+   Mobile first: the base rules describe the phone — a full-bleed chapel with
+   a fixed head, an orientation band, one scrollable prayer region and a
+   fixed action bar. The desktop card is layered on from 861px up. */
+
+.focus-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
 }
 
-.prayer-main {
-  border: 1px solid rgb(231 212 167 / 20%);
-  border-radius: 1.7rem 1.7rem 1.7rem 0.35rem;
-  background: var(--paper-raised);
-  box-shadow: 0 30px 80px rgb(0 0 0 / 24%);
+.focus-shell > main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
+}
+
+.focus-shell > main > .reading-wrap {
+  flex: 1;
+  align-self: center;
+}
+
+.focus-shell > main > .completion-screen,
+.focus-shell > main > .mystery-gate {
+  width: 100%;
+}
+
+.focus-header {
+  flex: none;
+  width: 100%;
+  min-height: 3.6rem;
+  gap: 1rem;
+  padding-inline: max(0.9rem, env(safe-area-inset-left, 0px)) max(0.9rem, env(safe-area-inset-right, 0px));
+}
+
+.prayer-layout {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+}
+
+.prayer-room {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(120% 70% at 50% -8%, rgb(231 212 167 / 8%), transparent 62%),
+    var(--paper-raised);
   color: var(--ink);
 }
 
-.prayer-main {
-  min-height: calc(100dvh - 9.5rem);
-  overflow: hidden;
-  padding: clamp(1.5rem, 4vw, 3.5rem);
-}
+/* Head: where the person is, the guide, the options */
 
-.prayer-progress {
-  height: 6px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgb(231 212 167 / 18%);
-}
-
-.prayer-progress > span {
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--oxblood), var(--brass));
-}
-
-.prayer-toolbar {
-  min-height: 4rem;
+.prayer-room-head {
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.6rem 1rem;
-  border-bottom: 1px solid var(--rule);
-  color: var(--muted-ink);
-  font-size: 0.86rem;
+  gap: 0.75rem;
+  padding: 0.45rem 0.75rem 0.3rem;
 }
 
-.prayer-toolbar-context {
+.prayer-room-context {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.45rem;
   min-width: 0;
 }
 
-.prayer-toolbar-actions {
+.prayer-room-mystery {
+  overflow: hidden;
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prayer-room-tools {
   display: inline-flex;
+  flex: none;
+  gap: 0.1rem;
+}
+
+.prayer-room-tools .button {
+  width: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  height: 2.75rem;
+  justify-content: center;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.prayer-room-tools .toolbar-label {
+  display: none;
+}
+
+/* Orientation band: the whole Rosary, then the beads of this decade */
+
+.rosary-rail {
+  flex: none;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.1rem 0.9rem 0.5rem;
+}
+
+.rosary-rail-track {
+  display: flex;
+  gap: 0.22rem;
+  height: 3px;
+}
+
+.rosary-rail-seg {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(231 212 167 / 16%);
+}
+
+.rosary-rail-seg > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--oxblood), var(--brass));
+  transition: width 240ms var(--ease-sacred);
+}
+
+.rosary-rail-seg[data-state='complete'] > span {
+  background: var(--oxblood);
+}
+
+.rosary-rail-seg[data-state='current'] {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brass) 45%, transparent);
+}
+
+.rosary-rail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.1rem 0.6rem;
+  min-width: 0;
+}
+
+.rosary-rail-phase {
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.92rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rosary-rail-count {
+  margin: 0 0 0 auto;
+  color: var(--muted-ink);
+  font-size: 0.64rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.rosary-rail-bead {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--brass);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.rosary-beads {
+  display: flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: space-between;
+  gap: 0;
+  width: 100%;
+  max-width: 24rem;
+  margin: 0.15rem auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rosary-beads li {
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+.bead-marker {
+  display: grid;
+  width: 100%;
+  max-width: 2rem;
+  height: 2.75rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.bead-marker {
+  cursor: pointer;
+}
+
+.bead-marker:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: -3px;
+}
+
+.bead-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 1.2px solid color-mix(in srgb, var(--brass) 62%, transparent);
+  border-radius: 999px;
+  transition: background-color 180ms ease, border-color 180ms ease, width 180ms ease, height 180ms ease;
+}
+
+.bead-marker[data-our-father] .bead-dot {
+  width: 0.78rem;
+  height: 0.78rem;
+}
+
+.bead-marker[data-state='future'] .bead-dot {
+  opacity: 0.55;
+}
+
+.bead-marker[data-state='complete'] .bead-dot {
+  border-color: transparent;
+  background: var(--oxblood);
+}
+
+.bead-marker[data-state='current'] .bead-dot {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-color: transparent;
+  background: var(--brass);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brass) 18%, transparent);
+}
+
+/* Prayer: the only region that scrolls */
+
+.prayer-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 1.05rem;
+  scrollbar-width: thin;
+}
+
+.prayer-scroll > * {
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.prayer-scroll .rosary-guide-prompt {
+  margin-bottom: 0.9rem;
 }
 
 .prayer-step {
   position: relative;
-  min-height: 500px;
-  padding: clamp(3rem, 7vw, 6rem) clamp(0rem, 4vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0 1rem;
 }
 
 .prayer-step::before {
+  display: none;
   position: absolute;
   top: 2rem;
   right: 1rem;
@@ -1343,54 +1752,167 @@ body {
 }
 
 .prayer-step h1 {
-  position: relative;
-  max-width: 14ch;
-  font-size: clamp(2.8rem, 5vw, 5.1rem);
-  letter-spacing: -0.045em;
-  line-height: 0.96;
+  margin: 0 0 0.65rem;
+  max-width: 22ch;
+  font-size: clamp(1.95rem, 7.2vw, 2.6rem);
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+/* Mystery announcements read as chapter openings, not another prayer */
+
+.prayer-step[data-type='mystery_intro'] h1 {
+  max-width: 26ch;
+  margin-bottom: 0.9rem;
+  font-size: clamp(1.7rem, 6.2vw, 2.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.prayer-chapter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.45rem;
+  color: var(--brass);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.prayer-chapter-label::before {
+  width: 1.1rem;
+  height: 1px;
+  background: currentColor;
+  content: '';
+  opacity: 0.7;
 }
 
 .prayer-text {
-  position: relative;
-  max-width: 38rem;
-  font-size: var(--prayer-reader-size, clamp(1.3rem, 2vw, 1.65rem));
+  max-width: 34rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: var(--prayer-reader-size, 1.24rem);
+  line-height: 1.66;
+  text-wrap: pretty;
 }
 
-.prayer-reader-normal { --prayer-reader-size: clamp(1.15rem, 1.8vw, 1.45rem); }
-.prayer-reader-large { --prayer-reader-size: clamp(1.3rem, 2vw, 1.65rem); }
-.prayer-reader-xl { --prayer-reader-size: clamp(1.5rem, 2.4vw, 1.95rem); }
+.prayer-text p {
+  margin: 0 0 0.9em;
+  white-space: pre-line;
+}
+
+.prayer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.prayer-step[data-type='mystery_intro'] .prayer-text {
+  max-width: 32rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid color-mix(in srgb, var(--brass) 55%, transparent);
+  color: color-mix(in srgb, var(--ink) 82%, var(--muted-ink));
+  font-style: italic;
+}
+
+.prayer-step[data-type='mystery_intro'] .prayer-text p {
+  margin-bottom: 0.5em;
+}
+
+.prayer-reader-normal { --prayer-reader-size: 1.24rem; }
+.prayer-reader-large { --prayer-reader-size: 1.42rem; }
+.prayer-reader-xl { --prayer-reader-size: 1.62rem; }
+
+.prayer-fruit {
+  margin: 0 0 0.9rem;
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.prayer-fruit strong {
+  color: #e3c782;
+  font-weight: 650;
+}
 
 .latin-text {
-  font-size: calc(var(--prayer-reader-size, 1.3rem) * 0.9);
+  margin-top: 1.15rem;
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--brass);
+  color: var(--muted-ink);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: calc(var(--prayer-reader-size, 1.24rem) * 0.9);
+  line-height: 1.6;
+  white-space: pre-line;
 }
 
-.prayer-actions {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
+/* Secondary actions live with the prayer, not in permanent chrome */
+
+.prayer-inline-actions {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 1.4rem 0.4rem;
-  background: linear-gradient(180deg, transparent, var(--paper-raised) 42%);
-  margin-inline: calc(clamp(1.5rem, 4vw, 3.5rem) * -1);
-  padding-inline: clamp(1.5rem, 4vw, 3.5rem);
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-bottom: 0.9rem;
 }
 
-.prayer-actions .button {
-  min-width: 10rem;
+.prayer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-ink);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
 }
 
-/* Intentions: a quiet pull-out panel, same behavior on every screen */
+.prayer-chip:hover {
+  border-color: color-mix(in srgb, var(--brass) 60%, transparent);
+  color: var(--ink);
+}
+
+.prayer-chip[aria-expanded='true'],
+.prayer-chip[aria-pressed='true'] {
+  border-color: var(--brass);
+  background: color-mix(in srgb, var(--brass) 14%, transparent);
+  color: var(--ink);
+}
+
+.prayer-chip:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.prayer-chip-count {
+  display: inline-grid;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--brass);
+  color: #241a10;
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+/* Intentions: a quiet pull-out panel, in the flow of the prayer */
 
 .intentions-panel {
-  margin-block: 1rem 0.2rem;
-  padding: 1rem 1.15rem;
+  margin: 0 0 1rem;
+  padding: 0.95rem 1rem;
   border: 1px solid var(--rule);
   border-radius: 0.9rem 0.9rem 0.3rem 0.9rem;
   background: rgb(231 212 167 / 6%);
   display: grid;
-  gap: 0.7rem;
+  gap: 0.65rem;
 }
 
 .intentions-hint {
@@ -1403,116 +1925,567 @@ body {
 .intentions-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 
-.daily-mystery-chip {
-  padding: 0.18rem 0.55rem;
-  margin-right: 0.5rem;
-  border-radius: 999px;
-  background: var(--brass);
-  color: #241a10;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+.intentions-form .button {
+  min-height: 2.75rem;
 }
 
-/* Decade strip: the Rosary's five-bead geometry */
+/* Action bar: fixed, thumb-sized, never scrolled away */
 
-.decade-strip {
+.prayer-actions {
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 0.5rem;
+  padding: 0.65rem 0.9rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper-raised) 90%, transparent);
+}
+
+.prayer-actions .button {
+  min-width: 0;
+  min-height: 3.1rem;
+  padding-inline: 0.7rem;
+  font-size: 0.88rem;
+}
+
+.prayer-actions .button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prayer-hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.prayer-keyboard-hint {
+  display: none;
+  margin: 0.4rem 0 0;
+  color: var(--muted-ink);
+  font-size: 0.74rem;
+  text-align: center;
+}
+
+/* Map sheet: the whole chain, out of the daily flow */
+
+.rosary-map-sheet {
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+  width: min(34rem, 100%);
+  padding: 1.45rem 1.15rem 1.25rem;
+  border: 1px solid rgb(231 212 167 / 22%);
+  border-top: 3px solid var(--oxblood);
+  border-radius: 1.2rem 1.2rem 0.3rem 1.2rem;
+  background: #253430;
+  color: #fff8eb;
+  --paper-raised: #253430;
+  --paper-deep: #1d2a27;
+  --ink: #fff8eb;
+  --muted-ink: #b9c4bb;
+  --brass: #d0a85f;
+  --rule: rgb(231 212 167 / 22%);
+}
+
+.rosary-map-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-right: 2rem;
+}
+
+.rosary-map-sheet-title {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.rosary-map-sheet .rosary-ring {
+  display: block;
+  height: clamp(170px, 30vh, 240px);
+  width: auto;
+  margin: 0.2rem auto;
+}
+
+.rosary-map-decades {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rosary-map-decade {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.4rem;
-  margin-block: 1.5rem 0;
-}
-
-.decade-strip::before,
-.decade-strip::after {
-  content: '';
-  height: 1px;
-  flex: 1;
-  max-width: 3.5rem;
-  background: color-mix(in srgb, var(--brass) 48%, transparent);
-}
-
-.decade-bead {
-  position: relative;
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0;
-  border-radius: 50%;
-  border: 1.5px solid color-mix(in srgb, var(--brass) 80%, transparent);
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 3.1rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
   background: transparent;
+  color: inherit;
+  text-align: left;
   cursor: pointer;
-  transition: transform 200ms var(--ease-sacred), background-color 200ms ease, box-shadow 200ms ease;
 }
 
-.decade-bead::after {
-  content: '';
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 44px;
-  height: 44px;
-  transform: translate(-50%, -50%);
+.rosary-map-decade:hover {
+  background: rgb(255 255 255 / 5%);
 }
 
-.decade-bead[data-complete] {
-  background: linear-gradient(135deg, var(--oxblood), var(--brass));
-  border-color: transparent;
-}
-
-.decade-bead[data-current] {
-  transform: scale(1.45);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brass) 26%, transparent);
-  background: linear-gradient(135deg, var(--oxblood), var(--brass));
-  border-color: transparent;
-}
-
-.decade-bead:focus-visible {
+.rosary-map-decade:focus-visible {
   outline: 2px solid var(--brass);
-  outline-offset: 3px;
+  outline-offset: -1px;
 }
 
-.decade-bead:disabled {
-  opacity: 0.35;
+.rosary-map-decade[data-state='current'] {
+  border-color: color-mix(in srgb, var(--brass) 55%, transparent);
+  background: color-mix(in srgb, var(--brass) 10%, transparent);
+}
+
+.rosary-map-decade:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* Mystery fruit */
+.rosary-map-decade-num {
+  display: grid;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--brass) 45%, transparent);
+  border-radius: 999px;
+  color: var(--brass);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
 
-.prayer-fruit {
-  position: relative;
-  margin: -1.2rem 0 0;
+.rosary-map-decade[data-state='complete'] .rosary-map-decade-num {
+  border-color: transparent;
+  background: var(--oxblood);
+  color: #fff8eb;
+}
+
+.rosary-map-decade-copy {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.rosary-map-decade-copy strong {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rosary-map-decade-fruit {
   color: var(--muted-ink);
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+}
+
+.rosary-map-decade-state {
+  flex: none;
+  margin-left: auto;
+  color: var(--brass);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.prayer-fruit strong {
-  color: #e3c782;
-  font-weight: 650;
+.rosary-map-sheet-foot {
+  display: grid;
 }
 
-/* Beads of the decade */
-
-.bead-line span[data-current='true'] {
-  transform: scale(1.3);
-  background: var(--brass);
-  border-color: var(--brass);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 25%, transparent);
+.rosary-map-sheet-foot .button {
+  width: 100%;
 }
 
-.bead-line {
-  flex-wrap: wrap;
+/* The ring is only shown inside the map sheet */
+
+.rosary-ring .rosary-chain {
+  fill: none;
+  stroke: color-mix(in srgb, var(--brass) 40%, transparent);
+  stroke-width: 1;
 }
 
-.bead-line span {
-  width: 0.9rem;
-  height: 0.9rem;
-  border-color: var(--brass);
+.rosary-ring .bead {
+  fill: transparent;
+  stroke: color-mix(in srgb, var(--brass) 78%, transparent);
+  stroke-width: 1.3;
+  transition: fill 180ms ease, stroke 180ms ease, opacity 180ms ease;
+}
+
+.rosary-ring .bead[data-state='future'] {
+  opacity: 0.45;
+}
+
+.rosary-ring .bead[data-state='complete'] {
+  fill: var(--oxblood);
+  stroke: transparent;
+}
+
+.rosary-ring .bead[data-state='current'] {
+  fill: var(--brass);
+  stroke: transparent;
+}
+
+.rosary-ring .bead-medal {
+  stroke-width: 1.8;
+}
+
+.rosary-ring .bead-clickable {
+  cursor: pointer;
+}
+
+/* Invisible thumb-sized pad drawn over clickable beads */
+.rosary-ring .bead-hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.rosary-ring .bead-clickable[data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.rosary-ring [role='button'] {
+  cursor: pointer;
+}
+
+.rosary-ring [role='button']:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.rosary-ring .bead-num {
+  fill: var(--paper-raised);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 4.6px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.rosary-ring .bead-num[data-emphasis='true'] {
+  font-weight: 800;
+}
+
+.rosary-ring .bead-cross-line {
+  stroke: color-mix(in srgb, var(--brass) 78%, transparent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke 180ms ease;
+}
+
+.rosary-ring .bead-cross[data-state='complete'] .bead-cross-line {
+  stroke: var(--oxblood);
+}
+
+.rosary-ring .bead-cross[data-state='current'] .bead-cross-line {
+  stroke: var(--brass);
+}
+
+/* Phones: the map becomes a bottom sheet */
+
+@media (max-width: 620px) {
+  .rosary-map-overlay {
+    align-items: end;
+    padding: 0;
+  }
+
+  .rosary-map-sheet {
+    width: 100%;
+    max-height: calc(100dvh - 2.5rem);
+    padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 1.4rem 1.4rem 0 0;
+  }
+
+  .intentions-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Short landscape: keep the prayer readable when height is scarce. The beads
+   stay reachable in the map sheet, next to the full ring. */
+
+@media (max-height: 520px) and (max-width: 860px) {
+  .prayer-room-head {
+    padding-block: 0.3rem 0.15rem;
+  }
+
+  .rosary-rail {
+    gap: 0.2rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .rosary-beads {
+    display: none;
+  }
+
+  .prayer-step {
+    padding-top: 0.9rem;
+  }
+
+  .prayer-actions {
+    padding-bottom: calc(0.4rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .prayer-hint {
+    display: none;
+  }
+
+  .gate-intro {
+    padding-bottom: 0.7rem;
+  }
+
+  .gate-today {
+    margin-bottom: 0.8rem;
+    padding-block: 0.85rem;
+  }
+
+  .gate-today::after {
+    display: none;
+  }
+}
+
+/* Touch-first devices don't need the arrow-key advice */
+
+@media (hover: none) and (pointer: coarse) {
+  .prayer-keyboard-hint {
+    display: none;
+  }
+}
+
+/* Tablets and desktop: the quiet chapel card */
+
+@media (min-width: 861px) {
+  .focus-header {
+    width: min(58rem, calc(100% - 3rem));
+    min-height: 4.6rem;
+    padding-inline: 0;
+  }
+
+  .prayer-layout {
+    width: min(58rem, calc(100% - 3rem));
+    margin-inline: auto;
+    padding-block: 1.5rem 2rem;
+  }
+
+  .prayer-room {
+    overflow: hidden;
+    border: 1px solid rgb(231 212 167 / 20%);
+    border-radius: 1.7rem 1.7rem 1.7rem 0.35rem;
+    box-shadow: 0 30px 80px rgb(0 0 0 / 24%);
+  }
+
+  .prayer-room-head {
+    padding: 0.9rem 1.6rem 0.4rem;
+  }
+
+  .rosary-rail {
+    gap: 0.5rem;
+    padding: 0.2rem 1.6rem 0.8rem;
+  }
+
+  .rosary-rail-track {
+    gap: 0.3rem;
+    height: 4px;
+  }
+
+  .rosary-rail-phase {
+    font-size: 1.05rem;
+  }
+
+  .rosary-rail-count {
+    font-size: 0.7rem;
+  }
+
+  .rosary-rail-bead {
+    font-size: 0.8rem;
+  }
+
+  .rosary-beads {
+    max-width: 30rem;
+  }
+
+  .bead-marker {
+    max-width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .bead-dot {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+
+  .prayer-scroll {
+    padding: 0 2.2rem;
+  }
+
+  .prayer-step {
+    padding: 2.2rem 0 1.5rem;
+  }
+
+  .prayer-step::before {
+    display: block;
+  }
+
+  .prayer-step h1 {
+    margin-bottom: 1.1rem;
+    font-size: clamp(2.6rem, 4.4vw, 3.9rem);
+  }
+
+  .prayer-step[data-type='mystery_intro'] h1 {
+    font-size: clamp(2.1rem, 3.2vw, 2.9rem);
+  }
+
+  .prayer-reader-normal { --prayer-reader-size: 1.4rem; }
+  .prayer-reader-large { --prayer-reader-size: 1.6rem; }
+  .prayer-reader-xl { --prayer-reader-size: 1.85rem; }
+
+  .prayer-inline-actions {
+    padding-bottom: 1.25rem;
+  }
+
+  .prayer-actions {
+    grid-template-columns: minmax(9rem, auto) minmax(0, 1fr) minmax(9rem, auto);
+    padding: 0.9rem 2.2rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .prayer-actions > .button-secondary {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .prayer-actions > .button:not(.button-secondary) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .prayer-hint {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .prayer-keyboard-hint {
+    display: block;
+  }
+
+  /* Gate: the same card, a little more air and a side-by-side CTA bar */
+
+  .gate-head {
+    padding-top: 1.1rem;
+  }
+
+  /* The gate is a short reading, not a long prayer: let the card take the
+     height it needs instead of scrolling inside itself. */
+  .prayer-layout.mystery-gate {
+    flex: none;
+  }
+
+  .gate-scroll {
+    flex: none;
+    overflow: visible;
+  }
+
+  .gate-intro {
+    padding-bottom: 1.5rem;
+  }
+
+  .gate-intro .page-title {
+    font-size: clamp(2.4rem, 4vw, 3.1rem);
+  }
+
+  .gate-intro .lede {
+    font-size: 1.02rem;
+  }
+
+  .gate-today {
+    gap: 0.4rem;
+    margin-bottom: 1.6rem;
+    padding: 1.5rem 1.6rem 1.45rem;
+  }
+
+  .gate-today::after {
+    top: -1.6rem;
+    right: 0.6rem;
+    font-size: 7rem;
+  }
+
+  .gate-today-theme {
+    font-size: 0.88rem;
+  }
+
+  .gate-today-days {
+    font-size: 0.82rem;
+  }
+
+  .gate-others-title {
+    margin-bottom: 0.8rem;
+  }
+
+  .gate-options {
+    gap: 0.6rem;
+  }
+
+  .mystery-gate-option {
+    gap: 0.9rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .gate-option-mark {
+    width: 2.1rem;
+    height: 2.1rem;
+    font-size: 0.8rem;
+  }
+
+  .gate-option-name {
+    font-size: 1.08rem;
+  }
+
+  .gate-option-meta {
+    font-size: 0.78rem;
+  }
+
+  .prayer-actions.gate-actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 0.9rem 2.2rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .prayer-actions.gate-actions .prayer-hint {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    font-size: 0.78rem;
+    text-align: left;
+  }
+
+  .prayer-actions.gate-actions > .mystery-gate-cta {
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: center;
+  }
 }
 
 /* Liturgy */
@@ -1859,10 +2832,6 @@ body {
   .home-practices-intro .section-title,
   .home-practices-intro .lede { margin-top: 0; }
 
-  .prayer-layout {
-    grid-template-columns: minmax(0, 1fr) 280px;
-  }
-
   .settings-main .form-stack { grid-template-columns: 1fr; }
   .settings-main .form-stack > .button,
   .settings-main .form-stack > .status-message { grid-column: auto; }
@@ -1872,9 +2841,7 @@ body {
   .page-wrap,
   .reading-wrap,
   .site-header-inner,
-  .focus-header,
-  .site-footer,
-  .prayer-layout {
+  .site-footer {
     width: min(100% - 2rem, 720px);
   }
 
@@ -1909,12 +2876,6 @@ body {
   .sanctuary-stats { order: 3; }
   .liturgy-promo { order: 2; }
 
-  .prayer-layout {
-    grid-template-columns: 1fr;
-    padding-block: 1rem 2rem;
-  }
-
-
   .liturgy-layout { grid-template-columns: 1fr; gap: 1.5rem; }
   .contents-nav { position: static; display: flex; max-width: 100%; flex-wrap: wrap; overflow-x: hidden; border-top-width: 1px; border-left: 3px solid var(--oxblood); border-radius: 0.2rem; }
   .contents-nav strong { flex: 0 0 auto; }
@@ -1926,8 +2887,8 @@ body {
 @media (max-width: 620px) {
   body { background-image: none; }
 
-  .site-header-inner,
-  .focus-header { min-height: 4.8rem; }
+  .site-header-inner { min-height: 4.8rem; }
+  .focus-header { min-height: 3.6rem; }
   .site-header { border-top-width: 2px; }
   .brand-seal { width: 2.35rem; height: 2.35rem; }
   .brand-name { font-size: 1.3rem; }
@@ -2003,6 +2964,9 @@ body {
   .paper-panel { border-radius: 1rem 1rem 1rem 0.2rem; }
   .prayer-invitation { min-height: 390px; padding: 1.75rem 1.35rem; }
   .prayer-invitation .hero-copy { gap: 1.4rem; }
+  .prayer-invitation .hero-actions { flex-direction: column; align-items: stretch; gap: 0.7rem; }
+  .prayer-invitation .hero-actions .button,
+  .prayer-invitation .hero-actions .rosary-guide-pill { width: 100%; justify-content: center; }
   .prayer-card-mark { top: 1.2rem; right: 1.3rem; }
   .sanctuary-stats { padding: 1.5rem 1.35rem; }
 
@@ -2044,17 +3008,10 @@ body {
 
   .focus-header .brand-copy { display: none; }
   .focus-header .text-link { font-size: 0.82rem; }
-  .prayer-main { min-height: calc(100dvh - 6.8rem); border-radius: 1.2rem 1.2rem 1.2rem 0.25rem; padding: 1.1rem; }
-  .prayer-toolbar { min-height: 3.5rem; }
-  .prayer-toolbar .button { padding-inline: 0.6rem; font-size: 0.75rem; }
-  .prayer-step { min-height: 470px; padding: 3rem 0.2rem; }
-  .prayer-step::before { top: 1.4rem; right: 0; font-size: 5rem; }
-  .prayer-step h1 { max-width: 11ch; margin-bottom: 1.6rem; font-size: clamp(2.55rem, 13vw, 3.8rem); }
-  .prayer-text { font-size: var(--prayer-reader-size, 1.28rem); line-height: 1.68; }
-  .decade-strip { margin-block: 1.1rem 0; gap: 1.05rem; }
-  .prayer-fruit { margin-top: -1rem; font-size: 0.7rem; letter-spacing: 0.09em; }
-  .prayer-actions { gap: 0.6rem; padding-top: 1rem; }
-  .prayer-actions .button { min-width: 0; flex: 1; padding-inline: 0.7rem; font-size: 0.78rem; }
+
+  .toolbar-label {
+    display: none;
+  }
 
   .reading-document {
     width: calc(100% + 0.5rem);
@@ -2083,9 +3040,7 @@ body {
   .page-wrap,
   .reading-wrap,
   .site-header-inner,
-  .focus-header,
-  .site-footer,
-  .prayer-layout {
+  .site-footer {
     width: calc(100% - 1.25rem);
   }
 
@@ -2571,6 +3526,7 @@ html[data-focus-mode] body::after {
   border-top: 4px solid var(--oxblood);
   color: var(--ink);
   text-align: left;
+  overflow-y: auto;
 }
 
 .rosary-guide-header {

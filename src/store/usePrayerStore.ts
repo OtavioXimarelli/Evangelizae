@@ -3,14 +3,15 @@
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 import {calendarDayDifference, getCalendarDateInTimeZone, getLocalDateKey, getResolvedTimeZone} from '@/lib/date';
-import {getDailyMysteryType, MysteryType} from '@/services/rosaryEngine';
+import {getDailyMysteryType, DevotionType, MysteryType} from '@/services/rosaryEngine';
 
 export interface PrayerCompletion {
   id: string;
   localDate: string;
   completedAt: string;
   timeZone: string;
-  mysteryType: MysteryType;
+  devotion: DevotionType;
+  mysteryType?: MysteryType;
   intentions?: string[];
   reflection?: string;
 }
@@ -23,6 +24,7 @@ export interface PrayerStats {
 }
 
 export interface PrayerState {
+  activeDevotion: DevotionType;
   activeMysteryType: MysteryType;
   currentStepIndex: number;
   furthestStepIndex: number;
@@ -31,7 +33,7 @@ export interface PrayerState {
   intentions: string[];
   reflection: string;
   completions: PrayerCompletion[];
-  initRosary: (type?: MysteryType) => void;
+  initRosary: (devotionOrMystery?: DevotionType | MysteryType, mysteryType?: MysteryType) => void;
   advanceStep: (totalSteps: number) => void;
   previousStep: () => void;
   setStep: (index: number) => void;
@@ -44,6 +46,7 @@ export interface PrayerState {
 }
 
 const initialPrayerState = {
+  activeDevotion: 'rosario' as DevotionType,
         activeMysteryType: getDailyMysteryType(getCalendarDateInTimeZone()),
   currentStepIndex: 0,
   furthestStepIndex: 0,
@@ -85,15 +88,26 @@ export const usePrayerStore = create<PrayerState>()(
   persist(
     (set, get) => ({
       ...initialPrayerState,
-      initRosary: (type) => set({
-        activeMysteryType: type ?? getDailyMysteryType(getCalendarDateInTimeZone()),
-        currentStepIndex: 0,
-        furthestStepIndex: 0,
-        sessionStartedAt: new Date().toISOString(),
-        isCompleted: false,
-        intentions: [],
-        reflection: '',
-      }),
+      initRosary: (devotionOrMystery, mysteryType) => {
+        const mysteryTypes = new Set<MysteryType>(['gozosos', 'luminosos', 'dolorosos', 'gloriosos']);
+        let devotion: DevotionType = 'rosario';
+        let resolvedMystery: MysteryType | undefined = mysteryType;
+        if (devotionOrMystery && mysteryTypes.has(devotionOrMystery as MysteryType)) {
+          resolvedMystery = devotionOrMystery as MysteryType;
+        } else if (devotionOrMystery) {
+          devotion = devotionOrMystery as DevotionType;
+        }
+        set({
+          activeDevotion: devotion,
+          activeMysteryType: resolvedMystery ?? getDailyMysteryType(getCalendarDateInTimeZone()),
+          currentStepIndex: 0,
+          furthestStepIndex: 0,
+          sessionStartedAt: new Date().toISOString(),
+          isCompleted: false,
+          intentions: [],
+          reflection: '',
+        });
+      },
       advanceStep: (totalSteps) => {
         const {currentStepIndex, furthestStepIndex, sessionStartedAt} = get();
         if (currentStepIndex >= totalSteps - 1) return;
@@ -131,12 +145,14 @@ export const usePrayerStore = create<PrayerState>()(
           localDate: getLocalDateKey(completedAt),
           completedAt: completedAt.toISOString(),
           timeZone: getResolvedTimeZone(),
-          mysteryType: state.activeMysteryType,
+          devotion: state.activeDevotion,
+          mysteryType: state.activeDevotion === 'rosario' ? state.activeMysteryType : undefined,
           intentions: state.intentions.length > 0 ? [...state.intentions] : undefined,
         };
         set({isCompleted: true, completions: [...state.completions, completion]});
       },
       discardSession: () => set({
+  activeDevotion: 'rosario',
   activeMysteryType: getDailyMysteryType(getCalendarDateInTimeZone()),
         currentStepIndex: 0,
         furthestStepIndex: 0,
@@ -149,19 +165,34 @@ export const usePrayerStore = create<PrayerState>()(
     }),
     {
       name: 'evangelizae-prayer-session',
-      version: 2,
+      version: 3,
       migrate: (persistedState, version) => {
-        if (version >= 2) return persistedState as PrayerState;
-        const legacy = persistedState as Partial<PrayerState>;
+        const persisted = (persistedState ?? {}) as Partial<PrayerState> & { completions?: PrayerCompletion[] };
+        if (version >= 3) return persisted as PrayerState;
+        if (version >= 2) {
+          const completions = Array.isArray(persisted.completions)
+            ? persisted.completions.map((c) => ({...c, devotion: c.devotion ?? 'rosario'}))
+            : [];
+          return {
+            ...persisted,
+            activeDevotion: persisted.activeDevotion ?? 'rosario',
+            completions,
+          } as PrayerState;
+        }
+        const legacy = persisted;
         const currentStepIndex = legacy.currentStepIndex ?? 0;
         return {
           ...initialPrayerState,
+          activeDevotion: 'rosario',
           activeMysteryType: legacy.activeMysteryType ?? getDailyMysteryType(),
           currentStepIndex,
           furthestStepIndex: currentStepIndex,
           sessionStartedAt: currentStepIndex ? new Date().toISOString() : null,
           intentions: Array.isArray(legacy.intentions) ? legacy.intentions : [],
           reflection: typeof legacy.reflection === 'string' ? legacy.reflection : '',
+          completions: Array.isArray(legacy.completions)
+            ? legacy.completions.map((c) => ({...c, devotion: (c as PrayerCompletion).devotion ?? 'rosario'}))
+            : [],
         };
       },
     },

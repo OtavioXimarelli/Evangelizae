@@ -1,4 +1,33 @@
+import {
+  SAO_JOSE_CONTEMPLATIONS,
+  SAO_JOSE_CLOSING_PRAISE,
+  SAO_JOSE_CREED,
+  SAO_JOSE_CROSS,
+  SAO_JOSE_LARGE_BEAD,
+  SAO_JOSE_OFFERING,
+  SAO_JOSE_OREMOS,
+  SAO_JOSE_SMALL_BEAD,
+} from '@/content/devotions/saoJose';
+import {
+  LAGRIMAS_CLOSING,
+  LAGRIMAS_JACULATORY_1,
+  LAGRIMAS_JACULATORY_2,
+  LAGRIMAS_LARGE_BEAD,
+  LAGRIMAS_OPENING,
+  LAGRIMAS_SMALL_BEAD,
+} from '@/content/devotions/lagrimas';
+
 export type MysteryType = 'gozosos' | 'luminosos' | 'dolorosos' | 'gloriosos';
+
+/** A prayer devotion supported by the app. The 5-decade Rosary is one devotion
+ *  among several; each devotion owns its own step builder and progress model. */
+export type DevotionType = 'rosario' | 'sao_jose' | 'lagrimas';
+
+export interface DevotionDefinition {
+  id: DevotionType;
+  segments: number;
+  hasMysteries: boolean;
+}
 
 export interface DecadeMystery {
   decadeNumber: number;
@@ -297,6 +326,131 @@ export function getDailyMysteryType(date: Date = new Date()): MysteryType {
     default:
       return 'gloriosos';
   }
+}
+
+/**
+ * Builds the complete step sequence for a devotion. The Rosary delegates to
+ * `buildRosarySequence`; the other devotions land in Phases B/C of the
+ * multi-devotion plan and throw until their sourced text is approved.
+ */
+export function buildDevotionSequence(
+  devotion: DevotionType,
+  options: { mysteryType?: MysteryType } = {},
+): RosaryStep[] {
+  switch (devotion) {
+    case 'rosario':
+      return buildRosarySequence(options.mysteryType ?? getDailyMysteryType());
+    case 'sao_jose':
+      return buildSaoJoseSequence();
+    case 'lagrimas':
+      return buildLagrimasSequence();
+    default: {
+      const exhaustive: never = devotion;
+      throw new Error(`Unknown devotion: ${String(exhaustive)}`);
+    }
+  }
+}
+
+export function buildSaoJoseSequence(): RosaryStep[] {
+  const steps: RosaryStep[] = [];
+  let i = 1;
+  const push = (s: Omit<RosaryStep, 'stepNumber' | 'totalSteps'>) => {
+    steps.push({...s, stepNumber: i++, totalSteps: 0});
+  };
+
+  // Opening
+  push({ id: 'intro-cross', type: 'sign_of_cross', titlePt: 'Sinal da Cruz', titleEn: 'Sign of the Cross', prayerTextPt: SAO_JOSE_CROSS, prayerTextEn: SAO_JOSE_CROSS });
+  push({ id: 'intro-creed', type: 'creed', titlePt: 'Credo dos Apóstolos', titleEn: "Apostles' Creed", prayerTextPt: SAO_JOSE_CREED, prayerTextEn: SAO_JOSE_CREED });
+  push({ id: 'intro-our-father', type: 'our_father_pope', titlePt: 'Pai Nosso', titleEn: 'Our Father', prayerTextPt: ROSARY_PRAYERS.ourFatherPt, prayerTextEn: ROSARY_PRAYERS.ourFatherEn, latinText: ROSARY_PRAYERS.ourFatherLa });
+  for (let k = 1; k <= 3; k++) {
+    push({ id: `intro-hail-mary-${k}`, type: 'three_hail_marys', titlePt: `Ave Maria (${k})`, titleEn: `Hail Mary (${k})`, prayerTextPt: ROSARY_PRAYERS.hailMaryPt, prayerTextEn: ROSARY_PRAYERS.hailMaryEn, latinText: ROSARY_PRAYERS.hailMaryLa });
+  }
+
+  // 5 decades
+  SAO_JOSE_CONTEMPLATIONS.forEach((c) => {
+    const largeText = `${ROSARY_PRAYERS.gloryFatimaPt.split('\n\n')[0]}\n\n${c.scripturePt}\n\n${SAO_JOSE_LARGE_BEAD}` + (c.number === 1 ? `\n\n${SAO_JOSE_OFFERING}` : '');
+    const largeTextEn = `${ROSARY_PRAYERS.gloryFatimaEn.split('\n\n')[0]}\n\n${c.scriptureEn}\n\n${SAO_JOSE_LARGE_BEAD}` + (c.number === 1 ? `\n\n${SAO_JOSE_OFFERING}` : '');
+    push({
+      id: `sao-jose-group-${c.number}-intro`,
+      type: 'mystery_intro',
+      titlePt: `${c.number}º Mistério: ${c.namePt}`,
+      titleEn: `${c.number}st Mystery: ${c.nameEn}`,
+      prayerTextPt: largeText,
+      prayerTextEn: largeTextEn,
+      decadeNumber: c.number,
+      mystery: { decadeNumber: c.number, namePt: c.namePt, nameEn: c.nameEn, scripturePt: c.scripturePt, scriptureEn: c.scriptureEn, fruitPt: '', fruitEn: '' },
+    });
+    for (let b = 1; b <= 10; b++) {
+      push({
+        id: `sao-jose-group-${c.number}-bead-${b}`,
+        type: 'decade_hail_mary',
+        titlePt: `São José, valei-me! (${b}ª Conta — ${c.number}º Mistério)`,
+        titleEn: `St. Joseph, help me! (Bead ${b} — ${c.number}st Mystery)`,
+        prayerTextPt: SAO_JOSE_SMALL_BEAD,
+        prayerTextEn: SAO_JOSE_SMALL_BEAD,
+        decadeNumber: c.number,
+        beadInDecade: b,
+        mystery: { decadeNumber: c.number, namePt: c.namePt, nameEn: c.nameEn, scripturePt: c.scripturePt, scriptureEn: c.scriptureEn, fruitPt: '', fruitEn: '' },
+      });
+    }
+    // mark last bead of group as close
+    steps[steps.length - 1].id = `sao-jose-group-${c.number}-close`;
+  });
+
+  // Closing
+  push({ id: 'closing-glory', type: 'decade_glory_fatima', titlePt: 'Glória ao Pai', titleEn: 'Glory Be', prayerTextPt: ROSARY_PRAYERS.gloryFatimaPt, prayerTextEn: ROSARY_PRAYERS.gloryFatimaEn, latinText: ROSARY_PRAYERS.gloryLa });
+  // Litany as a single step (text condensed)
+  push({ id: 'closing-litany', type: 'salve_regina', titlePt: 'Ladainha de São José', titleEn: 'Litany of St. Joseph', prayerTextPt: SAO_JOSE_OREMOS, prayerTextEn: SAO_JOSE_OREMOS });
+  push({ id: 'closing-oremos', type: 'salve_regina', titlePt: 'Oremos', titleEn: 'Let us pray', prayerTextPt: SAO_JOSE_CLOSING_PRAISE, prayerTextEn: SAO_JOSE_CLOSING_PRAISE });
+
+  const total = steps.length;
+  return steps.map((s) => ({...s, totalSteps: total}));
+}
+
+export function buildLagrimasSequence(): RosaryStep[] {
+  const steps: RosaryStep[] = [];
+  let i = 1;
+  const push = (s: Omit<RosaryStep, 'stepNumber' | 'totalSteps'>) => {
+    steps.push({...s, stepNumber: i++, totalSteps: 0});
+  };
+
+  push({ id: 'intro-opening', type: 'sign_of_cross', titlePt: 'Oração inicial', titleEn: 'Opening prayer', prayerTextPt: LAGRIMAS_OPENING, prayerTextEn: LAGRIMAS_OPENING });
+
+  for (let g = 1; g <= 7; g++) {
+    push({
+      id: `lagrimas-group-${g}-intro`,
+      type: 'mystery_intro',
+      titlePt: `Grupo ${g}`,
+      titleEn: `Group ${g}`,
+      prayerTextPt: LAGRIMAS_LARGE_BEAD,
+      prayerTextEn: LAGRIMAS_LARGE_BEAD,
+      decadeNumber: g,
+    });
+    for (let b = 1; b <= 7; b++) {
+      push({
+        id: `lagrimas-group-${g}-bead-${b}`,
+        type: 'decade_hail_mary',
+        titlePt: `Meu Jesus, ouvi os nossos rogos (${b}ª Conta — Grupo ${g})`,
+        titleEn: `My Jesus, hear our prayers (Bead ${b} — Group ${g})`,
+        prayerTextPt: LAGRIMAS_SMALL_BEAD,
+        prayerTextEn: LAGRIMAS_SMALL_BEAD,
+        decadeNumber: g,
+        beadInDecade: b,
+      });
+    }
+    steps[steps.length - 1].id = `lagrimas-group-${g}-close`;
+  }
+
+  // 3 final large beads
+  for (let k = 1; k <= 3; k++) {
+    push({ id: `closing-large-${k}`, type: 'decade_glory_fatima', titlePt: `Vêde, ó Jesus (${k})`, titleEn: `Behold, O Jesus (${k})`, prayerTextPt: LAGRIMAS_LARGE_BEAD, prayerTextEn: LAGRIMAS_LARGE_BEAD });
+  }
+  push({ id: 'closing-prayer', type: 'salve_regina', titlePt: 'Oração final', titleEn: 'Closing prayer', prayerTextPt: LAGRIMAS_CLOSING, prayerTextEn: LAGRIMAS_CLOSING });
+  push({ id: 'closing-jac-1', type: 'salve_regina', titlePt: 'Jaculatória 1', titleEn: 'Jaculatory 1', prayerTextPt: LAGRIMAS_JACULATORY_1, prayerTextEn: LAGRIMAS_JACULATORY_1 });
+  push({ id: 'closing-jac-2', type: 'salve_regina', titlePt: 'Jaculatória 2', titleEn: 'Jaculatory 2', prayerTextPt: LAGRIMAS_JACULATORY_2, prayerTextEn: LAGRIMAS_JACULATORY_2 });
+
+  const total = steps.length;
+  return steps.map((s) => ({...s, totalSteps: total}));
 }
 
 /**

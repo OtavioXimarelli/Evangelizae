@@ -185,9 +185,9 @@ export function RosaryGuideTrigger({
 
   return (
     <>
-      <button ref={triggerRef} type="button" className={buttonClass} onClick={handleOpen}>
+      <button ref={triggerRef} type="button" className={buttonClass} onClick={handleOpen} aria-label={t('guideTrigger')}>
         <HelpCircle size={15} aria-hidden="true" />
-        <span>{t('guideTrigger')}</span>
+        <span className="toolbar-label">{t('guideTrigger')}</span>
       </button>
       <RosaryGuideDialog open={open} onClose={() => setOpen(false)} returnFocusRef={triggerRef} />
     </>
