@@ -139,7 +139,8 @@ export default function SanctuaryPage() {
               <p className="lede">{t('emptyBody')}</p>
             </>
           )}
-          <p className="lede">{t('rosaryDescription')}</p>
+          {/* First visit only: the returning user meets the action, not the pitch. */}
+          {!activeSession && !hasHistory && <p className="lede">{t('rosaryDescription')}</p>}
         </div>
         <div className="hero-actions">
           {activeSession ? (
