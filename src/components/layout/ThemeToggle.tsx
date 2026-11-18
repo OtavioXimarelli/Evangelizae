@@ -6,7 +6,7 @@ import {Moon, Sun} from 'lucide-react';
 import {useIsMounted} from '@/hooks/useIsMounted';
 import {usePreferencesStore} from '@/store/usePreferencesStore';
 
-export function ThemeToggle() {
+export function ThemeToggle({showLabel = false}: {showLabel?: boolean}) {
   const t = useTranslations('Navigation');
   const mounted = useIsMounted();
   const theme = usePreferencesStore((state) => state.theme);
@@ -29,10 +29,11 @@ export function ThemeToggle() {
     <button
       type="button"
       className="theme-toggle"
-      aria-label={isDark ? t('themeToLight') : t('themeToDark')}
+      aria-label={`${t('theme')} · ${isDark ? t('themeToLight') : t('themeToDark')}`}
       onClick={() => setProfile({theme: isDark ? 'light' : 'dark'})}
     >
       {isDark ? <Sun /> : <Moon />}
+      {showLabel && <span className="theme-toggle-label">{t('theme')}</span>}
     </button>
   );
 }

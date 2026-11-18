@@ -1,5 +1,12 @@
 import {expect, test} from '@playwright/test';
 
+// These specs assert against route-mocked API responses. The production
+// service worker claims the page mid-test and re-issues fetches that bypass
+// page-level route mocks, leaking real requests to the live API (and a real
+// 403 that wrongly logs the admin out). Blocking workers here keeps the
+// mocking airtight; true offline behavior stays covered by core-flow.spec.ts.
+test.use({serviceWorkers: 'block'});
+
 const dailyLiturgy = {
   date: '2026-11-08',
   title: '32º Domingo do Tempo Comum',

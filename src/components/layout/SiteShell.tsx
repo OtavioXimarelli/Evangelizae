@@ -178,14 +178,10 @@ export function SiteShell({children}: {children: React.ReactNode}) {
           {nav.map(({href, label, icon: Icon}) => (
             <Link key={href} href={href} aria-current={isActive(href) ? 'page' : undefined}><Icon /><span>{label}</span></Link>
           ))}
+          <div className="bottom-nav-theme"><ThemeToggle showLabel /></div>
         </nav>
       )}
-      {isProductShell && !isOffline && (
-        <>
-          <PwaInstallPrompt />
-          <div className="bottom-nav-theme"><ThemeToggle /></div>
-        </>
-      )}
+      {isProductShell && !isOffline && <PwaInstallPrompt />}
     </div>
   );
 }
