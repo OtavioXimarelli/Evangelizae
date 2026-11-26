@@ -1626,7 +1626,7 @@ body {
 .rosary-rail-count {
   margin: 0 0 0 auto;
   color: var(--muted-ink);
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.1em;
 }
@@ -1635,7 +1635,7 @@ body {
   flex-basis: 100%;
   margin: 0;
   color: var(--brass);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
 }
 
@@ -1827,7 +1827,7 @@ button.bead-marker {
 .prayer-fruit {
   margin: 0 0 0.9rem;
   color: var(--muted-ink);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -1961,7 +1961,7 @@ button.bead-marker {
   grid-column: 1 / -1;
   margin: 0;
   color: var(--muted-ink);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.03em;
   text-align: center;
 }
@@ -2266,6 +2266,31 @@ button.bead-marker {
   .gate-today::after {
     display: none;
   }
+}
+
+/* Compact portrait phones (e.g. iPhone SE, 667px): keep every control and
+   touch target, but drop the tallest paddings, the bead caption and the
+   persistent autosave hint so the prayer text owns most of the screen. */
+
+@media (max-height: 700px) and (max-width: 860px) {
+  .focus-header { min-height: 3.2rem; }
+
+  .prayer-room-head { padding: 0.35rem 0.75rem 0.25rem; }
+
+  .rosary-rail {
+    gap: 0.2rem;
+    padding: 0.05rem 0.9rem 0.3rem;
+  }
+
+  .rosary-rail-bead { display: none; }
+
+  .prayer-step { padding-top: 1rem; }
+
+  .prayer-actions {
+    padding: 0.45rem 0.9rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .prayer-hint { display: none; }
 }
 
 /* Touch-first devices don't need the arrow-key advice */
@@ -2895,41 +2920,48 @@ button.bead-marker {
   .brand-line { display: none; }
 
   .display-title {
-    max-width: 11ch;
-    font-size: clamp(3.1rem, 15vw, 4.55rem);
-    line-height: 0.92;
+    max-width: 13ch;
+    font-size: clamp(2.6rem, 11.5vw, 4.55rem);
+    line-height: 0.98;
   }
 
   .page-title {
     font-size: clamp(2.8rem, 13vw, 4rem);
+    line-height: 1.02;
   }
 
   .section-title {
     font-size: clamp(2.2rem, 10vw, 3.15rem);
+    line-height: 1.04;
   }
 
-  .home-hero-grid { padding-block: 4rem 2rem; }
+  /* Phone landing: the fold completes itself — hero, actions and devotional
+     fit within one screen instead of the desktop's tall canvas. */
+  .home-hero-grid { min-height: 0; padding-block: 2.6rem 1.6rem; }
   .home-hero-copy { gap: 1.35rem; }
   .home-hero-copy .lede { font-size: 1.05rem; }
   .home-hero .hero-actions { width: 100%; }
   .home-hero .hero-actions .button { width: 100%; }
-  .home-devotional { min-height: 410px; }
-  .home-devotional .sacred-ornament { width: 270px; align-self: start; }
-  .home-devotional .editorial-note { right: 0; bottom: 1rem; width: 100%; padding: 1.4rem; transform: rotate(-0.8deg); }
+  .home-devotional { min-height: 0; }
+  .home-devotional .sacred-ornament { width: 215px; align-self: start; }
+  .home-devotional .editorial-note { right: 0; bottom: 0; width: 100%; padding: 1.3rem; transform: rotate(-0.8deg); }
 
-  .home-practices { padding-block: 5rem; }
+  .home-practices { padding-block: 3rem; }
   .home-practices-intro { display: block; }
   .home-practices-intro .section-title { margin-top: 1rem; }
   .home-practices-intro .lede { margin-top: 1.4rem; }
   .practice-grid { grid-template-columns: 1fr; }
   .practice-card { min-height: 240px; padding: 1.4rem; }
 
+  .home-how { padding-block: 2.75rem; }
+  .home-commitments { padding-block: 2.6rem 3.25rem; }
+
   .home-cta {
-    min-height: 500px;
+    min-height: 0;
     grid-template-columns: 1fr;
     gap: 0.5rem;
     border-radius: 1.3rem 1.3rem 0.3rem 0.3rem;
-    padding: 2.25rem;
+    padding: 1.9rem;
   }
 
   .home-cta-mark { width: 5rem; justify-self: start; }
@@ -2944,13 +2976,21 @@ button.bead-marker {
   }
 
   .sanctuary-masthead {
-    padding-block: 2rem;
+    padding-block: 1.4rem;
   }
+
+  /* Daily rhythm: on phones the masthead orients (date, season, greeting) and
+     the tagline steps aside, so the primary action lands in the first fold. */
+  .sanctuary-masthead .lede { display: none; }
 
   .statement-header::after { top: -9rem; right: -12rem; }
   .sanctuary-masthead::before { right: -6rem; opacity: 0.7; }
   .sanctuary-masthead::after { display: none; }
-  .sanctuary-masthead .page-title { max-width: 9ch; font-size: clamp(2.2rem, 8vw, 3.2rem); }
+  .sanctuary-masthead .page-title {
+    max-width: 16ch;
+    font-size: clamp(1.7rem, 6vw, 2.4rem);
+    line-height: 1.08;
+  }
   .sanctuary-page .dashboard-grid { padding-top: 1rem; }
 
   /* Info hierarchy: CTA before stats strip on phones (DOM order unchanged) */
@@ -2962,8 +3002,12 @@ button.bead-marker {
   .sanctuary-page .week-strip { order: 2; }
 
   .paper-panel { border-radius: 1rem 1rem 1rem 0.2rem; }
-  .prayer-invitation { min-height: 390px; padding: 1.75rem 1.35rem; }
-  .prayer-invitation .hero-copy { gap: 1.4rem; }
+  .prayer-invitation { min-height: 0; padding: 1.35rem 1.25rem; }
+  .prayer-invitation .hero-copy { gap: 0.85rem; }
+  .prayer-invitation .section-title {
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    line-height: 1.15;
+  }
   .prayer-invitation .hero-actions { flex-direction: column; align-items: stretch; gap: 0.7rem; }
   .prayer-invitation .hero-actions .button,
   .prayer-invitation .hero-actions .rosary-guide-pill { width: 100%; justify-content: center; }
@@ -3027,7 +3071,7 @@ button.bead-marker {
   .reading-group h2 { font-size: clamp(2rem, 10vw, 2.7rem); }
   .reading-body { font-size: var(--reader-size, 1.13rem); }
   .reading-paragraph.drop-cap::first-letter { font-size: 3.65em; }
-  .liturgy-source { font-size: 0.72rem; }
+  .liturgy-source { font-size: 0.76rem; }
   .liturgy-empty .hero-actions { width: 100%; }
   .liturgy-empty .button { width: 100%; }
 
